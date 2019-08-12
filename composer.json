@@ -1,27 +1,19 @@
 {
-	"name" : "sdd8002/yii2-adminlte",
+	"name" : "lemonvine/yii2-adminlte",
 	"description" : "AdminLTE - admin control panel and dashboard that's based on Bootstrap 3",
 	"homepage" : "https://adminlte.io/",
 	"type" : "template",
 	"keywords" : [
-		"css",
-		"js",
-		"less",
-		"responsive",
-		"back-end",
-		"template",
-		"theme",
-		"web",
-		"admin"
+		"lemon"
 	],
 	"authors" : [{
-			"name" : "Lemon Shao",
+			"name" : "LemonWine",
 			"email" : "sdd8002@163.com"
 		}
 	],
 	"license" : "MIT",
 	"support" : {
-		"issues" : "https://github.com/sdd8002/yii2-adminlte/issues"
+		"issues" : "https://github.com/lemonvine/yii2-adminlte/issues"
 	},
 	"require" : {
 		"yiisoft/yii2" : "2.*",
@@ -33,5 +25,5 @@
 		"psr-4" : {
 			"lemon\\" : ""
 		}
-	},
+	}
 }
