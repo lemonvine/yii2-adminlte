@@ -17,9 +17,9 @@
 	},
 	"require" : {
 		"yiisoft/yii2" : "2.*",
-		"yiisoft/yii2-bootstrap" : "~2.0.0",
+		"yiisoft/yii2-bootstrap4" : "~2.0.6",
 		"fortawesome/font-awesome" : "~4.7",
-		"bower-asset/jquery" : ">=1.9.0 <4.0.0"
+		"npm-asset/bootstrap" : "^4.3"
 	},
 	"autoload" : {
 		"psr-4" : {
