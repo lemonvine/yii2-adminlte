@@ -13,17 +13,13 @@ namespace lemon;
  */
 class AssetBundle extends \yii\web\AssetBundle
 {
-
-    /**
-     * @inherit
-     */
-    public $sourcePath = '@vendor/fortawesome/font-awesome';
+    public $sourcePath = '@vendor/lemonvine/yii2-adminlte/plugins/fontawesome-free';
 
     /**
      * @inherit
      */
     public $css = [
-        'css/font-awesome.min.css',
+        'css/all.min.css',
     ];
 
     /**
@@ -36,7 +32,7 @@ class AssetBundle extends \yii\web\AssetBundle
         parent::init();
 
         $this->publishOptions['beforeCopy'] = function ($from, $to) {
-            return preg_match('%(/|\\\\)(fonts|css)%', $from);
+            return preg_match('%(/|\\\\)(webfonts|css)%', $from);
         };
     }
 }

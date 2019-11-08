@@ -11,32 +11,16 @@ use yii\helpers\Html;
  */
 class Menu extends \yii\widgets\Menu
 {
-    /**
-     * @inheritdoc
-     */
-    public $linkTemplate = '<a href="{url}">{icon} {label}</a>';
-    /**
-     * @inheritdoc
-     * Styles all labels of items on sidebar by AdminLTE
-     */
-    public $labelTemplate = '<span>{label}</span>';
-    public $submenuTemplate = "\n<ul class='treeview-menu' {show}>\n{items}\n</ul>\n";
+    public $linkTemplate = '<a href="{url}" class="nav-link">{icon}{label}</a>';
+    public $submenuTemplate = "\n<ul class='nav nav-treeview'{show}>\n{items}\n</ul>\n";
     public $activateParents = true;
-    public $defaultIconHtml = '<i class="fa fa-circle-o"></i> ';
+    public $defaultIconHtml = '<i class="nav-icon far fa-circle"></i> ';
     public $options = ['class' => 'sidebar-menu', 'data-widget' => 'tree'];
-
-    /**
-     * @var string is prefix that will be added to $item['icon'] if it exist.
-     * By default uses for Font Awesome (http://fontawesome.io/)
-     */
-    public static $iconClassPrefix = 'fa fa-';
+    public static $iconClassPrefix = 'fas fa-';
 
     private $noDefaultAction;
     private $noDefaultRoute;
 
-    /**
-     * Renders the menu.
-     */
     public function run()
     {
         if ($this->route === null && Yii::$app->controller !== null) {
@@ -72,17 +56,21 @@ class Menu extends \yii\widgets\Menu
     protected function renderItem($item)
     {
         if (isset($item['items'])) {
-            $labelTemplate = '<a href="{url}">{icon} {label} <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>';
-            $linkTemplate = '<a href="{url}">{icon} {label} <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>';
+            $labelTemplate = '<a href="{url}" class="nav-link">{icon}<p>{label}<i class="fas fa-angle-left right"></i></p></a>';
+            $linkTemplate = '<a href="{url}" class="nav-link">{icon}<p>{label}<i class="fas fa-angle-left right"></i></p></a>';
         } else {
             $labelTemplate = $this->labelTemplate;
             $linkTemplate = $this->linkTemplate;
+        }
+        $active = '';
+        if ($item['active']) {
+            $active= 'active';
         }
 
         $replacements = [
             '{label}' => strtr($this->labelTemplate, ['{label}' => $item['label'],]),
             '{icon}' => empty($item['icon']) ? $this->defaultIconHtml
-                : '<i class="' . static::$iconClassPrefix . $item['icon'] . '"></i> ',
+                : '<i class="' . static::$iconClassPrefix . $item['icon'] . ' nav-icon"></i> ',
             '{url}' => isset($item['url']) ? Url::to($item['url']) : 'javascript:void(0);',
         ];
 
@@ -104,21 +92,17 @@ class Menu extends \yii\widgets\Menu
             $options = array_merge($this->itemOptions, ArrayHelper::getValue($item, 'options', []));
             $tag = ArrayHelper::remove($options, 'tag', 'li');
             $class = [];
-            if ($item['active']) {
-                $class[] = $this->activeCssClass;
-            }
+            $class[] = 'nav-item';
             if ($i === 0 && $this->firstItemCssClass !== null) {
                 $class[] = $this->firstItemCssClass;
             }
             if ($i === $n - 1 && $this->lastItemCssClass !== null) {
                 $class[] = $this->lastItemCssClass;
             }
-            if (!empty($class)) {
-                if (empty($options['class'])) {
-                    $options['class'] = implode(' ', $class);
-                } else {
-                    $options['class'] .= ' ' . implode(' ', $class);
-                }
+            if (empty($options['class'])) {
+                $options['class'] = implode(' ', $class);
+            } else {
+                $options['class'] .= ' ' . implode(' ', $class);
             }
             $menu = $this->renderItem($item);
             if (!empty($item['items'])) {
@@ -127,9 +111,9 @@ class Menu extends \yii\widgets\Menu
                     '{items}' => $this->renderItems($item['items']),
                 ]);
 				if (isset($options['class'])) {
-					$options['class'] .= ' treeview';
+					$options['class'] .= ' has-treeview';
 				} else {
-					$options['class'] = 'treeview';
+					$options['class'] = 'has-treeview';
 				}
             }
             $lines[] = Html::tag($tag, $menu, $options);
