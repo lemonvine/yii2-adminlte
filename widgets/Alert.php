@@ -7,8 +7,8 @@
 
 namespace lemon\widgets;
 
-use yii\bootstrap\Alert as BootstrapAlert;
-use yii\bootstrap\Widget;
+use yii\bootstrap4\Alert as BootstrapAlert;
+use yii\bootstrap4\Widget;
 
 /**
  * Alert widget renders a message from session flash for AdminLTE alerts. All flash messages are displayed
