@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c92cecbb0dfb8207f23da4a2db230829",
+    "content-hash": "ed3c16ba28b639f813f8b5f186ba4863",
     "packages": [
         {
             "name": "bower-asset/inputmask",
@@ -271,51 +271,66 @@
         },
         {
             "name": "fortawesome/font-awesome",
-            "version": "v4.7.0",
+            "version": "5.11.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FortAwesome/Font-Awesome.git",
-                "reference": "a8386aae19e200ddb0f6845b5feeee5eb7013687"
+                "reference": "1c1b102b2ba19518d77e60e97cf1b4ebf133bba0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FortAwesome/Font-Awesome/zipball/a8386aae19e200ddb0f6845b5feeee5eb7013687",
-                "reference": "a8386aae19e200ddb0f6845b5feeee5eb7013687",
+                "url": "https://api.github.com/repos/FortAwesome/Font-Awesome/zipball/1c1b102b2ba19518d77e60e97cf1b4ebf133bba0",
+                "reference": "1c1b102b2ba19518d77e60e97cf1b4ebf133bba0",
                 "shasum": ""
             },
-            "require-dev": {
-                "jekyll": "1.0.2",
-                "lessc": "1.4.2"
-            },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "4.6.x-dev"
-                }
-            },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
+                "CC-BY-4.0",
                 "OFL-1.1",
                 "MIT"
             ],
             "authors": [
                 {
+                    "name": "Travis Chase",
+                    "homepage": "http://twitter.com/supercodepoet"
+                },
+                {
                     "name": "Dave Gandy",
-                    "email": "dave@fontawesome.io",
-                    "homepage": "http://twitter.com/davegandy",
-                    "role": "Developer"
+                    "homepage": "http://twitter.com/davegandy"
+                },
+                {
+                    "name": "Rob Madole",
+                    "homepage": "http://twitter.com/robmadole"
+                },
+                {
+                    "name": "Jory Raphael",
+                    "homepage": "http://twitter.com/sensibleworld"
+                },
+                {
+                    "name": "Geremia Taglialatela",
+                    "homepage": "http://twitter.com/gtagliala"
+                },
+                {
+                    "name": "Brian Talbot",
+                    "homepage": "http://twitter.com/talbs"
+                },
+                {
+                    "name": "Mike Wilkerson",
+                    "homepage": "http://twitter.com/mw77"
                 }
             ],
-            "description": "The iconic font and CSS framework",
-            "homepage": "http://fontawesome.io/",
+            "description": "The iconic font, CSS, and SVG framework",
+            "homepage": "https://fontawesome.com",
             "keywords": [
                 "FontAwesome",
                 "awesome",
                 "bootstrap",
                 "font",
-                "icon"
+                "icon",
+                "svg"
             ],
-            "time": "2016-10-24T15:52:54+00:00"
+            "time": "2019-09-23T18:57:22+00:00"
         },
         {
             "name": "npm-asset/bootstrap",
@@ -323,6 +338,7 @@
             "dist": {
                 "type": "tar",
                 "url": "https://registry.npmjs.org/bootstrap/-/bootstrap-4.3.1.tgz",
+                "reference": null,
                 "shasum": "280ca8f610504d99d7b6b4bfc4b68cec601704ac"
             },
             "type": "npm-asset-library",
@@ -435,16 +451,16 @@
         },
         {
             "name": "yiisoft/yii2",
-            "version": "2.0.29",
+            "version": "2.0.30",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-framework.git",
-                "reference": "f972275551172a4b2e293979d77aa0c795ae36a2"
+                "reference": "dfeeaf4dbdd23c9cd29b9246921e8a9ca2dbabe4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/f972275551172a4b2e293979d77aa0c795ae36a2",
-                "reference": "f972275551172a4b2e293979d77aa0c795ae36a2",
+                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/dfeeaf4dbdd23c9cd29b9246921e8a9ca2dbabe4",
+                "reference": "dfeeaf4dbdd23c9cd29b9246921e8a9ca2dbabe4",
                 "shasum": ""
             },
             "require": {
@@ -531,7 +547,7 @@
                 "framework",
                 "yii2"
             ],
-            "time": "2019-10-22T13:47:14+00:00"
+            "time": "2019-11-19T21:22:20+00:00"
         },
         {
             "name": "yiisoft/yii2-bootstrap4",

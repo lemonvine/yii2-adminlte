@@ -13,15 +13,15 @@ use yii\helpers\Html;
  *
  * ```
  * echo \cebe\gravatar\Gravatar::widget([
- *     'email' => 'mail@cebe.cc',
- *     'size' => 128,
- *     'defaultImage' => 'monsterid',
+ *	 'email' => 'mail@cebe.cc',
+ *	 'size' => 128,
+ *	 'defaultImage' => 'monsterid',
  * //  'secure' => false, // will be autodetected
- *     'rating' => 'r',
- *     'options'=>[
- *         'alt'=>'Gravatar image',
- *         'title'=>'Gravatar image',
- *     ]
+ *	 'rating' => 'r',
+ *	 'options'=>[
+ *		 'alt'=>'Gravatar image',
+ *		 'title'=>'Gravatar image',
+ *	 ]
  * ]);
  * </pre>
  *
