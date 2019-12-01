@@ -6,13 +6,13 @@
 
 namespace lemon\web;
 
-use yii\web\AssetBundle;
+use yii\web\AssetBundle as Base;
 
 /**
  * Class AssetBundle
  * @package lemon\web
  */
-class AssetBundle extends AssetBundle
+class AssetBundle extends Base
 {
 	public $sourcePath = '@vendor/fortawesome/font-awesome';
 	
