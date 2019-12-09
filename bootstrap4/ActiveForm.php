@@ -3,6 +3,8 @@
 namespace lemon\bootstrap4;
 
 use Yii;
+use yii\base\InvalidCallException;
+use yii\helpers\Html;
 
 /**
  * A Bootstrap 4 enhanced version of [[\yii\bootstrap4\ActiveForm]].
@@ -19,4 +21,22 @@ class ActiveForm extends \yii\bootstrap4\ActiveForm
 		parent::init();
 	}
 	
+	public function run()
+	{
+		if (!empty($this->_fields)) {
+			throw new InvalidCallException('Each beginField() should have a matching endField() call.');
+		}
+		
+		$content = ob_get_clean();
+		$html = Html::beginForm($this->action, $this->method, $this->options);
+		$html .= Html::hiddenInput('back_referer',$this->view->context->referer, ['id'=>'referer_url']);
+		$html .= $content;
+		
+		if ($this->enableClientScript) {
+			$this->registerClientScript();
+		}
+		
+		$html .= Html::endForm();
+		return $html;
+	}
 }
