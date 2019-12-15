@@ -5,6 +5,7 @@ namespace lemon\bootstrap4;
 use Yii;
 use yii\base\InvalidCallException;
 use yii\helpers\Html;
+use lemon\widgets\JsBlock;
 
 /**
  * A Bootstrap 4 enhanced version of [[\yii\bootstrap4\ActiveForm]].
@@ -26,7 +27,6 @@ class ActiveForm extends \yii\bootstrap4\ActiveForm
 		if (!empty($this->_fields)) {
 			throw new InvalidCallException('Each beginField() should have a matching endField() call.');
 		}
-		
 		$content = ob_get_clean();
 		$html = Html::beginForm($this->action, $this->method, $this->options);
 		$html .= Html::hiddenInput('back_referer',$this->view->context->referer, ['id'=>'referer_url']);
@@ -35,8 +35,20 @@ class ActiveForm extends \yii\bootstrap4\ActiveForm
 		if ($this->enableClientScript) {
 			$this->registerClientScript();
 		}
-		
+		$html .= $this->pjaxResponse();
 		$html .= Html::endForm();
 		return $html;
+	}
+	
+	private function pjaxResponse(){
+		if($this->view->context->flag==9){
+			$Js = <<<JS
+bolevine.back2begin("{$this->view->context->message}", "{$this->view->context->referer}");
+JS;
+			$jsb = JsBlock::begin();
+			$html = $jsb->block($Js);
+			JsBlock::end();
+			return $html;
+		}
 	}
 }
