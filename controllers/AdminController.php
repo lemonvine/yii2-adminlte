@@ -11,15 +11,15 @@ use common\repository\Utility;
  */
 class AdminController extends Controller
 {
-	public $appid = 0;
-	public $layout = '@vendor/lemonvine/yii2-adminlte/views/layouts/adminlte-main';
+	public $layout='@vendor/lemonvine/yii2-adminlte/views/layouts/adminlte-main';
 	public $u;
-	public $user_id = 0;
-	public $flag = 0;
-	public $message = "";
-	public $primary = ''; //当前页面首次打开时的路径，用于查询提交
-	public $referer = ''; //跳转源，用于返回按钮
-	public $deliver = [];
+	public $m='';
+	public $user_id=0;
+	public $operate= 0;
+	public $message="";
+	public $primary=''; //当前页面首次打开时的路径，用于查询提交
+	public $referer=''; //跳转源，用于返回按钮
+	public $deliver=[];
 
 	/**
 	 * 初始化信息
@@ -39,6 +39,19 @@ class AdminController extends Controller
 		}
 		$this->referer = Utility::getReferer();
 		$this->primary = Utility::getPrimary();
+		$params = Yii::$app->request->queryParams;
+		if (isset($params['m'])) {
+			$this->m = $params['m'];
+		}
+	}
+	
+	public function beforeAction($action)
+	{
+		$this->u = Yii::$app->user->identity;
+		if (!$this->u) {
+			die;
+		}
+		return parent::beforeAction($action);
 	}
 
 	/**
@@ -47,9 +60,7 @@ class AdminController extends Controller
 	public function success($data)
 	{
 		Yii::$app->response->format = Response::FORMAT_JSON;
-		$ret['status'] = '201';
-		$ret['data'] = $data;
-		return $ret;
+		return ['status'=>'202', 'data'=>$data];
 	}
 
 	/**
@@ -60,9 +71,7 @@ class AdminController extends Controller
 	public function fail($msg)
 	{
 		Yii::$app->response->format = Response::FORMAT_JSON;
-		$ret['status'] = '401';
-		$ret['message'] = $msg;
-		return $ret;
+		return ['status'=>'401', 'message'=>$msg];
 	}
 
 	/**
@@ -70,7 +79,12 @@ class AdminController extends Controller
 	 */
 	public function turnToDialog ()
 	{
-		$this->layout = "@app/views/layouts/model";
+		$this->layout = "@vendor/lemonvine/yii2-adminlte/views/layouts/adminlte-model";
+	}
+	
+	public function turnToHtml()
+	{
+		$this->layout = "@vendor/lemonvine/yii2-adminlte/views/layouts/html";
 	}
 	
 	/**

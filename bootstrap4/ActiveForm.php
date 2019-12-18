@@ -16,6 +16,7 @@ use lemon\widgets\JsBlock;
  */
 class ActiveForm extends \yii\bootstrap4\ActiveForm
 {
+	public $PJAX = false;
 	public function init()
 	{
 		$this->fieldClass = "lemon\bootstrap4\ActiveField";
@@ -35,13 +36,16 @@ class ActiveForm extends \yii\bootstrap4\ActiveForm
 		if ($this->enableClientScript) {
 			$this->registerClientScript();
 		}
-		$html .= $this->pjaxResponse();
+		if($this->PJAX){
+			$html .= $this->pjaxResponse();
+		}
+		
 		$html .= Html::endForm();
 		return $html;
 	}
 	
 	private function pjaxResponse(){
-		if($this->view->context->flag==9){
+		if($this->view->context->operate==9){
 			$Js = <<<JS
 bolevine.back2begin("{$this->view->context->message}", "{$this->view->context->referer}");
 JS;
