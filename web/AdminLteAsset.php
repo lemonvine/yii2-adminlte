@@ -11,6 +11,7 @@ class AdminLteAsset extends AssetBundle
 {
 	public $sourcePath = '@vendor/lemonvine/yii2-adminlte/dist';
 	public $css = [
+		'css/font-awesome.min.css',
 		'css/adminlte.min.css',
 		'css/alt/adminlte.plugins.min.css',
 		'//at.alicdn.com/t/font_1461808_yl4hc59zdsq.css',
@@ -27,7 +28,7 @@ class AdminLteAsset extends AssetBundle
 	];
 	public $depends = [
 		'yii\web\JqueryAsset',
-		'lemon\web\AssetBundle',
+		//'lemon\web\AssetBundle',
 	];
 	
 	//定义按需加载JS方法，注意加载顺序在最后
