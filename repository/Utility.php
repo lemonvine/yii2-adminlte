@@ -1,5 +1,4 @@
 <?php
-
 namespace lemon\repository;
 
 use Yii;
@@ -27,7 +26,7 @@ class Utility
 		$pos = mt_rand(0, 26);
 		$password .= $lower[$pos];
 		$chars = array_merge($digit, $upper, $lower, $special);
-			
+		
 		$charsLen = count($chars) - 1;
 		for($i = 0; $i < $len-3; $i++)
 		{
@@ -49,7 +48,7 @@ class Utility
 		}
 		return $str;
 	}
-		
+	
 	/**
 	 * 获取来源页面地址
 	 * @return string
@@ -131,5 +130,26 @@ class Utility
 		$sequence =  $command->queryScalar();
 		return $sequence;
 	}
+	
+	/**
+	 * 获取缓存
+	 * @param unknown $cache_name
+	 * @return mixed|boolean|\yii\caching\Dependency|\yii\caching\false
+	 */
+	public static function getCache($cache_name){
+		$cache = Yii::$app->cache;
+		$cache_data = $cache->get($cache_name);
+		return $cache_data;
+	}
+	
+	/**
+	 * 保存缓存
+	 * @param unknown $cache_name
+	 * @param unknown $cache_data
+	 * @param number $limit
+	 */
+	public static function setCache($cache_name, $cache_data, $limit=3600){
+		$cache = Yii::$app->cache;
+		$cache->set($cache_name, $cache_data, $limit);
+	}
 }
-

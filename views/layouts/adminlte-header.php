@@ -1,6 +1,7 @@
 <?php
 use yii\helpers\Html;
 use yii\helpers\Url;
+use lemon\repository\Undefinitive;
 
 /* @var $this \yii\web\View */
 /* @var $content string */
@@ -13,12 +14,7 @@ use yii\helpers\Url;
 		</li>
 	</ul>
 	<ul class="navbar-nav ml-auto">
-		<li class="nav-item messages-menu">
-			<a href="javascript:;" target="_blank">
-				<i class="fa fa-envelope-o"></i>
-				<span class="label label-success"></span>
-			</a>
-		</li>
+		<?=Undefinitive::mission('headerMenu', ['view'=>$this])?>
 		<li class="nav-item">
 			<a href="javascript:;" onclick="resetPassword()" class="nav-link" >
 				<i class="fa fa-key"></i> 修改密码

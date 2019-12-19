@@ -14,9 +14,9 @@ class Menu extends \yii\widgets\Menu
 	public $linkTemplate = '<a href="{url}" class="nav-link">{icon}{label}</a>';
 	public $submenuTemplate = "\n<ul class='nav nav-treeview'{show}>\n{items}\n</ul>\n";
 	public $activateParents = true;
-	public $defaultIconHtml = '<i class="nav-icon far fa-circle"></i> ';
+	public $defaultIconHtml = '<i class="nav-icon fa fa-circle"></i> ';
 	public $options = ['class' => 'sidebar-menu', 'data-widget' => 'tree'];
-	public static $iconClassPrefix = 'fas fa-';
+	public static $iconClassPrefix = 'fa fa-';
 
 	private $noDefaultAction;
 	private $noDefaultRoute;
@@ -56,8 +56,8 @@ class Menu extends \yii\widgets\Menu
 	protected function renderItem($item)
 	{
 		if (isset($item['items'])) {
-			$labelTemplate = '<a href="{url}" class="nav-link">{icon}<p>{label}<i class="fas fa-angle-left right"></i></p></a>';
-			$linkTemplate = '<a href="{url}" class="nav-link">{icon}<p>{label}<i class="fas fa-angle-left right"></i></p></a>';
+			$labelTemplate = '<a href="{url}" class="nav-link">{icon}<p>{label}<i class="fa fa-angle-left right"></i></p></a>';
+			$linkTemplate = '<a href="{url}" class="nav-link">{icon}<p>{label}<i class="fa fa-angle-left right"></i></p></a>';
 		} else {
 			$labelTemplate = $this->labelTemplate;
 			$linkTemplate = $this->linkTemplate;

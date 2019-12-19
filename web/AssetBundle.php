@@ -17,7 +17,7 @@ class AssetBundle extends Base
 	public $sourcePath = '@vendor/fortawesome/font-awesome';
 	
 	public $css = [
-		'css/all.min.css',
+		'css/fontawesome.min.css',
 	];
 
 	/**
