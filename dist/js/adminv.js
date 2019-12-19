@@ -117,6 +117,48 @@ var bolevine = {
 		}
 		return array1;
 	},
+	initdate: function(target){
+		if(!$(target).hasClass('rendered') && $(target).attr('readonly')!="readonly"){
+			$(target).prop('autocomplete','off');// 取消记忆功能
+			var id = $(target).attr('id');
+			var type = $(target).data('type');
+			var format = $(target).data('format');
+			var save = $(target).data('save') || 'timestamp';
+			var callback = $(target).data('callback');
+			var hidden = $(target).data('hidden');
+			var params = {};
+			params.elem = '#'+id;
+			if(type!=''){
+				params.type=type;
+			}
+			if(format!=''){
+				params.format=format;
+			}
+			params.trigger='click';
+			params.done=function(date){
+				if(save == 'string'){
+					if(date){
+						$("#"+hidden).val(date);
+					}else{
+						$("#"+hidden).val('');
+					}
+				}else{
+					var newTimestamp = Date.parse(new Date(date.replace('-','/')))/1000;
+					if(newTimestamp){
+						$("#"+hidden).val(newTimestamp);
+					}else{
+						$("#"+hidden).val('');
+					}
+				}
+				
+				if(callback){
+					eval(callback+"(target)");
+				}
+			};
+			laydate.render(params);
+			$(target).addClass('rendered');
+		}
+	},
 	sy: function(){
 		layer.alert('only test');
 	}
@@ -163,7 +205,7 @@ $(window).ready(function(){
 	});
 	
 	$('.js-laydate').each(function(){
-		initLaydate(this);
+		bolevine.initdate(this);
 	});
 	
 	$('.table-form').resize(function(){
