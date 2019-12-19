@@ -4,7 +4,7 @@ namespace lemon\controllers;
 use Yii;
 use yii\web\Controller;
 use yii\web\Response;
-use common\repository\Utility;
+use lemon\repository\Utility;
 
 /*
  * 后台管理员控制器基类
@@ -31,7 +31,7 @@ class AdminController extends Controller
 		if (!empty(Yii::$app->user->identity)) {
 			$this->u = Yii::$app->user->identity;
 			$this->user_id = $this->u->id;
-			$this->appid = $this->u->appid;
+			//$this->appid = $this->u->appid;
 		}
 		if ($this->user_id == 0) {
 			$this->layout=null;

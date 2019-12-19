@@ -1,10 +1,9 @@
 <?php
-
 use yii\helpers\Html;
-use backend\assets\AppAsset;
 use lemon\widgets\Message;
+use lemon\web\AdminLteAsset;
 
-AppAsset::register($this);
+AdminLteAsset::register($this);
 
 ?>
 <?php $this->beginPage() ?>
@@ -16,7 +15,7 @@ AppAsset::register($this);
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<?= Html::csrfMetaTags() ?>
 		<title><?= Html::encode($this->title) ?></title>
-		<link rel="icon" type="image/x-icon" class="js-site-favicon" href="favicon.ico">
+		<link rel="icon" type="image/x-icon" class="js-site-favicon" href="/favicon.ico">
 		<?php $this->head() ?>
 	</head>
 	<body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed text-sm">

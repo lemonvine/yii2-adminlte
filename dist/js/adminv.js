@@ -5,8 +5,30 @@ var bolevine = {
 	v: '1',
 	referer: '',
 	opening: null,
-	alert: function(options){
-		layer.msg(MESSAGE, {time: 1000});
+	turnoff: function(){
+		if(bolevine.opening){
+			layer.close(bolevine.opening);
+			bolevine.opening = null;
+		}
+	},
+	alert: function(param){
+		var base = {flag: 1, message: 'md', icon: 1, time: 2000, callback:null};
+		base = bolevine.merge(base, param);
+		switch (flag){
+			case "4":
+				base.icon = 5;
+				base.time = 4000;
+				layer.alert(base.message,{time: base.time, skin: 'layui-layer-molv', icon: base.icon});
+				break;
+			case "8":
+			case "9":
+				base.time = 1000;
+			case "1":
+				layer.msg(base.message,{time: base.time, skin: 'layui-layer-molv', icon: base.icon}, function(){
+					if(base.callback) eval(base.callback);
+				});
+				break;
+		}
 	},
 	forward: function(url){
 		if(url){
@@ -28,7 +50,126 @@ var bolevine = {
 			bolevine.forward(url);
 		}
 	},
+	dialog:function(param){
+		var size = {xs:['420px', '280px'], sm:['600px', '450px'], md: ['800px', '600px'], lg: ['1000px', '750px']}
+		var base = {title:'信息', size: 'md', resize:false, max:false, url: '', html:'', callback:null};
+		base = bolevine.merge(base, param);
+		var config = {type: 1, title: base.title, area:size[base.size], resize: base.resize};
+		if(base.max) config.maxmin = true;
+		if(base.url) {
+			config.type = 2;
+			config.content = base.url;
+		}
+		else{
+			config.content = base.html
+		}
+		if(base.callback){
+			config.success = function(layero, index){eval(base.callback+"(layero, index)");};
+		}
+		bolevine.opening = layer.open(config);
+	},
+	confirm: function(param){
+		var base = {title: '询问', 'word':'', way: '', url:'', type:'post', data:'', target: null, callback:null};
+		base = bolevine.merge(base, param);
+		layer.confirm(base.word, {icon: 3, title:base.title}, function(index){
+			layer.close(index);
+			switch(base.way){
+				case "page":
+					bolevine.forward(base.url);
+					break;
+				case "dialog":
+					bolevine.dialog({url:base.url});
+					break;
+				case "ajax":
+					$.ajax({type: base.type, url: base.url, data: base.data, success : function(r) {
+						if(r.status==202){
+							if(base.callback){
+								var target = base.target;
+								var data = r.data;
+								eval(callback+"(target, data)");
+							}
+						}else{
+							bolevine.alert({message: r.message, flag: 4});
+						}
+					}, error : function(e){bolevine.alert({message: "错误："+e.responseText, flag: 4});}
+					});
+					break;
+				default:
+					break;
+			}
+			
+		}, function(){
+			
+		});
+	},
+	precall: function(target){
+		var _precall = $(target).data('precall');
+		if(_precall){
+			return eval(_precall+"(target)");
+		}
+		return true;
+	},
+	merge: function(array1, array2){
+		for(item in array2){
+			if(array2[item]!=undefined){
+				array1[item] = array2[item];
+			}
+		}
+		return array1;
+	},
 	sy: function(){
-		layer.alert('ssssss');
+		layer.alert('only test');
 	}
 }
+
+$(window).ready(function(){
+	setTimeout(function(){
+		$('.form-btns').width($('.content-wrapper').width()-32).fadeIn(1800);
+	},100);
+
+	$(document).on('click','.modaldialog',function(){
+		if(!bolevine.precall($(this))) return false;
+		var param = {};
+		param.title=$(this).data('title');
+		param.size=$(this).data('area');
+		param.url = $(this).data('url');
+		param.html = $(this).data('html');
+		var _maxmin = $(this).data('maxmin');
+		if(_maxmin) param.max= true;
+		bolevine.dialog(param);
+	});
+
+	$(document).on('click', '.confirmdialog',function(){
+		if(!bolevine.precall($(this))) return false;
+		var param = {};
+		param.word=$(this).data("word");
+		param.way=$(this).data('way');
+		param.url=$(this).data("url");
+		param.type=$(this).data('type');
+		param.data=$(this).data('data');
+		param.callback = $(this).data('callback');
+		param.target = $(this);
+		bolevine.confirm(param);
+	});
+	
+	$(document).on('click', '.btn-radio',function(){
+		var radio_type = $(this).data("radio");
+		$(".btn-radio[data-radio="+radio_type+"]").removeClass('btn-info');
+		$(this).addClass('btn-info');
+		var _callback = $(this).data("call");
+		if(_callback){
+			eval(_callback);
+		}
+	});
+	
+	$('.js-laydate').each(function(){
+		initLaydate(this);
+	});
+	
+	$('.table-form').resize(function(){
+		$('.form-btns').width($('.content-wrapper').width()-32)
+	});
+	if(MESSAGE){
+		bolevine.alert({message:MESSAGE, flag:MESSAGE_FLAG});
+	}
+})

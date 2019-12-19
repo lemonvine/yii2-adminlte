@@ -28,7 +28,7 @@ use lemon\bootstrap4\Breadcrumbs;
 </div>
 <footer class="main-footer">
 	<div class="float-right d-none d-sm-block">
-	  <b>Version：</b> <?=\Yii::$app->params['version']?>
+	  <b>Version：</b> <?=\Yii::$app->params['admin_version']?>
 	</div>
 	<strong>Copyright &copy; <?=date('Y')?> <a href="javascript:void(0)"><?=\Yii::$app->params['copyright']?></a> </strong> 版权所有
 </footer>
