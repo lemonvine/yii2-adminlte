@@ -14,12 +14,14 @@ class Menu extends \yii\widgets\Menu
 	public $linkTemplate = '<a href="{url}" class="nav-link">{icon}{label}</a>';
 	public $submenuTemplate = "\n<ul class='nav nav-treeview'{show}>\n{items}\n</ul>\n";
 	public $activateParents = true;
-	public $defaultIconHtml = '<i class="nav-icon fa fa-circle"></i> ';
+	public $defaultIconHtml = '<i class="nav-icon fa fa-circle-o @i@"></i> ';
 	public $options = ['class' => 'sidebar-menu', 'data-widget' => 'tree'];
 	public static $iconClassPrefix = 'fa fa-';
 
 	private $noDefaultAction;
 	private $noDefaultRoute;
+	private $icons = ['text-primary', 'text-success', 'text-info', 'text-warning', 'text-danger', 'text-white', 'text-success', 'text-purple'];
+	private $i=0;
 
 	public function run()
 	{
@@ -66,10 +68,12 @@ class Menu extends \yii\widgets\Menu
 		if ($item['active']) {
 			$active= 'active';
 		}
-
+		
+		$defaulticon = str_replace("@i@", $this->icons[$this->i%8], $this->defaultIconHtml);
+		$this->i++;
 		$replacements = [
 			'{label}' => strtr($this->labelTemplate, ['{label}' => $item['label'],]),
-			'{icon}' => empty($item['icon']) ? $this->defaultIconHtml
+			'{icon}' => empty($item['icon']) ? $defaulticon
 				: '<i class="' . static::$iconClassPrefix . $item['icon'] . ' nav-icon"></i> ',
 			'{url}' => isset($item['url']) ? Url::to($item['url']) : 'javascript:void(0);',
 		];
