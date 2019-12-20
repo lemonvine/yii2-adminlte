@@ -19,7 +19,10 @@
 		"yiisoft/yii2" : "2.*",
 		"yiisoft/yii2-bootstrap4" : "~2.0.6",
 		"fortawesome/font-awesome" : "^5.9.0",
-		"npm-asset/bootstrap" : "^4.3"
+		"npm-asset/fontawesome" : "5.*",
+		"npm-asset/bootstrap" : "^4.3",
+		"npm-asset/codemirror" : "5.*@stable",
+		"npm-asset/summernote" : "0.*@stable"
 	},
 	"autoload" : {
 		"psr-4" : {
