@@ -103,7 +103,7 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 			
 			switch ($type){
 				case 'icon':
-					$content =  Html::tag('i', '', ['class'=>"fas fa-$content"]);
+					$content =  Html::tag('i', '', ['class'=>"fa fa-$content"]);
 					break;
 				case 'button':
 					$as_button=true;
@@ -116,8 +116,7 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 			}
 		}
 		if(!$as_button){
-			Html::addCssClass($options, 'input-group-text');
-			$content = Html::tag('span', $content);
+			$content = Html::tag('span', $content, ['class'=>'input-group-text']);
 		}
 		
 		$content = Html::tag('div', $content, ['class' => "input-group-{$pos}"]);

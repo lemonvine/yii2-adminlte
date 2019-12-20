@@ -1,9 +1,11 @@
 <?php
 use yii\helpers\Html;
 use lemon\widgets\Message;
-use lemon\web\AdminLteAsset;
 
-AdminLteAsset::register($this);
+/* @var $this \yii\web\View */
+/* @var $content string */
+
+$this->registerAssetBundle(Yii::$app->params['classname_asset']);
 
 ?>
 <?php $this->beginPage() ?>

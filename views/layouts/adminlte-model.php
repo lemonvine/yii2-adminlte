@@ -1,12 +1,11 @@
 <?php
 use yii\helpers\Html;
 use lemon\widgets\Message;
-use lemon\web\AdminLteAsset;
 
 /* @var $this \yii\web\View */
 /* @var $content string */
 
-AdminLteAsset::register($this);
+$this->registerAssetBundle(Yii::$app->params['classname_asset']);
 
 ?>
 <?php $this->beginPage() ?>
@@ -24,7 +23,7 @@ AdminLteAsset::register($this);
 		<div class="wrapper">
 			<?php $this->beginBody() ?>
 			<section  class="content m-2">
-				<?= $content ?>
+				<?=$content?>
 			</section >
 			<?php $this->endBody() ?>
 		</div>

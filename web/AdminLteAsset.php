@@ -14,8 +14,7 @@ class AdminLteAsset extends AssetBundle
 		'css/font-awesome.min.css',
 		'css/adminlte.min.css',
 		'css/alt/adminlte.plugins.min.css',
-		'//at.alicdn.com/t/font_1461808_yl4hc59zdsq.css',
-		'viewer/viewer.css?v=3.9.0',
+		'viewer/viewer.css',
 	];
 	public $js = [
 		'js/adminlte.min.js',
