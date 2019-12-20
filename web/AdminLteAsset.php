@@ -13,7 +13,7 @@ class AdminLteAsset extends AssetBundle
 	public $css = [
 		'css/font-awesome.min.css',
 		'css/adminlte.min.css',
-		'css/alt/adminlte.plugins.min.css',
+		//'css/alt/adminlte.plugins.min.css',
 		'viewer/viewer.css',
 	];
 	public $js = [
