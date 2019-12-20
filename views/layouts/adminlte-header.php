@@ -16,32 +16,12 @@ use lemon\repository\Undefinitive;
 	<ul class="navbar-nav ml-auto">
 		<?=Undefinitive::mission('headerMenu', ['view'=>$this])?>
 		<li class="nav-item">
-			<a href="javascript:;" onclick="resetPassword()" class="nav-link" >
+			<a href="javascript:;" class="nav-link" data-url="<?= Url::toRoute(['/admin/mpwd'])?>" >
 				<i class="fa fa-key"></i> 修改密码
 			</a>
 		</li>
 		<li class="nav-item">
-			<?= Html::a('<i class="fa fa-sign-out"></i> 退出',['/site/logout'],['data-method' => 'post', 'class' => 'nav-link']) ?>
+			<?= Html::a('<i class="fa fa-sign-out"></i> 退出',['/admin/logout'],['data-method' => 'post', 'class' => 'nav-link']) ?>
 		</li>
 	</ul>
 </nav>
-<script type="text/javascript">
-var layerResetPassword;
-function resetPassword(){
-	layerResetPassword = layer.open({
-		type: 2,
-		title: "修改密码",
-		area: ['640px', '430px'],
-		resize: false,
-		move: false,
-		content: "<?= Url::toRoute(['/auth/user/updatepwd'])?>"
-	});
-}
-function closeResetPassword(){
-	layer.close(layerResetPassword);
-	layer.alert('密码修改成功，请重新登陆',{area: ['420px', '260px']},function(){
-		$.post("<?= Url::toRoute(['/site/logout'])?>");
-	});
-}
-</script>
-
