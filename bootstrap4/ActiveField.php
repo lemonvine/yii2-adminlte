@@ -100,7 +100,7 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 			$type = ArrayHelper::getValue($config, 'type', 'char');
 			$content = ArrayHelper::getValue($config, 'content', '');
 			$options = ArrayHelper::getValue($config, 'options', []);
-			$class = ArrayHelper::getValue($config, 'class', '');
+			$class = ArrayHelper::getValue($config, 'class', '');
 			
 			switch ($type){
 				case 'icon':
