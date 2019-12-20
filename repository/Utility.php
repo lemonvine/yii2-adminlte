@@ -153,7 +153,7 @@ class Utility
 		$cache->set($cache_name, $cache_data, $limit);
 	}
 	
-	public static function addon($char){
-		return ['append' => ['type'=>'char', 'content' => $char]];
+	public static function addon($char, $type='char'){
+		return ['append' => ['type'=>$type, 'content' => $char]];
 	}
 }

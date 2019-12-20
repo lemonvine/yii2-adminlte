@@ -100,6 +100,7 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 			$type = ArrayHelper::getValue($config, 'type', 'char');
 			$content = ArrayHelper::getValue($config, 'content', '');
 			$options = ArrayHelper::getValue($config, 'options', []);
+			$class = ArrayHelper::getValue($config, 'class', '');
 			
 			switch ($type){
 				case 'icon':
@@ -119,7 +120,7 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 			$content = Html::tag('span', $content, ['class'=>'input-group-text']);
 		}
 		
-		$content = Html::tag('div', $content, ['class' => "input-group-{$pos}"]);
+		$content = Html::tag('div', $content, ['class' => "input-group-{$pos} {$class}"]);
 		return $content;
 	}
 }
