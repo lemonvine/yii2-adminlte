@@ -1,6 +1,7 @@
 <?php
 namespace lemon\web;
 
+use Yii;
 use yii\web\AssetBundle;
 
 /**
@@ -9,34 +10,38 @@ use yii\web\AssetBundle;
  */
 class AdminLteAsset extends AssetBundle
 {
-	public $sourcePath = '@vendor/lemonvine/yii2-adminlte/dist';
-	public $css = [
-		'css/font-awesome.min.css',
-		'css/adminlte.min.css',
-		//'css/alt/adminlte.plugins.min.css',
-		'viewer/viewer.css',
-	];
-	public $js = [
-		'js/adminlte.min.js',
-		'layer/layer.js',
-		//'js/handlebars-v4.0.5.js',
-		'laydate/laydate.js',
-		"viewer/viewer.js?v=3.9.0",
-		'js/adminv.js?v=1',
-		//'js/common.js?v=1.0',
-	];
+	public static $path = '@vendor/lemonvine/yii2-adminlte/dist';
+	
 	public $depends = [
 		'yii\web\JqueryAsset',
-		//'lemon\web\AssetBundle',
 	];
 	
+	public function init()
+	{
+		$this->sourcePath = self::$path;
+		$postfix = YII_DEBUG ? '' : '.min';
+		$version = Yii::$app->params['admin_version'];
+		
+		$this->js[] = "js/adminlte{$postfix}.js?v=v{$version}";
+		$this->js[] = "layer/layer{$postfix}.js?v=v{$version}";
+		$this->js[] = "laydate/laydate{$postfix}.js?v=v{$version}";
+		$this->js[] = "viewer/viewer{$postfix}.js?v=v{$version}";
+		
+		$this->css[] = "css/font-awesome{$postfix}.css?v=v{$version}";
+		$this->css[] = "css/adminlte{$postfix}.css?v=v{$version}";
+		$this->css[] = "viewer/viewer{$postfix}.css?v=v{$version}";
+		
+		parent::init();
+	}
 	//定义按需加载JS方法，注意加载顺序在最后
 	public static function addScript($view, $jsfile) {
-		$view->registerJsFile($jsfile, ['depends' => self::className()]);
+		$directoryAsset = Yii::$app->assetManager->getPublishedUrl(self::$path);
+		$view->registerJsFile($directoryAsset.DIRECTORY_SEPARATOR.$jsfile, ['depends' => self::className()]);
 	}
 	
 	//定义按需加载css方法，注意加载顺序在最后
 	public static function addCss($view, $cssfile) {
-		$view->registerCssFile($cssfile, ['depends' => self::className()]);
+		$directoryAsset = Yii::$app->assetManager->getPublishedUrl(self::$path);
+		$view->registerCssFile($directoryAsset.DIRECTORY_SEPARATOR.$cssfile, ['depends' => self::className()]);
 	}
 }
