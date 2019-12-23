@@ -26,6 +26,7 @@ class AdminLteAsset extends AssetBundle
 		$this->js[] = "layer/layer{$postfix}.js?v=v{$version}";
 		$this->js[] = "laydate/laydate{$postfix}.js?v=v{$version}";
 		$this->js[] = "viewer/viewer{$postfix}.js?v=v{$version}";
+		$this->js[] = "js/adminv{$postfix}.js?v=v{$version}";
 		
 		$this->css[] = "css/font-awesome{$postfix}.css?v=v{$version}";
 		$this->css[] = "css/adminlte{$postfix}.css?v=v{$version}";
