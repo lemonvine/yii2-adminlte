@@ -43,6 +43,13 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 		return \yii\widgets\ActiveField::dropdownList($items, $options);
 	}
 
+	public $checkOptions = [
+        'class' => ['widget' => 'custom-control-input'],
+        'labelOptions' => [
+            'class' => ['widget' => '']
+        ]
+    ];
+
 	public $radioOptions = [
         'class' => ['widget' => 'custom-control-input'],
         'labelOptions' => [
