@@ -15,7 +15,7 @@ var bolevine = {
 	alert: function(param){
 		var base = {flag: 1, message: 'md', icon: 1, time: 2000, callback:null};
 		base = bolevine.merge(base, param);
-		switch (flag){
+		switch (base.flag){
 			case "4":
 				base.icon = 5;
 				base.time = 4000;

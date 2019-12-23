@@ -11,7 +11,8 @@ class GroupBtn extends Widget
 	public $fixed = true;
 	public $right = false;
 	public $form_id = 'main_form';
-	
+	public $key_id = 0;
+	public $inherit_class;
 	
 	private $submit_type = false;
 	public $target = "";
@@ -57,6 +58,10 @@ class GroupBtn extends Widget
 		$params = ['form_id'=>$this->form_id];
 		$params = array_merge($params, $config);
 		echo $this->render('export', $params);
+	}
+	
+	public function inherit($function_name){
+		$inherit_class::$function_name();
 	}
 	
 	private function getClass(){
