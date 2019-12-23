@@ -42,6 +42,90 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 	{
 		return \yii\widgets\ActiveField::dropdownList($items, $options);
 	}
+
+	public $radioOptions = [
+        'class' => ['widget' => 'custom-control-input'],
+        'labelOptions' => [
+            'class' => ['widget' => '']
+        ]
+	];
+	
+	public function checkboxList($items, $options = [])
+    {
+        if (!isset($options['item'])) {
+            $this->template = str_replace("\n{error}", '', $this->template);
+            $itemOptions = isset($options['itemOptions']) ? $options['itemOptions'] : [];
+            $encode = ArrayHelper::getValue($options, 'encode', true);
+            $itemCount = count($items) - 1;
+            $error = $this->error()->parts['{error}'];
+            $options['item'] = function ($i, $label, $name, $checked, $value) use (
+                $itemOptions,
+                $encode,
+                $itemCount,
+                $error
+            ) {
+                $options = array_merge($this->checkOptions, [
+                    'label' => $encode ? Html::encode($label) : $label,
+                    'id' => $name.'_'.$value
+                ], $itemOptions);
+                $wrapperOptions = ArrayHelper::remove($options, 'wrapperOptions', ['class' => ['icheck-primary', 'd-inline']]);
+                if ($this->inline) {
+                    Html::addCssClass($wrapperOptions, 'custom-control-inline');
+                }
+
+				$html = Html::beginTag('div', $wrapperOptions) . "\n" .
+				Html::checkbox($name,$checked,['id'=>$options['id'],'value'=>$value]). "\n" .
+				Html::label($options['label'],$options['id']) . "\n" ;
+                if ($itemCount === $i) {
+                    $html .= $error . "\n";
+                }
+                $html .= Html::endTag('div') . "\n";
+
+                return $html;
+            };
+        }
+
+        parent::checkboxList($items, $options);
+        return $this;
+    }
+
+	public function radioList($items, $options = [])
+    {
+        if (!isset($options['item'])) {
+            $this->template = str_replace("\n{error}", '', $this->template);
+            $itemOptions = isset($options['itemOptions']) ? $options['itemOptions'] : [];
+            $encode = ArrayHelper::getValue($options, 'encode', true);
+            $itemCount = count($items) - 1;
+            $error = $this->error()->parts['{error}'];
+            $options['item'] = function ($i, $label, $name, $checked, $value) use (
+                $itemOptions,
+                $encode,
+                $itemCount,
+                $error
+            ) {
+                $options = array_merge($this->radioOptions, [
+                    'label' => $encode ? Html::encode($label) : $label,
+					'id' => $name.'_'.$value
+                ], $itemOptions);
+                $wrapperOptions = ArrayHelper::remove($options, 'wrapperOptions', ['class' => ['icheck-primary', 'd-inline']]);
+                if ($this->inline) {
+                    Html::addCssClass($wrapperOptions, 'custom-control-inline');
+				}
+				$html = Html::beginTag('div', $wrapperOptions) . "\n" .
+				Html::radio($name,$checked,['id'=>$options['id'],'value'=>$value]). "\n" .
+				Html::label($options['label'],$options['id']) . "\n" ;
+                if ($itemCount === $i) {
+                    $html .= $error . "\n";
+                }
+                $html .= Html::endTag('div') . "\n";
+
+                return $html;
+            };
+        }
+
+        parent::radioList($items, $options);
+        return $this;
+    }
 	
 	protected function buildTemplate(){
 		$this->generateAddon();
