@@ -43,24 +43,8 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 		return \yii\widgets\ActiveField::dropdownList($items, $options);
 	}
 	
-	public function radioList($items, $options = [])
-	{
-		if ($this->form->validationStateOn === ActiveForm::VALIDATION_STATE_ON_INPUT) {
-			$this->addErrorClassIfNeeded($options);
-		}
-		
-		$this->addRoleAttributes($options, 'radiogroup');
-		$this->addAriaAttributes($options);
-		$this->adjustLabelFor($options);
-		//$this->_skipLabelFor = true;
-		$this->parts['{input}'] = Html::activeRadioList($this->model, $this->attribute, $items, $options);
-		
-		return $this;
-	}
-	
 	protected function buildTemplate(){
 		$this->generateAddon();
-		
 	}
 	
 	/**
