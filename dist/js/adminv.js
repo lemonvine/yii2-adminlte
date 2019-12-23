@@ -5,6 +5,7 @@ var bolevine = {
 	v: '1',
 	referer: '',
 	opening: null,
+	cookie_name: {save_reappear: "j2u8i3"},
 	turnoff: function(){
 		if(bolevine.opening){
 			layer.close(bolevine.opening);
@@ -40,14 +41,42 @@ var bolevine = {
 	},
 	back2begin: function(msg, url){
 		if(msg){
-			if(bolevine.opening){
-				layer.close(bolevine.opening);
-			}
+			bolevine.turnoff();
 			layer.msg(msg, {time: 1000}, function(){
 				bolevine.forward(url);
 			});
 		}else{
 			bolevine.forward(url);
+		}
+	},
+	reload: function(url){
+		url = location.href;
+		if(!url.includes('referer_url') && is_chain){
+			if(url.includes('?')){
+				url = url + "&referer_url="+encodeURI(bolevine.referer);
+			}
+			else{
+				url = url + "?referer_url="+encodeURI(bolevine.referer);
+			}
+		}
+		location.href=url;
+	},
+	dialogok: function(msg, url, chain){
+		var is_chain=false;
+		if(chain) is_chain=true;
+		if(msg){
+			bolevine.turnoff();
+			layer.msg(msg, {time: 1000}, function(){
+				if(url)
+					bolevine.forward(url);
+				else 
+					bolevine.reload(is_chain);
+			});
+		}else{
+			if(url)
+				bolevine.forward(url);
+			else 
+				bolevine.reload(is_chain);
 		}
 	},
 	dialog:function(param){
@@ -159,12 +188,30 @@ var bolevine = {
 			$(target).addClass('rendered');
 		}
 	},
+	cookie: function(cname, cvalue, exminutes){
+		if(cvalue){
+			var d = new Date();
+			d.setTime(d.getTime()+(exminutes*60*1000));
+			var expires = "expires="+d.toGMTString();
+			document.cookie = cname + "=" + cvalue + "; " + expires;
+		}else{
+			var name = cname + "=";
+			var ca = document.cookie.split(';');
+			for(var i=0; i<ca.length; i++)
+			{
+				var c = ca[i].trim();
+				if (c.indexOf(name)==0) return c.substring(name.length,c.length);
+			}
+			return null;
+		}
+	},
 	sy: function(){
 		layer.alert('only test');
 	}
 }
 
 $(window).ready(function(){
+	bolevine.referer = $("#referer_url").val();
 	setTimeout(function(){
 		$('.form-btns').width($('.content-wrapper').width()-32).fadeIn(1800);
 	},100);

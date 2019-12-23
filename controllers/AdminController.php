@@ -20,6 +20,7 @@ class AdminController extends Controller
 	public $primary=''; //当前页面首次打开时的路径，用于查询提交
 	public $referer=''; //跳转源，用于返回按钮
 	public $deliver=[];
+	public $submit_type='';
 
 	/**
 	 * 初始化信息
@@ -42,6 +43,10 @@ class AdminController extends Controller
 		$params = Yii::$app->request->queryParams;
 		if (isset($params['m'])) {
 			$this->m = $params['m'];
+		}
+		$post = Yii::$app->request->post();
+		if(isset($post['submit_type'])){
+			$this->submit_type=$post['submit_type'];
 		}
 	}
 	
@@ -92,10 +97,10 @@ class AdminController extends Controller
 	 * @param string $msg
 	 * @return string
 	 */
-	public function modelSaveSuccess($msg="保存成功")
+	public function modelSaveSuccess($msg="保存成功", $url='')
 	{
 		$msg = addslashes($msg);
-		return "<script type='text/javascript'>window.parent.modelsuccess('{$msg}');</script>";
+		return "<script type='text/javascript'>window.parent.bolevine.dialogok('{$msg}, {$url}');</script>";
 	}
 	
 	public function pjaxSuccess($msg='')
