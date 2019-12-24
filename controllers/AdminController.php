@@ -100,7 +100,7 @@ class AdminController extends Controller
 	public function modelSaveSuccess($msg="保存成功", $url='')
 	{
 		$msg = addslashes($msg);
-		return "<script type='text/javascript'>window.parent.bolevine.dialogok('{$msg}, {$url}');</script>";
+		return "<script type='text/javascript'>window.parent.bolevine.dialogok('{$msg}', '{$url}');</script>";
 	}
 	
 	public function pjaxSuccess($msg='')

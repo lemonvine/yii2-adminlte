@@ -13,11 +13,9 @@ class GroupBtn extends Widget
 	public $form_id = 'main_form';
 	public $key_id = 0;
 	
+	public static $btn_css ='';
 	private $submit_type = false;
 	private $view_dir = "@lemon/widgets/btns/views/";
-	public $target = "";
-	public $url = 'create';
-	public $m = '';
 	
 	public function init()
 	{
@@ -35,8 +33,70 @@ class GroupBtn extends Widget
 		echo Html::endTag(ArrayHelper::remove($this->options, 'tag', 'div'));
 	}
 	
+	public static function BackButton($isbtn=true){
+		return Html::Button('返回', ['class' => ($isbtn?'btn btn-':static::$btn_css).'default', 'onclick'=>'bolevine.forward()']);
+	}
+	
+	public static function OkButton($isbtn=true){
+		return Html::submitButton('确定', ['id' => 'btn_submit', 'class' => ($isbtn?'btn btn-':'').'success']);
+	}
+	
+	public static function CancelButton($isbtn=true){
+		return Html::Button('取消', ['class' => ($isbtn?'btn btn-':'').'default', 'onclick'=>'window.parent.bolevine.turnoff()']);
+	}
+	
+	public static function SearchButton(){
+		$button = Html::submitButton('查询', ['class' => 'btn btn-primary']);
+		$content = Html::tag('div', $button, ['class' => "form-group pull-right btns-line ml-auto"]);
+		return $content;
+	}
+	
+	public static function GoButton($title, $url, $isbtn=true, $color='info'){
+		return Html::a($title,  $url, ['class' => ($isbtn?'btn btn-':static::$btn_css).$color]);
+	}
+	
+	public static function DialogButton($title, $url, $isbtn=true, $color='info', $size='sm'){
+		return Html::a($title, 'javascript:;', ['class' => ($isbtn?'btn btn-':static::$btn_css).$color.' modaldialog', 'data-title' => $title, 'data-area' => $size,
+			'data-url' => $url]);
+	}
+	
+	public static function AlertButton($title, $html, $isbtn=true, $color='info', $size='sm'){
+		return Html::a($title, 'javascript:;', ['class' => ($isbtn?'btn btn-':static::$btn_css).$color.' modaldialog', 'data-title' => $title, 'data-area' => $size,
+			'data-html' => $html]);
+	}
+	
 	public function back(){
-		echo Html::Button('返回', ['class' => 'btn btn-info', 'onclick'=>'bolevine.forward()']);
+		echo self::BackButton();
+	}
+	
+	public function cancel(){
+		echo self::CancelButton();
+	}
+	
+	public function go($title, $url, $color='info'){
+		echo self::GoButton($title, $url, true);
+	}
+	
+	/**
+	 * 弹出对话框
+	 * @param unknown $title
+	 * @param unknown $url
+	 * @param string $color
+	 * @param string $size
+	 */
+	public function dialog($title, $url, $color='info', $size='sm'){
+		echo self::DialogButton($title, $url, true, $color, $size);
+	}
+	
+	/**
+	 * 弹出提示按钮
+	 * @param unknown $title
+	 * @param unknown $url
+	 * @param string $color
+	 * @param string $size
+	 */
+	public function alert($title, $url, $color='info', $size='sm'){
+		echo self::AlertButton($title, $url, true, $color, $size);
 	}
 	
 	public function save($config=[]){
@@ -58,11 +118,6 @@ class GroupBtn extends Widget
 		$params = ['form_id'=>$this->form_id];
 		$params = array_merge($params, $config);
 		echo $this->render($this->view_dir.'export', $params);
-	}
-	
-	public function alert($title, $url, $btn_color='info', $size='sm'){
-		echo Html::a($title, 'javascript:;', ['class' => 'btn btn-'.$btn_color.' modaldialog', 'data-title' => $title, 'data-area' => $size,
-			'data-url' => $url]);
 	}
 	
 	private function getClass(){

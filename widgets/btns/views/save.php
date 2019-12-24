@@ -18,9 +18,12 @@ function onSaveData(){
 	}
 	try{
 		var _tabs = $("#nav-tabs>li>a.active");
-		var _tabid = $(_tabs[0]).attr('aria-controls');
-		var _scroll = $("#"+_tabid).scrollTop();
-		bolevine.cookie(bolevine.cookie_name.save_reappear, ""+_tabid+","+_scroll, 2);
+		if(_tabs.length>0){
+			var _tabid = $(_tabs[0]).attr('aria-controls');
+			var _scroll = $("#"+_tabid).scrollTop();
+			bolevine.cookie(bolevine.cookie_name.save_reappear, ""+_tabid+","+_scroll, 2);
+		}
+		
 	}
 	catch(ex){
 	}
