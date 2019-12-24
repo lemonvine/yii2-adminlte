@@ -56,13 +56,24 @@ class GroupBtn extends Widget
 	}
 	
 	public static function DialogButton($title, $url, $isbtn=true, $color='info', $size='sm'){
-		return Html::a($title, 'javascript:;', ['class' => ($isbtn?'btn btn-':static::$btn_css).$color.' modaldialog', 'data-title' => $title, 'data-area' => $size,
+		return Html::a($title, 'javascript:;', ['class'=>($isbtn?'btn btn-':static::$btn_css).$color.' modaldialog', 'data-title' => $title, 'data-area' => $size,
 			'data-url' => $url]);
 	}
 	
 	public static function AlertButton($title, $html, $isbtn=true, $color='info', $size='sm'){
-		return Html::a($title, 'javascript:;', ['class' => ($isbtn?'btn btn-':static::$btn_css).$color.' modaldialog', 'data-title' => $title, 'data-area' => $size,
-			'data-html' => $html]);
+		return Html::a($title, 'javascript:;', ['class'=>($isbtn?'btn btn-':static::$btn_css).$color.' modaldialog', 'data-title' => $title, 'data-area' => $size,
+			'data-html'=>$html]);
+	}
+	
+	public static function AsynchButton($title, $url, $data=[], $callback='', $type='post', $isbtn=true, $color='info'){
+		if($data){
+			$data = json_encode($data);
+		}
+		else{
+			$data = '';
+		}
+		return Html::a($title, 'javascript:;', ['class'=>($isbtn?'btn btn-':static::$btn_css).$color.' asynchtrace', 'data-type'=>$type, 'data-data'=>$data,
+			'data-url'=>$url, 'data-callback'=>$callback]);
 	}
 	
 	public function back(){

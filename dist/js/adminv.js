@@ -98,7 +98,7 @@ var bolevine = {
 		bolevine.opening = layer.open(config);
 	},
 	confirm: function(param){
-		var base = {title: '询问', 'word':'', way: '', url:'', type:'post', data:'', target: null, callback:null};
+		var base = {title: '询问', word:'', way: '', url:'', type:'post', data:'', target: null, callback:null};
 		base = bolevine.merge(base, param);
 		layer.confirm(base.word, {icon: 3, title:base.title}, function(index){
 			layer.close(index);
@@ -110,18 +110,7 @@ var bolevine = {
 					bolevine.dialog({url:base.url});
 					break;
 				case "ajax":
-					$.ajax({type: base.type, url: base.url, data: base.data, success : function(r) {
-						if(r.status==202){
-							if(base.callback){
-								var target = base.target;
-								var data = r.data;
-								eval(callback+"(target, data)");
-							}
-						}else{
-							bolevine.alert({message: r.message, flag: 4});
-						}
-					}, error : function(e){bolevine.alert({message: "错误："+e.responseText, flag: 4});}
-					});
+					bolevine.vjax(base);
 					break;
 				default:
 					break;
@@ -129,6 +118,22 @@ var bolevine = {
 			
 		}, function(){
 			
+		});
+	},
+	vjax: function(param){
+		var base = {url:'', type:'post', data:'', target: null, callback:null};
+		base = bolevine.merge(base, param);
+		$.ajax({type: base.type, url: base.url, data: base.data, success: function(r) {
+			if(r.status==202){
+				if(base.callback){
+					var target = base.target;
+					var data = r.data;
+					eval(base.callback+"(target, data)");
+				}
+			}else{
+				bolevine.alert({message: r.message, flag: 4});
+			}
+		}, error : function(e){bolevine.alert({message: "错误："+e.responseText, flag: 4});}
 		});
 	},
 	precall: function(target){
@@ -145,6 +150,22 @@ var bolevine = {
 			}
 		}
 		return array1;
+	},
+	calldel: function(target, json){
+		$(target).parent().parent().remove();
+	},
+	callload: function(target, json){
+		var msg='', url='';
+		if(json.message){
+			msg = json.message;
+		}
+		if(json.url){
+			url = json.url;
+		}
+		bolevine.dialogok(msg, url);
+	},
+	callback: function(target, json){
+		bolevine.forward();
 	},
 	initdate: function(target){
 		if(!$(target).hasClass('rendered') && $(target).attr('readonly')!="readonly"){
@@ -240,6 +261,17 @@ $(window).ready(function(){
 		param.target = $(this);
 		bolevine.confirm(param);
 	});
+
+	$(document).on('click', '.asynchtrace',function(){
+		if(!bolevine.precall($(this))) return false;
+		var param = {};
+		param.url=$(this).data("url");
+		param.type=$(this).data('type');
+		param.data=$(this).data('data');
+		param.callback = $(this).data('callback');
+		param.target = $(this);
+		bolevine.vjax(param);
+	});
 	
 	$(document).on('click', '.btn-radio',function(){
 		var radio_type = $(this).data("radio");
@@ -265,5 +297,5 @@ $(window).ready(function(){
 	});
 
 	// 监听元素宽高变化方法
-	(function($,h,c){var a=$([]),e=$.resize=$.extend($.resize,{}),i,k="setTimeout",j="resize",d=j+"-special-event",b="delay",f="throttleWindow";e[b]=0;e[f]=true;$.event.special[j]={setup:function(){if(!e[f]&&this[k]){return false}var l=$(this);a=a.add(l);$.data(this,d,{w:l.width(),h:l.height()});if(a.length===1){g()}},teardown:function(){if(!e[f]&&this[k]){return false}var l=$(this);a=a.not(l);l.removeData(d);if(!a.length){clearTimeout(i)}},add:function(l){if(!e[f]&&this[k]){return false}var n;function m(s,o,p){var q=$(this),r=$.data(this,d);r.w=o!==c?o:q.width();r.h=p!==c?p:q.height();n.apply(this,arguments)}if($.isFunction(l)){n=l;return m}else{n=l.handler;l.handler=m}}};function g(){i=h[k](function(){a.each(function(){var n=$(this),m=n.width(),l=n.height(),o=$.data(this,d);if(m!==o.w||l!==o.h){n.trigger(j,[o.w=m,o.h=l])}});g()},e[b])}})(jQuery,this);
+	//(function($,h,c){var a=$([]),e=$.resize=$.extend($.resize,{}),i,k="setTimeout",j="resize",d=j+"-special-event",b="delay",f="throttleWindow";e[b]=0;e[f]=true;$.event.special[j]={setup:function(){if(!e[f]&&this[k]){return false}var l=$(this);a=a.add(l);$.data(this,d,{w:l.width(),h:l.height()});if(a.length===1){g()}},teardown:function(){if(!e[f]&&this[k]){return false}var l=$(this);a=a.not(l);l.removeData(d);if(!a.length){clearTimeout(i)}},add:function(l){if(!e[f]&&this[k]){return false}var n;function m(s,o,p){var q=$(this),r=$.data(this,d);r.w=o!==c?o:q.width();r.h=p!==c?p:q.height();n.apply(this,arguments)}if($.isFunction(l)){n=l;return m}else{n=l.handler;l.handler=m}}};function g(){i=h[k](function(){a.each(function(){var n=$(this),m=n.width(),l=n.height(),o=$.data(this,d);if(m!==o.w||l!==o.h){n.trigger(j,[o.w=m,o.h=l])}});g()},e[b])}})(jQuery,this);
 })
