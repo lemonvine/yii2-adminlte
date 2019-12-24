@@ -12,9 +12,9 @@ class GroupBtn extends Widget
 	public $right = false;
 	public $form_id = 'main_form';
 	public $key_id = 0;
-	public $inherit_class;
 	
 	private $submit_type = false;
+	private $view_dir = "@lemon/widgets/btns/views/";
 	public $target = "";
 	public $url = 'create';
 	public $m = '';
@@ -43,25 +43,26 @@ class GroupBtn extends Widget
 		$this->submit_type = true;
 		$params = ['btn_name'=>'保存', 'form_id'=>$this->form_id];
 		$params = array_merge($params, $config);
-		echo $this->render('save', $params);
+		echo $this->render($this->view_dir.'save', $params);
 	}
 	
 	public function submit($config=[]){
 		$this->submit_type = true;
 		$params = ['btn_name'=>'提交', 'form_id'=>$this->form_id, 'confirm'=>'您确定要提交吗？'];
 		$params = array_merge($params, $config);
-		echo $this->render('submit', $params);
+		echo $this->render($this->view_dir.'submit', $params);
 	}
 	
 	public function export($config=[]){
 		$this->submit_type = true;
 		$params = ['form_id'=>$this->form_id];
 		$params = array_merge($params, $config);
-		echo $this->render('export', $params);
+		echo $this->render($this->view_dir.'export', $params);
 	}
 	
-	public function inherit($function_name){
-		$inherit_class::$function_name();
+	public function alert($title, $url, $btn_color='info', $size='sm'){
+		echo Html::a($title, 'javascript:;', ['class' => 'btn btn-'.$btn_color.' modaldialog', 'data-title' => $title, 'data-area' => $size,
+			'data-url' => $url]);
 	}
 	
 	private function getClass(){
