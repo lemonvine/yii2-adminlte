@@ -84,6 +84,10 @@ class GroupBtn extends Widget
 		echo self::CancelButton();
 	}
 	
+	public function ok(){
+		echo self::OkButton();
+	}
+	
 	public function go($title, $url, $color='info'){
 		echo self::GoButton($title, $url, true);
 	}
