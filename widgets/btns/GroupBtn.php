@@ -4,6 +4,7 @@ namespace lemon\widgets\btns;
 use yii\base\Widget;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
+use yii\helpers\Url;
 
 class GroupBtn extends Widget
 {
@@ -51,29 +52,56 @@ class GroupBtn extends Widget
 		return $content;
 	}
 	
-	public static function GoButton($title, $url, $isbtn=true, $color='info'){
-		return Html::a($title,  $url, ['class' => ($isbtn?'btn btn-':static::$btn_css).$color]);
+	public static function SearchAddButton($config=[]){
+		$params = ['target'=>'model', 'title'=>'添加', 'url'=>['create']];
+		$params = array_merge($params, $config);
+		$button = Html::submitButton('查询', ['class' => 'btn btn-primary']);
+		$url = Url::toRoute($params['url']);
+		if($params['target']=='model'){
+			$button .= Html::a($params['title'], 'javascript:;', ['id' => 'btn_create', 'class' => 'btn btn-success modaldialog', 'data-url' => $url, 'data-title' => $params['title']]);
+		}
+		elseif($params['target']=="page"){
+			$button .= Html::a($params['title'], $url, ['class' => 'btn btn-success']);
+		}
+		$content = Html::tag('div', $button, ['class' => "form-group pull-right btns-line ml-auto"]);
+		return $content;
 	}
 	
-	public static function DialogButton($title, $url, $isbtn=true, $color='info', $size='sm'){
-		return Html::a($title, 'javascript:;', ['class'=>($isbtn?'btn btn-':static::$btn_css).$color.' modaldialog', 'data-title' => $title, 'data-area' => $size,
-			'data-url' => $url]);
+	public static function GoButton($config=[]){
+		$params = ['title'=>'保存', 'url'=>'', 'isbtn'=>true, 'color'=>'info'];
+		$params = array_merge($params, $config);
+		
+		return Html::a($params['title'],  $params['url'], ['class' => ($params['isbtn']?'btn btn-':static::$btn_css).$params['color']]);
 	}
 	
-	public static function AlertButton($title, $html, $isbtn=true, $color='info', $size='sm'){
-		return Html::a($title, 'javascript:;', ['class'=>($isbtn?'btn btn-':static::$btn_css).$color.' modaldialog', 'data-title' => $title, 'data-area' => $size,
-			'data-html'=>$html]);
+	public static function DialogButton($config=[]){
+		$params = ['title'=>'保存', 'url'=>'', 'isbtn'=>true, 'color'=>'info', 'size'=>'sm'];
+		$params = array_merge($params, $config);
+		return Html::a($params['title'], 'javascript:;', 
+			['class'=>($params['isbtn']?'btn btn-':static::$btn_css).$params['color'].' modaldialog', 'data-title' => $params['title'],
+			'data-area' => $params['size'], 'data-url' => $params['url']]);
 	}
 	
-	public static function AsynchButton($title, $url, $data=[], $callback='', $type='post', $isbtn=true, $color='info'){
-		if($data){
-			$data = json_encode($data);
+	public static function AlertButton($config=[]){
+		$params = ['title'=>'保存', 'html'=>'', 'isbtn'=>true, 'color'=>'info', 'size'=>'sm'];
+		$params = array_merge($params, $config);
+		
+		return Html::a($params['title'], 'javascript:;', ['class'=>($params['isbtn']?'btn btn-':static::$btn_css).$params['color'].' modaldialog', 'data-title' => $params['title'], 'data-area' => $params['size'],
+			'data-html'=>$params['html']]);
+	}
+	
+	public static function AsynchButton($config=[]){
+		$params = ['title'=>'保存', 'html'=>'', 'isbtn'=>true, 'color'=>'info', 'data'=>[], 'callback'=>'', 'type'=>'post'];
+		$params = array_merge($params, $config);
+		
+		if($params['data']){
+			$data = json_encode($params['data']);
 		}
 		else{
 			$data = '';
 		}
-		return Html::a($title, 'javascript:;', ['class'=>($isbtn?'btn btn-':static::$btn_css).$color.' asynchtrace', 'data-type'=>$type, 'data-data'=>$data,
-			'data-url'=>$url, 'data-callback'=>$callback]);
+		return Html::a($params['title'], 'javascript:;', ['class'=>($params['isbtn']?'btn btn-':static::$btn_css).$params['color'].' asynchtrace', 'data-type'=>$params['type'], 'data-data'=>$data,
+			'data-url'=>$params['url'], 'data-callback'=>$params['callback']]);
 	}
 	
 	public function back(){
@@ -88,8 +116,9 @@ class GroupBtn extends Widget
 		echo self::OkButton();
 	}
 	
-	public function go($title, $url, $color='info'){
-		echo self::GoButton($title, $url, true);
+	public function go($config=[]){
+		$config['isbtn']=true;
+		echo self::GoButton($config);
 	}
 	
 	/**
@@ -99,8 +128,9 @@ class GroupBtn extends Widget
 	 * @param string $color
 	 * @param string $size
 	 */
-	public function dialog($title, $url, $color='info', $size='sm'){
-		echo self::DialogButton($title, $url, true, $color, $size);
+	public function dialog($config=[]){
+		$config['isbtn']=true;
+		echo self::DialogButton($config);
 	}
 	
 	/**
@@ -110,8 +140,9 @@ class GroupBtn extends Widget
 	 * @param string $color
 	 * @param string $size
 	 */
-	public function alert($title, $url, $color='info', $size='sm'){
-		echo self::AlertButton($title, $url, true, $color, $size);
+	public function alert($config=[]){
+		$config['isbtn']=true;
+		echo self::AlertButton($config);
 	}
 	
 	public function save($config=[]){
