@@ -22,7 +22,8 @@
 		"npm-asset/fontawesome" : "5.*",
 		"npm-asset/bootstrap" : "^4.3",
 		"npm-asset/codemirror" : "5.*@stable",
-		"npm-asset/summernote" : "0.*@stable"
+		"npm-asset/summernote" : "0.*@stable",
+		"npm-asset/bootstrap-table" : "1.*@stable"
 	},
 	"autoload" : {
 		"psr-4" : {
