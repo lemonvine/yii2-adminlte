@@ -17,7 +17,6 @@ $this->registerAssetBundle(Yii::$app->params['classname_asset']);
 		<?= Html::csrfMetaTags() ?>
 		<title><?= Html::encode($this->title) ?></title>
 		<?php $this->head() ?>
-		<script src="/js/depends.js?v=1.0"></script>
 	</head>
 	<body class="hold-transition layout-fixed text-sm">
 		<div class="wrapper">
