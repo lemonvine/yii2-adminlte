@@ -23,7 +23,7 @@
 		"npm-asset/bootstrap" : "^4.3",
 		"npm-asset/codemirror" : "5.*@stable",
 		"npm-asset/summernote" : "0.*@stable",
-		"npm-asset/bootstrap-table" : "1.*@stable"
+		"wenzhixin/bootstrap-table" : "^1.14.1"
 	},
 	"autoload" : {
 		"psr-4" : {
