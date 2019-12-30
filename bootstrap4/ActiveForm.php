@@ -16,6 +16,9 @@ use lemon\widgets\JsBlock;
  */
 class ActiveForm extends \yii\bootstrap4\ActiveForm
 {
+	const INPUT_TEXT = 'textInput';
+	const INPUT_LIST = 'dropDownList';
+	const INPUT_DATE = 'DatePicker';
 	public $PJAX = false;
 	public function init()
 	{

@@ -16,9 +16,9 @@ use yii\helpers\ArrayHelper;
  *
  * Example(s):
  * ```php
- *    echo $this->form->field($model, 'email', ['prepend'=>'@ ', addon' => ['class'=>'abc']]);
- *    echo $this->form->field($model, 'phone', ['prepend' => ['type'=>'icon', 'content'=>'phone']]);
- *    echo $this->form->field($model, 'amount_paid', ['append' => ['type'=>'button', 'content'=>'go', 'options'=>['onclick'=>'javascript:;']]);
+ *	echo $this->form->field($model, 'email', ['prepend'=>'@ ', addon' => ['class'=>'abc']]);
+ *	echo $this->form->field($model, 'phone', ['prepend' => ['type'=>'icon', 'content'=>'phone']]);
+ *	echo $this->form->field($model, 'amount_paid', ['append' => ['type'=>'button', 'content'=>'go', 'options'=>['onclick'=>'javascript:;']]);
  * ```
  *
  * @property ActiveForm $form
@@ -32,6 +32,7 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 	public $prepend = [];
 	public $append = [];
 	
+	public $dateOptions = ['save'=>'timestamp', 'format'=>'', 'type'=>'', 'readonly'=>false, 'callback'=>'', 'class' => ''];
 	
 	public function render($content = null){
 		$this->buildTemplate();
@@ -44,98 +45,159 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 	}
 
 	public $checkOptions = [
-        'class' => ['widget' => 'custom-control-input'],
-        'labelOptions' => [
-            'class' => ['widget' => '']
-        ]
-    ];
+		'class' => ['widget' => 'custom-control-input'],
+		'labelOptions' => [
+			'class' => ['widget' => '']
+		]
+	];
 
 	public $radioOptions = [
-        'class' => ['widget' => 'custom-control-input'],
-        'labelOptions' => [
-            'class' => ['widget' => '']
-        ]
+		'class' => ['widget' => 'custom-control-input'],
+		'labelOptions' => [
+			'class' => ['widget' => '']
+		]
 	];
 	
 	public function checkboxList($items, $options = [])
-    {
-        if (!isset($options['item'])) {
-            $this->template = str_replace("\n{error}", '', $this->template);
-            $itemOptions = isset($options['itemOptions']) ? $options['itemOptions'] : [];
-            $encode = ArrayHelper::getValue($options, 'encode', true);
-            $itemCount = count($items) - 1;
-            $error = $this->error()->parts['{error}'];
-            $options['item'] = function ($i, $label, $name, $checked, $value) use (
-                $itemOptions,
-                $encode,
-                $itemCount,
-                $error
-            ) {
-                $options = array_merge($this->checkOptions, [
-                    'label' => $encode ? Html::encode($label) : $label,
-                    'id' => $name.'_'.$value
-                ], $itemOptions);
-                $wrapperOptions = ArrayHelper::remove($options, 'wrapperOptions', ['class' => ['icheck-primary', 'd-inline']]);
-                if ($this->inline) {
-                    Html::addCssClass($wrapperOptions, 'custom-control-inline');
-                }
+	{
+		if (!isset($options['item'])) {
+			$this->template = str_replace("\n{error}", '', $this->template);
+			$itemOptions = isset($options['itemOptions']) ? $options['itemOptions'] : [];
+			$encode = ArrayHelper::getValue($options, 'encode', true);
+			$itemCount = count($items) - 1;
+			$error = $this->error()->parts['{error}'];
+			$options['item'] = function ($i, $label, $name, $checked, $value) use (
+				$itemOptions,
+				$encode,
+				$itemCount,
+				$error
+			) {
+				$options = array_merge($this->checkOptions, [
+					'label' => $encode ? Html::encode($label) : $label,
+					'id' => $name.'_'.$value
+				], $itemOptions);
+				$wrapperOptions = ArrayHelper::remove($options, 'wrapperOptions', ['class' => ['icheck-primary', 'd-inline']]);
+				if ($this->inline) {
+					Html::addCssClass($wrapperOptions, 'custom-control-inline');
+				}
 
 				$html = Html::beginTag('div', $wrapperOptions) . "\n" .
 				Html::checkbox($name,$checked,['id'=>$options['id'],'value'=>$value]). "\n" .
 				Html::label($options['label'],$options['id']) . "\n" ;
-                if ($itemCount === $i) {
-                    $html .= $error . "\n";
-                }
-                $html .= Html::endTag('div') . "\n";
+				if ($itemCount === $i) {
+					$html .= $error . "\n";
+				}
+				$html .= Html::endTag('div') . "\n";
 
-                return $html;
-            };
-        }
+				return $html;
+			};
+		}
 
-        parent::checkboxList($items, $options);
-        return $this;
-    }
+		parent::checkboxList($items, $options);
+		return $this;
+	}
 
 	public function radioList($items, $options = [])
-    {
-        if (!isset($options['item'])) {
-            $this->template = str_replace("\n{error}", '', $this->template);
-            $itemOptions = isset($options['itemOptions']) ? $options['itemOptions'] : [];
-            $encode = ArrayHelper::getValue($options, 'encode', true);
-            $itemCount = count($items) - 1;
-            $error = $this->error()->parts['{error}'];
-            $options['item'] = function ($i, $label, $name, $checked, $value) use (
-                $itemOptions,
-                $encode,
-                $itemCount,
-                $error
-            ) {
-                $options = array_merge($this->radioOptions, [
-                    'label' => $encode ? Html::encode($label) : $label,
+	{
+		if (!isset($options['item'])) {
+			$this->template = str_replace("\n{error}", '', $this->template);
+			$itemOptions = isset($options['itemOptions']) ? $options['itemOptions'] : [];
+			$encode = ArrayHelper::getValue($options, 'encode', true);
+			$itemCount = count($items) - 1;
+			$error = $this->error()->parts['{error}'];
+			$options['item'] = function ($i, $label, $name, $checked, $value) use (
+				$itemOptions,
+				$encode,
+				$itemCount,
+				$error
+			) {
+				$options = array_merge($this->radioOptions, [
+					'label' => $encode ? Html::encode($label) : $label,
 					'id' => $name.'_'.$value
-                ], $itemOptions);
-                $wrapperOptions = ArrayHelper::remove($options, 'wrapperOptions', ['class' => ['icheck-primary', 'd-inline']]);
-                if ($this->inline) {
-                    Html::addCssClass($wrapperOptions, 'custom-control-inline');
+				], $itemOptions);
+				$wrapperOptions = ArrayHelper::remove($options, 'wrapperOptions', ['class' => ['icheck-primary', 'd-inline']]);
+				if ($this->inline) {
+					Html::addCssClass($wrapperOptions, 'custom-control-inline');
 				}
 				$html = Html::beginTag('div', $wrapperOptions) . "\n" .
 				Html::radio($name,$checked,['id'=>$options['id'],'value'=>$value]). "\n" .
 				Html::label($options['label'],$options['id']) . "\n" ;
-                if ($itemCount === $i) {
-                    $html .= $error . "\n";
-                }
-                $html .= Html::endTag('div') . "\n";
+				if ($itemCount === $i) {
+					$html .= $error . "\n";
+				}
+				$html .= Html::endTag('div') . "\n";
 
-                return $html;
-            };
-        }
+				return $html;
+			};
+		}
 
-        parent::radioList($items, $options);
-        return $this;
-    }
+		parent::radioList($items, $options);
+		return $this;
+	}
+	
+	public function datePicker($options=[]){
+		$options = array_merge($this->dateOptions, $options);
+		if ($this->form->validationStateOn === ActiveForm::VALIDATION_STATE_ON_INPUT) {
+			$this->addErrorClassIfNeeded($options);
+		}
+		$this->addAriaAttributes($options);
+		$this->adjustLabelFor($options);
+		
+		//$this->id = empty($this->id)?Html::getInputId($this->model, $this->attribute) : $this->id;
+		$content = $this->renderDatePicker($options, $this->attribute);
+		$content = Html::tag('div', $content, ['class'=>'input-group']);
+		$this->parts['{input}'] = $content;
+		return $this;
+		
+	}
+	
+	public function fieldRange($options=[], $type=ActiveForm::INPUT_TEXT, $items=[]){
+		$options = array_merge($this->inputOptions, $options);
+		
+		if ($this->form->validationStateOn === ActiveForm::VALIDATION_STATE_ON_INPUT) {
+			$this->addErrorClassIfNeeded($options);
+		}
+		
+		$this->addAriaAttributes($options);
+		$this->adjustLabelFor($options);
+		
+		switch ($type){
+			case ActiveForm::INPUT_TEXT:
+				$begin = Html::activeTextInput($this->model, $this->attribute.'[0]', $options);
+				$end = Html::activeTextInput($this->model, $this->attribute.'[1]', $options);
+				break;
+			case ActiveForm::INPUT_LIST:
+				$begin = Html::activeDropDownList($this->model, $this->attribute.'[0]', $items, $options);
+				$end= Html::activeDropDownList($this->model, $this->attribute.'[1]', $items, $options);
+				break;
+			case ActiveForm::INPUT_DATE:
+				$begin = $this->renderDatePicker($options, $this->attribute.'[0]');
+				$end= $this->renderDatePicker($options, $this->attribute.'[1]');
+				break;
+		}
+		
+		if (empty($this->prepend) || empty($this->append)){
+			$addon = $this->generateAddon();
+			$begin= strtr($addon, ['{input}'=>$begin]);
+			$end= strtr($addon, ['{input}'=>$end]);
+		}
+		//$connector = Html::tag('div', '', ['class'=>'']);
+		$connector= '<div class="input-group-text bg-primary text-white"><i class="fa fa-arrow-right"></i></div>';
+		$content = Html::tag('div', $begin.$connector.$end, ['class'=>'input-group']);
+		$this->parts['{input}'] = $content;
+		$this->prepend=[];
+		$this->append=[];
+		return $this;
+	}
 	
 	protected function buildTemplate(){
-		$this->generateAddon();
+		if (empty($this->prepend) || empty($this->append)){
+			$content = $this->generateAddon();
+			$group = $this->addon;
+			Html::addCssClass($group, 'input-group');
+			$content = Html::tag('div', $content, $group);
+			$this->template = strtr($this->template, ['{input}'=>$content]);
+		}
 	}
 	
 	/**
@@ -144,16 +206,12 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 	protected function generateAddon()
 	{
 		if (empty($this->prepend) && empty($this->append)){
-			return;
+			return '{input}';
 		}
 		$prepend = $this->renderAddonItem('prepend');
 		$append = $this->renderAddonItem('append');
 		$content = $prepend . '{input}' . $append;
-		$group = $this->addon;
-		Html::addCssClass($group, 'input-group');
-		
-		$content = Html::tag('div', $content, $group);
-		$this->template = strtr($this->template, ['{input}'=>$content]);
+		return $content;
 	}
 	
 	/**
@@ -197,5 +255,52 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 		
 		$content = Html::tag('div', $content, ['class' => "input-group-{$pos} {$class}"]);
 		return $content;
+	}
+	
+	protected function renderDatePicker($options, $attribute){
+		$hidden_id = isset($options['id'])?$options['id']:Html::getInputId($this->model, $attribute);
+		$display_id= 'dt_'.$hidden_id;
+		$value =  Html::getAttributeValue($this->model, $attribute);
+		$hidden = Html::activeHiddenInput($this->model, $attribute, ['value'=>$value, 'id'=>$hidden_id]);
+		$display_value = '';
+		if(!empty($value) && $options['save']=='timestamp'){
+			switch (empty($options['format'])?$options['type']:'format'){
+				case '':
+				case 'date':
+					$display_value = date('Y-m-d', $value);
+					break;
+				case 'format':
+					$display_value = date($this->formatTurner($options['format']), $value);
+					break;
+				case 'year':
+					$display_value = date('Y', $value);
+					break;
+				case 'month':
+					$display_value = date('Y-m', $value);
+					break;
+				case 'time':
+					$display_value = date('h:i:s', $value);
+					break;
+				case 'datetime':
+					$display_value = date('Y-m-d h:i:s', $value);
+					break;
+			}
+		}
+		else{
+			$display_value= $value;
+		}
+		$display = Html::input('text', '', $display_value, ['class'=>'form-control js-laydate '.$options['class'], 'id'=>$display_id, 'data-type'=>$options['type'], 'data-save'=>$options['save'],
+			'data-callback'=>$options['callback'], 'data-format'=>$options['format'], 'data-hidden'=>$hidden_id, 'readonly'=>$options['readonly']]);
+		
+		$connector= '<div class="input-group-append"><div class="input-group-text text-primary"><i class="fa fa-calendar"></i></div></div>';
+		return $hidden.$display.$connector;
+	}
+	
+	private function formatTurner($format){
+		$chars = ['yyyy'=>'Y', 'MM'=>'m', 'dd'=>'d', 'HH'=>'H', 'mm'=>'i', 'ss'=>'s'];
+		foreach ($chars as $key=>$value){
+			$format = str_replace($key, $value, $format);
+		}
+		return $format;
 	}
 }
