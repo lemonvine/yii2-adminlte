@@ -143,6 +143,13 @@ var bolevine = {
 		}
 		return true;
 	},
+	search: function(form){
+		$('#submit_type').val('search');
+		if(!form){
+			form = "form";
+		}
+		$(form).submit();
+	},
 	export: function(form){
 		$('#submit_type').val('export');
 		if(!form){

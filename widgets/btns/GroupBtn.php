@@ -47,11 +47,15 @@ class GroupBtn extends Widget
 	}
 	
 	public static function SearchButton($config=[]){
-		$params = ['unique'=>true, 'color'=>'primary', 'title'=>'查询', ];
+		$params = ['title'=>'查询', 'color'=>'primary', 'form_id'=>'', 'unique'=>true, ];
 		$params = array_merge($params, $config);
-		$content= Html::submitButton($params['title'], ['class' => 'btn btn-'.$params['color']]);
+		
 		if($params['unique']){
-			$content = Html::tag('div', $button, ['class' => "form-group btns-line pull-right ml-auto"]);
+			$content= Html::submitButton($params['title'], ['class' => 'btn btn-'.$params['color'], 'value'=>'search']);
+			$content = Html::tag('div', $content, ['class' => "form-group btns-line pull-right ml-auto"]);
+		}
+		else{
+			$content= Html::Button($params['title'], ['class' => 'btn btn-'.$params['color'], 'value'=>'search', 'onclick'=>"bolevine.search('#".$params['form_id']."')"]);
 		}
 		
 		return $content;
@@ -127,7 +131,7 @@ class GroupBtn extends Widget
 	}
 	
 	public function search(){
-		echo self::SearchButton(['unique'=>false]);
+		echo self::SearchButton(['unique'=>false, 'form_id'=>$this->form_id]);
 	}
 	
 	/**

@@ -152,7 +152,16 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 	}
 	
 	public function fieldRange($options=[], $type=ActiveForm::INPUT_TEXT, $items=[]){
-		$options = array_merge($this->inputOptions, $options);
+		
+		switch ($type){
+			case ActiveForm::INPUT_TEXT:
+			case ActiveForm::INPUT_LIST:
+				$options = array_merge($this->inputOptions, $options);
+				break;
+			case ActiveForm::INPUT_DATE:
+				$options = array_merge($this->dateOptions, $options);
+				break;
+		}
 		
 		if ($this->form->validationStateOn === ActiveForm::VALIDATION_STATE_ON_INPUT) {
 			$this->addErrorClassIfNeeded($options);
@@ -182,7 +191,7 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 			$end= strtr($addon, ['{input}'=>$end]);
 		}
 		//$connector = Html::tag('div', '', ['class'=>'']);
-		$connector= '<div class="input-group-text bg-primary text-white"><i class="fa fa-arrow-right"></i></div>';
+		$connector= '<div class="bg-default text-primary">↔</div>';
 		$content = Html::tag('div', $begin.$connector.$end, ['class'=>'input-group']);
 		$this->parts['{input}'] = $content;
 		$this->prepend=[];
