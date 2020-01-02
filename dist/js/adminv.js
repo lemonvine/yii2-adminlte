@@ -143,6 +143,13 @@ var bolevine = {
 		}
 		return true;
 	},
+	export: function(form){
+		$('#submit_type').val('export');
+		if(!form){
+			form = "form";
+		}
+		$(form).submit();
+	},
 	merge: function(array1, array2){
 		for(item in array2){
 			if(array2[item]!=undefined){

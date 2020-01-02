@@ -45,4 +45,12 @@ class AdminLteAsset extends AssetBundle
 		$directoryAsset = Yii::$app->assetManager->getPublishedUrl(self::$path);
 		$view->registerCssFile($directoryAsset.DIRECTORY_SEPARATOR.$cssfile, ['depends' => self::className()]);
 	}
+	
+	public static function BootstrapTable($view){
+		$directoryAsset = Yii::$app->assetManager->getPublishedUrl(self::$path);
+		$postfix = YII_DEBUG ? '' : '.min';
+		$version = Yii::$app->params['admin_version'];
+		$view->registerCssFile($directoryAsset.DIRECTORY_SEPARATOR."bootstrap-table/bootstrap-table{$postfix}.css?v=v{$version}", ['depends' => self::className()]);
+		$view->registerJsFile($directoryAsset.DIRECTORY_SEPARATOR."bootstrap-table/bootstrap-table{$postfix}.js?v=v{$version}", ['depends' => self::className()]);
+	}
 }

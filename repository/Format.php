@@ -22,5 +22,9 @@ class Format extends Formatter
 	public function asPattern($value, $s1){
 		return Pattern::$CODE[$s1][$value]??'';
 	}
+	
+	public function asInt($value){
+		return (int)$value;
+	}
 }
 
