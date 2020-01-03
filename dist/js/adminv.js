@@ -15,7 +15,7 @@ var bolevine = {
 	alert: function(param){
 		var base = {flag: 1, message: 'md', icon: 1, time: 2000, callback:null};
 		base = bolevine.merge(base, param);
-		switch (base.flag){
+		switch (base.flag.toString()){
 			case "4":
 				base.icon = 5;
 				base.time = 4000;
@@ -49,7 +49,7 @@ var bolevine = {
 			bolevine.forward(url);
 		}
 	},
-	reload: function(url){
+	reload: function(is_chain){
 		url = location.href;
 		if(!url.includes('referer_url') && is_chain){
 			if(url.includes('?')){
