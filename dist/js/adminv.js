@@ -54,7 +54,7 @@ var bolevine = {
 	},
 	reload: function(is_chain){
 		url = location.href;
-		if(!url.includes('referer_url') && is_chain){
+		if(!url.includes('referer_url')){
 			if(url.includes('?')){
 				url = url + "&referer_url="+encodeURI(bolevine.referer);
 			}
@@ -335,4 +335,9 @@ function callRefresh(target, rj){
 
 function callDelete(target, rj){
 	$(target).parent().parent().remove();
+}
+
+function popCancel(){
+	var index = parent.layer.getFrameIndex(window.name);
+	parent.layer.close(index)
 }
