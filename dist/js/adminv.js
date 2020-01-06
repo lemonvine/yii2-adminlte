@@ -12,6 +12,9 @@ var bolevine = {
 			bolevine.opening = null;
 		}
 	},
+	suicide: function(){
+		parent.bolevine.turnoff();
+	},
 	alert: function(param){
 		var base = {flag: 1, message: 'md', icon: 1, time: 2000, callback:null};
 		base = bolevine.merge(base, param);
