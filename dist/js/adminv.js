@@ -157,6 +157,9 @@ var bolevine = {
 		}
 		$(form).submit();
 	},
+	linkage: function(target, data){
+		$(target).html(data);
+	},
 	merge: function(array1, array2){
 		for(item in array2){
 			if(array2[item]!=undefined){
@@ -250,7 +253,7 @@ $(window).ready(function(){
 	setTimeout(function(){
 		$('.form-btns').width($('.content-wrapper').width()-32).fadeIn(1800);
 	},100);
-
+	//弹出框
 	$(document).on('click','.modaldialog',function(){
 		if(!bolevine.precall($(this))) return false;
 		var param = {};
@@ -262,7 +265,7 @@ $(window).ready(function(){
 		if(_maxmin) param.max= true;
 		bolevine.dialog(param);
 	});
-
+	//确认框
 	$(document).on('click', '.confirmdialog',function(){
 		if(!bolevine.precall($(this))) return false;
 		var param = {};
@@ -275,7 +278,7 @@ $(window).ready(function(){
 		param.target = $(this);
 		bolevine.confirm(param);
 	});
-
+	//异步ajax
 	$(document).on('click', '.asynchtrace',function(){
 		if(!bolevine.precall($(this))) return false;
 		var param = {};
@@ -284,6 +287,16 @@ $(window).ready(function(){
 		param.data=$(this).data('data');
 		param.callback = $(this).data('callback');
 		param.target = $(this);
+		bolevine.vjax(param);
+	});
+	//关联下拉框
+	$(document).on('change', '.implicate',function(){
+		if(!bolevine.precall($(this))) return false;
+		var param = {};
+		param.url=$(this).data("url");
+		param.data={id: $(this).val()};
+		param.callback = 'bolevine.linkage';
+		param.target = $(this).data('target');
 		bolevine.vjax(param);
 	});
 	
