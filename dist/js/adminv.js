@@ -317,8 +317,7 @@ $(window).ready(function(){
 		bolevine.initdate(this);
 	});
 	
-	
-	if(MESSAGE){
+	if(typeof(MESSAGE)!="undefined" && MESSAGE){
 		bolevine.alert({message:MESSAGE, flag:MESSAGE_FLAG});
 	}
 

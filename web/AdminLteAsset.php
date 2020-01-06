@@ -27,6 +27,7 @@ class AdminLteAsset extends AssetBundle
 		$this->js[] = "laydate/laydate{$postfix}.js?v=v{$version}";
 		$this->js[] = "viewer/viewer{$postfix}.js?v=v{$version}";
 		$this->js[] = "js/adminv{$postfix}.js?v=v{$version}";
+		//$this->js[] = "plugins/popper.min{$postfix}.js?v=v{$version}";
 		
 		$this->css[] = "css/font-awesome{$postfix}.css?v=v{$version}";
 		$this->css[] = "css/adminlte{$postfix}.css?v=v{$version}";
@@ -37,13 +38,17 @@ class AdminLteAsset extends AssetBundle
 	//定义按需加载JS方法，注意加载顺序在最后
 	public static function addScript($view, $jsfile) {
 		$directoryAsset = Yii::$app->assetManager->getPublishedUrl(self::$path);
-		$view->registerJsFile($directoryAsset.DIRECTORY_SEPARATOR.$jsfile, ['depends' => self::className()]);
+		$postfix = YII_DEBUG ? '' : '.min';
+		$version = Yii::$app->params['admin_version'];
+		$view->registerJsFile($directoryAsset.DIRECTORY_SEPARATOR.$jsfile.$postfix.".js?v=v".$version, ['depends' => self::className()]);
 	}
 	
 	//定义按需加载css方法，注意加载顺序在最后
 	public static function addCss($view, $cssfile) {
 		$directoryAsset = Yii::$app->assetManager->getPublishedUrl(self::$path);
-		$view->registerCssFile($directoryAsset.DIRECTORY_SEPARATOR.$cssfile, ['depends' => self::className()]);
+		$postfix = YII_DEBUG ? '' : '.min';
+		$version = Yii::$app->params['admin_version'];
+		$view->registerCssFile($directoryAsset.DIRECTORY_SEPARATOR.$cssfile.$postfix.".css?v=v".$version, ['depends' => self::className()]);
 	}
 	
 	public static function BootstrapTable($view){
