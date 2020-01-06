@@ -28,7 +28,7 @@ $user_name = $this->context->u->realname??'';
 			</div>
 		</div>
 		<nav class="mt-2">
-			<?=Undefinitive::adminMenus(false)?>
+			<?=Undefinitive::adminMenus(YII_DEBUG)?>
 		</nav>
 	</div>
 </aside>

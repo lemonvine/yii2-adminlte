@@ -62,9 +62,15 @@ class GroupBtn extends Widget
 	}
 	
 	public static function SearchAddButton($config=[]){
-		$params = ['target'=>'model', 'title'=>'添加', 'url'=>['create']];
+		$params = ['target'=>'model', 'title'=>'添加', 'url'=>['create'], 'back'=>false];
 		$params = array_merge($params, $config);
-		$button = Html::submitButton('查询', ['class' => 'btn btn-primary']);
+		if($params['back']){
+			$button = self::BackButton();
+		}
+		else{
+			$button ='';
+		}
+		$button .= Html::submitButton('查询', ['class' => 'btn btn-primary']);
 		$url = Url::toRoute($params['url']);
 		if($params['target']=='model'){
 			$button .= Html::a($params['title'], 'javascript:;', ['id' => 'btn_create', 'class' => 'btn btn-success modaldialog', 'data-url' => $url, 'data-title' => $params['title']]);
@@ -99,6 +105,7 @@ class GroupBtn extends Widget
 			'data-html'=>$params['html']]);
 	}
 	
+	//AJAX调用按钮
 	public static function AsynchButton($config=[]){
 		$params = ['title'=>'保存', 'html'=>'', 'isbtn'=>true, 'color'=>'info', 'data'=>[], 'callback'=>'', 'type'=>'post'];
 		$params = array_merge($params, $config);
