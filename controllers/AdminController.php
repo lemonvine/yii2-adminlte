@@ -89,7 +89,7 @@ class AdminController extends Controller
 	
 	public function turnToHtml()
 	{
-		$this->layout = "@vendor/lemonvine/yii2-adminlte/views/layouts/html";
+		$this->layout = "@vendor/lemonvine/yii2-adminlte/views/layouts/pure_html";
 	}
 	
 	/**
@@ -101,6 +101,17 @@ class AdminController extends Controller
 	{
 		$msg = addslashes($msg);
 		return "<script type='text/javascript'>window.parent.bolevine.dialogok('{$msg}', '{$url}');</script>";
+	}
+	
+	/**
+	 * 弹出层保存成功，关闭弹出层
+	 * @param string $msg
+	 * @return string
+	 */
+	public function modelHandleSuccess($msg="保存成功", $url='')
+	{
+		$msg = addslashes($msg);
+		return "<script type='text/javascript'>window.parent.bolevine.back2begin('{$msg}', '{$url}');</script>";
 	}
 	
 	public function pjaxSuccess($msg='')
