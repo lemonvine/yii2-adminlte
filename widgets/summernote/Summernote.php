@@ -31,7 +31,7 @@ class Summernote extends InputWidget
 	
 	public function init()
 	{
-		AdminLteAsset::addScript($this->getView(), 'js/popper.min');
+		AdminLteAsset::addScript($this->getView(), 'plugins/popper');
 		BootstrapAsset::addScript($this->getView(), 'tooltip');
 		$this->options = array_merge($this->defaultOptions, $this->options);
 		$this->clientOptions = array_merge($this->defaultClientOptions, $this->clientOptions);

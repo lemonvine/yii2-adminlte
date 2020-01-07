@@ -10,6 +10,7 @@ namespace lemon\bootstrap4;
 
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
+use lemon\web\AdminLteAsset;
 
 /**
  * Extends the ActiveField component to handle various bootstrap4 form handle input groups.
@@ -267,6 +268,7 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 	}
 	
 	protected function renderDatePicker($options, $attribute){
+		AdminLteAsset::DatePicker($this->form->getView());
 		$hidden_id = isset($options['id'])?$options['id']:Html::getInputId($this->model, $attribute);
 		$display_id= 'dt_'.$hidden_id;
 		$value =  Html::getAttributeValue($this->model, $attribute);

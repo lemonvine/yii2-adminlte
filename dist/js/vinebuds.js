@@ -13,7 +13,7 @@ var budsvine = {
 			var image = budsvine.text2img(_text);
 			img.src=image;
 		}
-	}
+	},
 	text2img: function(text, config){
 		var img = {
 			fontsize: 50,
