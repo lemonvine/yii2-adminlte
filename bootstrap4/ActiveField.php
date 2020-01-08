@@ -81,9 +81,17 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 				if ($this->inline) {
 					Html::addCssClass($wrapperOptions, 'custom-control-inline');
 				}
+				$checkboxAttrs = ['id'=>$options['id'],'value'=>$value];
+				if(isset($options['individuals'])){
+					$individuals = $options['individuals'];
+					
+					if(isset($individuals[$value])){
+						$checkboxAttrs = array_merge($checkboxAttrs, $individuals[$value]);
+					}
+				}
 
 				$html = Html::beginTag('div', $wrapperOptions) . "\n" .
-				Html::checkbox($name,$checked,['id'=>$options['id'],'value'=>$value]). "\n" .
+				Html::checkbox($name,$checked, $checkboxAttrs). "\n" .
 				Html::label($options['label'],$options['id']) . "\n" ;
 				if ($itemCount === $i) {
 					$html .= $error . "\n";
@@ -94,7 +102,7 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 			};
 		}
 
-		parent::checkboxList($items, $options);
+		\yii\widgets\ActiveField::checkboxList($items, $options);
 		return $this;
 	}
 

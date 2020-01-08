@@ -23,9 +23,9 @@ use yii\helpers\Html;
 				$(form_id).submit();
 				layer.close(layerSubmitIndex);
 				setTimeout(function () {
-					var error = $(".has-error");
+					var error = $(".is-invalid");
 					if(error.length>0){
-						var block = $(error[0]).find(".help-block");
+						var block = $(error[0]).parents('.form-group').find(".invalid-feedback");
 						var message = $(block[0]).html();
 						bolevine.alert({flag: 4, message: message});
 					}
