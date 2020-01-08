@@ -21,5 +21,9 @@ class CodemirrorAsset extends AssetBundle
 		$this->js[] = 'mode/xml/xml.js';
 
 		parent::init();
+		
+		$this->publishOptions['beforeCopy'] = function ($from, $to) {
+			return preg_match('%(/|\\\\)(js)%', $from);
+		};
 	}
 }
