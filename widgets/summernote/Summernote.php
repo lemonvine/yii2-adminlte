@@ -34,7 +34,7 @@ class Summernote extends InputWidget
 		AdminLteAsset::addScript($this->getView(), 'plugins/popper.min');
  		BootstrapAsset::addScript($this->getView(), 'tooltip');
 		BootstrapAsset::addScript($this->getView(), 'dropdown');
-		$this->getView()->registerCss('.tooltip{top:-40px!important;}');
+		//$this->getView()->registerCss('.tooltip{top:-40px!important;}');
 
 		$this->options = array_merge($this->defaultOptions, $this->options);
 		$this->clientOptions = array_merge($this->defaultClientOptions, $this->clientOptions);
