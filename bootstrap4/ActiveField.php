@@ -10,6 +10,7 @@ namespace lemon\bootstrap4;
 
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
+use lemon\web\AdminLteAsset;
 
 /**
  * Extends the ActiveField component to handle various bootstrap4 form handle input groups.
@@ -80,9 +81,17 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 				if ($this->inline) {
 					Html::addCssClass($wrapperOptions, 'custom-control-inline');
 				}
+				$checkboxAttrs = ['id'=>$options['id'],'value'=>$value];
+				if(isset($options['individuals'])){
+					$individuals = $options['individuals'];
+					
+					if(isset($individuals[$value])){
+						$checkboxAttrs = array_merge($checkboxAttrs, $individuals[$value]);
+					}
+				}
 
 				$html = Html::beginTag('div', $wrapperOptions) . "\n" .
-				Html::checkbox($name,$checked,['id'=>$options['id'],'value'=>$value]). "\n" .
+				Html::checkbox($name,$checked, $checkboxAttrs). "\n" .
 				Html::label($options['label'],$options['id']) . "\n" ;
 				if ($itemCount === $i) {
 					$html .= $error . "\n";
@@ -93,7 +102,7 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 			};
 		}
 
-		parent::checkboxList($items, $options);
+		\yii\widgets\ActiveField::checkboxList($items, $options);
 		return $this;
 	}
 
@@ -152,7 +161,16 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 	}
 	
 	public function fieldRange($options=[], $type=ActiveForm::INPUT_TEXT, $items=[]){
-		$options = array_merge($this->inputOptions, $options);
+		
+		switch ($type){
+			case ActiveForm::INPUT_TEXT:
+			case ActiveForm::INPUT_LIST:
+				$options = array_merge($this->inputOptions, $options);
+				break;
+			case ActiveForm::INPUT_DATE:
+				$options = array_merge($this->dateOptions, $options);
+				break;
+		}
 		
 		if ($this->form->validationStateOn === ActiveForm::VALIDATION_STATE_ON_INPUT) {
 			$this->addErrorClassIfNeeded($options);
@@ -182,7 +200,7 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 			$end= strtr($addon, ['{input}'=>$end]);
 		}
 		//$connector = Html::tag('div', '', ['class'=>'']);
-		$connector= '<div class="input-group-text bg-primary text-white"><i class="fa fa-arrow-right"></i></div>';
+		$connector= '<div class="bg-default text-primary">↔</div>';
 		$content = Html::tag('div', $begin.$connector.$end, ['class'=>'input-group']);
 		$this->parts['{input}'] = $content;
 		$this->prepend=[];
@@ -258,6 +276,7 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 	}
 	
 	protected function renderDatePicker($options, $attribute){
+		AdminLteAsset::DatePicker($this->form->getView());
 		$hidden_id = isset($options['id'])?$options['id']:Html::getInputId($this->model, $attribute);
 		$display_id= 'dt_'.$hidden_id;
 		$value =  Html::getAttributeValue($this->model, $attribute);

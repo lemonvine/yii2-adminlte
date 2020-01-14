@@ -16,7 +16,7 @@ use lemon\repository\Undefinitive;
 	<ul class="navbar-nav ml-auto">
 		<?=Undefinitive::mission('headerMenu', ['view'=>$this])?>
 		<li class="nav-item">
-			<a href="javascript:;" class="nav-link" data-url="<?= Url::toRoute(['/admin/mpwd'])?>" >
+			<a href="javascript:;" class="nav-link modaldialog" data-title="修改密码" data-area="sm" data-url="<?= Url::toRoute(['/admin/mpwd'])?>" >
 				<i class="fa fa-key"></i> 修改密码
 			</a>
 		</li>

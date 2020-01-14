@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "de83624eee7f0afd326718838a83777a",
+    "content-hash": "52d3b8f8b8564cba706ec581253752fc",
     "packages": [
         {
             "name": "bower-asset/inputmask",
@@ -338,6 +338,7 @@
             "dist": {
                 "type": "tar",
                 "url": "https://registry.npmjs.org/bootstrap/-/bootstrap-4.4.1.tgz",
+                "reference": null,
                 "shasum": "8582960eea0c5cd2bede84d8b0baf3789c3e8b01"
             },
             "type": "npm-asset-library",
@@ -455,6 +456,7 @@
             "dist": {
                 "type": "tar",
                 "url": "https://registry.npmjs.org/codemirror/-/codemirror-5.49.2.tgz",
+                "reference": null,
                 "shasum": "c84fdaf11b19803f828b0c67060c7bc6d154ccad"
             },
             "type": "npm-asset-library",
@@ -3012,6 +3014,7 @@
             "dist": {
                 "type": "tar",
                 "url": "https://registry.npmjs.org/fontawesome/-/fontawesome-5.6.3.tgz",
+                "reference": null,
                 "shasum": "73f0b865fa2b0b384e69d531c05a02c643b72f95"
             },
             "type": "npm-asset-library",
@@ -3054,6 +3057,7 @@
             "dist": {
                 "type": "tar",
                 "url": "https://registry.npmjs.org/summernote/-/summernote-0.8.12.tgz",
+                "reference": null,
                 "shasum": "563502ed882abde9daab9db1e7eba330d37ac020"
             },
             "type": "npm-asset-library",
@@ -3096,17 +3100,106 @@
             "time": "2019-05-16T08:29:34+00:00"
         },
         {
+            "name": "twitter/bootstrap",
+            "version": "v4.4.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/twbs/bootstrap.git",
+                "reference": "dca1ab7d877bc4b664b43604657a2b5fbe2b4ecb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/twbs/bootstrap/zipball/dca1ab7d877bc4b664b43604657a2b5fbe2b4ecb",
+                "reference": "dca1ab7d877bc4b664b43604657a2b5fbe2b4ecb",
+                "shasum": ""
+            },
+            "replace": {
+                "twitter/bootstrap": "self.version"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.3.x-dev"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mark Otto",
+                    "email": "markdotto@gmail.com"
+                },
+                {
+                    "name": "Jacob Thornton",
+                    "email": "jacobthornton@gmail.com"
+                }
+            ],
+            "description": "The most popular front-end framework for developing responsive, mobile first projects on the web.",
+            "homepage": "https://getbootstrap.com/",
+            "keywords": [
+                "JS",
+                "css",
+                "framework",
+                "front-end",
+                "mobile-first",
+                "responsive",
+                "sass",
+                "web"
+            ],
+            "time": "2019-11-28T12:59:49+00:00"
+        },
+        {
+            "name": "wenzhixin/bootstrap-table",
+            "version": "1.14.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wenzhixin/bootstrap-table.git",
+                "reference": "daa239267fadc2ef7ef00e1c5350bfd1d67f4fa6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wenzhixin/bootstrap-table/zipball/daa239267fadc2ef7ef00e1c5350bfd1d67f4fa6",
+                "reference": "daa239267fadc2ef7ef00e1c5350bfd1d67f4fa6",
+                "shasum": ""
+            },
+            "require": {
+                "twitter/bootstrap": ">=2.3.0"
+            },
+            "type": "component",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "wenzhixin2010",
+                    "email": "wenzhixin2010@gmail.com"
+                }
+            ],
+            "description": "An extended Bootstrap table with radio, checkbox, sort, pagination and other features.",
+            "homepage": "https://github.com/wenzhixin/bootstrap-table",
+            "keywords": [
+                "bootstrap",
+                "pagination",
+                "table",
+                "tablesort"
+            ],
+            "time": "2019-03-18T16:13:02+00:00"
+        },
+        {
             "name": "yiisoft/yii2",
             "version": "2.0.31",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-framework.git",
-                "reference": "b9fa3d184b41fb847aa7ae8b447d59b243c72d45"
+                "reference": "0329b2db8bbf9719b1add17d6defd2d6045b4f09"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/b9fa3d184b41fb847aa7ae8b447d59b243c72d45",
-                "reference": "b9fa3d184b41fb847aa7ae8b447d59b243c72d45",
+                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/0329b2db8bbf9719b1add17d6defd2d6045b4f09",
+                "reference": "0329b2db8bbf9719b1add17d6defd2d6045b4f09",
                 "shasum": ""
             },
             "require": {

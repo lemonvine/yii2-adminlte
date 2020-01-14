@@ -46,16 +46,31 @@ class GroupBtn extends Widget
 		return Html::Button('取消', ['class' => ($isbtn?'btn btn-':'').'default', 'onclick'=>'window.parent.bolevine.turnoff()']);
 	}
 	
-	public static function SearchButton(){
-		$button = Html::submitButton('查询', ['class' => 'btn btn-primary']);
-		$content = Html::tag('div', $button, ['class' => "form-group pull-right btns-line ml-auto"]);
+	public static function SearchButton($config=[]){
+		$params = ['title'=>'查询', 'color'=>'primary', 'form_id'=>'', 'unique'=>true, ];
+		$params = array_merge($params, $config);
+		
+		if($params['unique']){
+			$content= Html::submitButton($params['title'], ['class' => 'btn btn-'.$params['color'], 'value'=>'search']);
+			$content = Html::tag('div', $content, ['class' => "form-group btns-line pull-right ml-auto"]);
+		}
+		else{
+			$content= Html::Button($params['title'], ['class' => 'btn btn-'.$params['color'], 'value'=>'search', 'onclick'=>"bolevine.search('#".$params['form_id']."')"]);
+		}
+		
 		return $content;
 	}
 	
 	public static function SearchAddButton($config=[]){
-		$params = ['target'=>'model', 'title'=>'添加', 'url'=>['create']];
+		$params = ['target'=>'model', 'title'=>'添加', 'url'=>['create'], 'back'=>false];
 		$params = array_merge($params, $config);
-		$button = Html::submitButton('查询', ['class' => 'btn btn-primary']);
+		if($params['back']){
+			$button = self::BackButton();
+		}
+		else{
+			$button ='';
+		}
+		$button .= Html::submitButton('查询', ['class' => 'btn btn-primary']);
 		$url = Url::toRoute($params['url']);
 		if($params['target']=='model'){
 			$button .= Html::a($params['title'], 'javascript:;', ['id' => 'btn_create', 'class' => 'btn btn-success modaldialog', 'data-url' => $url, 'data-title' => $params['title']]);
@@ -90,6 +105,7 @@ class GroupBtn extends Widget
 			'data-html'=>$params['html']]);
 	}
 	
+	//AJAX调用按钮
 	public static function AsynchButton($config=[]){
 		$params = ['title'=>'保存', 'html'=>'', 'isbtn'=>true, 'color'=>'info', 'data'=>[], 'callback'=>'', 'type'=>'post'];
 		$params = array_merge($params, $config);
@@ -119,6 +135,10 @@ class GroupBtn extends Widget
 	public function go($config=[]){
 		$config['isbtn']=true;
 		echo self::GoButton($config);
+	}
+	
+	public function search(){
+		echo self::SearchButton(['unique'=>false, 'form_id'=>$this->form_id]);
 	}
 	
 	/**
@@ -161,15 +181,20 @@ class GroupBtn extends Widget
 	
 	public function export($config=[]){
 		$this->submit_type = true;
-		$params = ['form_id'=>$this->form_id];
+		
+		$params = ['title'=>'提交', 'form_id'=>$this->form_id, 'color'=>'secondary'];
 		$params = array_merge($params, $config);
-		echo $this->render($this->view_dir.'export', $params);
+		//$params = ['form_id'=>$this->form_id];
+		//$params = array_merge($params, $config);
+		echo Html::button('导出', ['class' => 'btn btn-'.$params['color'], 'onclick'=>"bolevine.export('#".$params['form_id']."')" ]);
+
+		//echo $this->render($this->view_dir.'export', $params);
 	}
 	
 	private function getClass(){
-		$class = $this->fixed?'form-btns':'btns-line';
+		$class = $this->fixed?'form-btns':'form-group btns-line';
 		if($this->right){
-			$class .= ' text-right';
+			$class .= ' text-right ml-auto';
 		}
 		$options = $this->options;
 		if (isset($options['class'])) {

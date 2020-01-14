@@ -9,6 +9,8 @@ use yii\widgets\InputWidget;
 use lemon\web\CodemirrorAsset;
 use lemon\web\SummernoteAsset;
 use lemon\web\SummernoteLanguageAsset;
+use lemon\web\AdminLteAsset;
+use lemon\web\BootstrapAsset;
 
 class Summernote extends InputWidget
 {
@@ -23,20 +25,22 @@ class Summernote extends InputWidget
 	];
 	/** @var array */
 	public $options = [];
+	
 	/** @var array */
 	public $clientOptions = [];
-	/**
-	 * @inheritdoc
-	 */
+	
 	public function init()
 	{
+		AdminLteAsset::addScript($this->getView(), 'plugins/popper.min');
+ 		BootstrapAsset::addScript($this->getView(), 'tooltip');
+		BootstrapAsset::addScript($this->getView(), 'dropdown');
+		//$this->getView()->registerCss('.tooltip{top:-40px!important;}');
+
 		$this->options = array_merge($this->defaultOptions, $this->options);
 		$this->clientOptions = array_merge($this->defaultClientOptions, $this->clientOptions);
 		parent::init();
 	}
-	/**
-	 * @inheritdoc
-	 */
+	
 	public function run()
 	{
 		$this->registerAssets();
@@ -46,6 +50,8 @@ class Summernote extends InputWidget
 		$clientOptions = empty($this->clientOptions)
 		? null
 		: Json::encode($this->clientOptions);
+		
+		
 		$this->getView()->registerJs('jQuery( "#' . $this->options['id'] . '" ).summernote(' . $clientOptions . ');');
 	}
 	private function registerAssets()
@@ -54,8 +60,10 @@ class Summernote extends InputWidget
 		if (ArrayHelper::getValue($this->clientOptions, 'codemirror')) {
 			CodemirrorAsset::register($view);
 		}
+		
 		SummernoteAsset::register($view);
-		if ($language = ArrayHelper::getValue($this->clientOptions, 'lang', null)) {
+		$language = ArrayHelper::getValue($this->clientOptions, 'lang', null);
+		if ($language) {
 			SummernoteLanguageAsset::register($view)->language = $language;
 		}
 	}

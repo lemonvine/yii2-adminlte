@@ -12,10 +12,13 @@ var bolevine = {
 			bolevine.opening = null;
 		}
 	},
+	suicide: function(){
+		parent.bolevine.turnoff();
+	},
 	alert: function(param){
 		var base = {flag: 1, message: 'md', icon: 1, time: 2000, callback:null};
 		base = bolevine.merge(base, param);
-		switch (base.flag){
+		switch (base.flag.toString()){
 			case "4":
 				base.icon = 5;
 				base.time = 4000;
@@ -49,9 +52,9 @@ var bolevine = {
 			bolevine.forward(url);
 		}
 	},
-	reload: function(url){
+	reload: function(is_chain){
 		url = location.href;
-		if(!url.includes('referer_url') && is_chain){
+		if(!url.includes('referer_url')){
 			if(url.includes('?')){
 				url = url + "&referer_url="+encodeURI(bolevine.referer);
 			}
@@ -143,6 +146,23 @@ var bolevine = {
 		}
 		return true;
 	},
+	search: function(form){
+		$('#submit_type').val('search');
+		if(!form){
+			form = "form";
+		}
+		$(form).submit();
+	},
+	export: function(form){
+		$('#submit_type').val('export');
+		if(!form){
+			form = "form";
+		}
+		$(form).submit();
+	},
+	linkage: function(target, data){
+		$(target).html(data);
+	},
 	merge: function(array1, array2){
 		for(item in array2){
 			if(array2[item]!=undefined){
@@ -229,14 +249,14 @@ var bolevine = {
 	sy: function(){
 		layer.alert('only test');
 	}
-}
+};
 
 $(window).ready(function(){
 	bolevine.referer = $("#referer_url").val();
 	setTimeout(function(){
 		$('.form-btns').width($('.content-wrapper').width()-32).fadeIn(1800);
 	},100);
-
+	//弹出框
 	$(document).on('click','.modaldialog',function(){
 		if(!bolevine.precall($(this))) return false;
 		var param = {};
@@ -248,7 +268,7 @@ $(window).ready(function(){
 		if(_maxmin) param.max= true;
 		bolevine.dialog(param);
 	});
-
+	//确认框
 	$(document).on('click', '.confirmdialog',function(){
 		if(!bolevine.precall($(this))) return false;
 		var param = {};
@@ -261,7 +281,7 @@ $(window).ready(function(){
 		param.target = $(this);
 		bolevine.confirm(param);
 	});
-
+	//异步ajax
 	$(document).on('click', '.asynchtrace',function(){
 		if(!bolevine.precall($(this))) return false;
 		var param = {};
@@ -270,6 +290,16 @@ $(window).ready(function(){
 		param.data=$(this).data('data');
 		param.callback = $(this).data('callback');
 		param.target = $(this);
+		bolevine.vjax(param);
+	});
+	//关联下拉框
+	$(document).on('change', '.implicate',function(){
+		if(!bolevine.precall($(this))) return false;
+		var param = {};
+		param.url=$(this).data("url");
+		param.data={id: $(this).val()};
+		param.callback = 'bolevine.linkage';
+		param.target = $(this).data('target');
 		bolevine.vjax(param);
 	});
 	
@@ -287,23 +317,80 @@ $(window).ready(function(){
 		bolevine.initdate(this);
 	});
 	
-	
-	if(MESSAGE){
+	if(typeof(MESSAGE)!="undefined" && MESSAGE){
 		bolevine.alert({message:MESSAGE, flag:MESSAGE_FLAG});
 	}
 
 	$('.table-form').resize(function(){
 		$('.form-btns').width($('.content-wrapper').width()-32)
 	});
-
 	// 监听元素宽高变化方法
 	//(function($,h,c){var a=$([]),e=$.resize=$.extend($.resize,{}),i,k="setTimeout",j="resize",d=j+"-special-event",b="delay",f="throttleWindow";e[b]=0;e[f]=true;$.event.special[j]={setup:function(){if(!e[f]&&this[k]){return false}var l=$(this);a=a.add(l);$.data(this,d,{w:l.width(),h:l.height()});if(a.length===1){g()}},teardown:function(){if(!e[f]&&this[k]){return false}var l=$(this);a=a.not(l);l.removeData(d);if(!a.length){clearTimeout(i)}},add:function(l){if(!e[f]&&this[k]){return false}var n;function m(s,o,p){var q=$(this),r=$.data(this,d);r.w=o!==c?o:q.width();r.h=p!==c?p:q.height();n.apply(this,arguments)}if($.isFunction(l)){n=l;return m}else{n=l.handler;l.handler=m}}};function g(){i=h[k](function(){a.each(function(){var n=$(this),m=n.width(),l=n.height(),o=$.data(this,d);if(m!==o.w||l!==o.h){n.trigger(j,[o.w=m,o.h=l])}});g()},e[b])}})(jQuery,this);
-})
+});
 
-function callRefresh(target, rj){
-	window.location.reload();
+Date.prototype.format = function(fmt){
+	var o = {
+			"M+" : this.getMonth()+1,
+			"d+" : this.getDate(),
+			"h+" : this.getHours(),
+			"m+" : this.getMinutes(),
+			"s+" : this.getSeconds(),
+			"q+" : Math.floor((this.getMonth()+3)/3),//季度   
+			"S"  : this.getMilliseconds()//毫秒
+			};
+	if(/(y+)/.test(fmt))
+		fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+	for(var k in o)
+		if(new RegExp("("+ k +")").test(fmt))
+			fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+	return fmt; 
+};
+Number.prototype.date = function(){
+	var time = new Date(this);
+	return time;
+}
+Number.prototype.chinese = function(n){
+	if (!/^(0|[1-9]\d*)(\.\d+)?$/.test(n))
+		return "";
+	var unit = "仟佰拾亿仟佰拾万仟佰拾元角分", str = "";
+		n += "00";
+	var p = n.indexOf('.');
+	if (p >= 0)
+		n = n.substring(0, p) + n.substr(p+1, 2);
+		unit = unit.substr(unit.length - n.length);
+	for (var i=0; i < n.length; i++)
+		str += '零壹贰叁肆伍陆柒捌玖'.charAt(n.charAt(i)) + unit.charAt(i);
+	return str.replace(/零(仟|佰|拾|角)/g, "零").replace(/(零)+/g, "零").replace(/零(万|亿|元)/g, "$1").replace(/(亿)万/g, "$1$2").replace(/^元零?|零分/g, "").replace(/元$/g, "");
 }
 
-function callDelete(target, rj){
-	$(target).parent().parent().remove();
+//加法   
+Number.prototype.add = function(arg){   
+	var r1,r2,m;   
+	try{r1=this.toString().split(".")[1].length}catch(e){r1=0}   
+	try{r2=arg.toString().split(".")[1].length}catch(e){r2=0}   
+	m=Math.pow(10,Math.max(r1,r2))   
+	return (this*m+arg*m)/m   
+}	 
+//减法   
+Number.prototype.sub = function (arg){   
+	return this.add(-arg);   
+}   
+//乘法   
+Number.prototype.mul = function (arg)   
+{   
+	var m=0,s1=this.toString(),s2=arg.toString();   
+	try{m+=s1.split(".")[1].length}catch(e){}   
+	try{m+=s2.split(".")[1].length}catch(e){}   
+	return Number(s1.replace(".",""))*Number(s2.replace(".",""))/Math.pow(10,m)   
+}  
+//除法   
+Number.prototype.div = function (arg){   
+	var t1=0,t2=0,r1,r2;   
+	try{t1=this.toString().split(".")[1].length}catch(e){}   
+	try{t2=arg.toString().split(".")[1].length}catch(e){}   
+	with(Math){   
+		r1=Number(this.toString().replace(".",""))   
+		r2=Number(arg.toString().replace(".",""))
+		return r1/(r2*Math.pow(10,t1-t2));   
+	}   
 }
