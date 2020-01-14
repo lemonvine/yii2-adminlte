@@ -104,6 +104,20 @@ class GroupBtn extends Widget
 		return Html::a($params['title'], 'javascript:;', ['class'=>($params['isbtn']?'btn btn-':static::$btn_css).$params['color'].' modaldialog', 'data-title' => $params['title'], 'data-area' => $params['size'],
 			'data-html'=>$params['html']]);
 	}
+
+	// 删除按钮
+	public static function DeleteButton($config=[]){
+		$params = ['title'=>'删除', 'html'=>'', 'isbtn'=>true, 'color'=>'danger', 'data'=>[], 'callback'=>'', 'way'=>'ajax'];
+		$params = array_merge($params, $config);
+		
+		if($params['data']){
+			$data = json_encode($params['data']);
+		}
+		else{
+			$data = '';
+		}
+		return Html::a($params['title'], 'javascript:;', ['class'=>($params['isbtn']?'btn btn-':static::$btn_css).$params['color'].' confirmdialog', 'data-word'=>$params['html'], 'data-way'=>$params['way'], 'data-data'=>$data,'data-url'=>$params['url'], 'data-callback'=>$params['callback']]);
+	}
 	
 	//AJAX调用按钮
 	public static function AsynchButton($config=[]){
