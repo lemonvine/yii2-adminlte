@@ -1,6 +1,7 @@
 /**
  * 
  */
+'use strict';
 var bolevine = {
 	v: '1',
 	referer: '',
@@ -83,7 +84,7 @@ var bolevine = {
 		}
 	},
 	dialog:function(param){
-		var size = {xs:['420px', '280px'], sm:['600px', '450px'], md: ['800px', '600px'], lg: ['1000px', '750px']}
+		var size = {xs:['420px', '280px'], sm:['600px', '450px'], md: ['800px', '600px'], lg: ['1000px', '750px']};
 		var base = {title:'信息', size: 'md', resize:false, max:false, url: '', html:'', callback:null};
 		base = bolevine.merge(base, param);
 		var config = {type: 1, title: base.title, area:size[base.size], resize: base.resize};
@@ -324,8 +325,6 @@ $(window).ready(function(){
 	$('.table-form').resize(function(){
 		$('.form-btns').width($('.content-wrapper').width()-32)
 	});
-	// 监听元素宽高变化方法
-	//(function($,h,c){var a=$([]),e=$.resize=$.extend($.resize,{}),i,k="setTimeout",j="resize",d=j+"-special-event",b="delay",f="throttleWindow";e[b]=0;e[f]=true;$.event.special[j]={setup:function(){if(!e[f]&&this[k]){return false}var l=$(this);a=a.add(l);$.data(this,d,{w:l.width(),h:l.height()});if(a.length===1){g()}},teardown:function(){if(!e[f]&&this[k]){return false}var l=$(this);a=a.not(l);l.removeData(d);if(!a.length){clearTimeout(i)}},add:function(l){if(!e[f]&&this[k]){return false}var n;function m(s,o,p){var q=$(this),r=$.data(this,d);r.w=o!==c?o:q.width();r.h=p!==c?p:q.height();n.apply(this,arguments)}if($.isFunction(l)){n=l;return m}else{n=l.handler;l.handler=m}}};function g(){i=h[k](function(){a.each(function(){var n=$(this),m=n.width(),l=n.height(),o=$.data(this,d);if(m!==o.w||l!==o.h){n.trigger(j,[o.w=m,o.h=l])}});g()},e[b])}})(jQuery,this);
 });
 
 Date.prototype.format = function(fmt){
@@ -335,7 +334,7 @@ Date.prototype.format = function(fmt){
 			"h+" : this.getHours(),
 			"m+" : this.getMinutes(),
 			"s+" : this.getSeconds(),
-			"q+" : Math.floor((this.getMonth()+3)/3),//季度   
+			"q+" : Math.floor((this.getMonth()+3)/3),//季度
 			"S"  : this.getMilliseconds()//毫秒
 			};
 	if(/(y+)/.test(fmt))
@@ -348,7 +347,7 @@ Date.prototype.format = function(fmt){
 Number.prototype.date = function(){
 	var time = new Date(this);
 	return time;
-}
+};
 Number.prototype.chinese = function(n){
 	if (!/^(0|[1-9]\d*)(\.\d+)?$/.test(n))
 		return "";
@@ -361,36 +360,36 @@ Number.prototype.chinese = function(n){
 	for (var i=0; i < n.length; i++)
 		str += '零壹贰叁肆伍陆柒捌玖'.charAt(n.charAt(i)) + unit.charAt(i);
 	return str.replace(/零(仟|佰|拾|角)/g, "零").replace(/(零)+/g, "零").replace(/零(万|亿|元)/g, "$1").replace(/(亿)万/g, "$1$2").replace(/^元零?|零分/g, "").replace(/元$/g, "");
-}
+};
 
-//加法   
-Number.prototype.add = function(arg){   
-	var r1,r2,m;   
-	try{r1=this.toString().split(".")[1].length}catch(e){r1=0}   
-	try{r2=arg.toString().split(".")[1].length}catch(e){r2=0}   
-	m=Math.pow(10,Math.max(r1,r2))   
-	return (this*m+arg*m)/m   
-}	 
-//减法   
-Number.prototype.sub = function (arg){   
-	return this.add(-arg);   
-}   
-//乘法   
-Number.prototype.mul = function (arg)   
-{   
-	var m=0,s1=this.toString(),s2=arg.toString();   
-	try{m+=s1.split(".")[1].length}catch(e){}   
-	try{m+=s2.split(".")[1].length}catch(e){}   
-	return Number(s1.replace(".",""))*Number(s2.replace(".",""))/Math.pow(10,m)   
-}  
-//除法   
-Number.prototype.div = function (arg){   
-	var t1=0,t2=0,r1,r2;   
-	try{t1=this.toString().split(".")[1].length}catch(e){}   
-	try{t2=arg.toString().split(".")[1].length}catch(e){}   
-	with(Math){   
-		r1=Number(this.toString().replace(".",""))   
-		r2=Number(arg.toString().replace(".",""))
-		return r1/(r2*Math.pow(10,t1-t2));   
-	}   
-}
+//加法
+Number.prototype.add = function(arg){
+	var r1,r2,m;
+	try{r1=this.toString().split(".")[1].length}catch(e){r1=0}
+	try{r2=arg.toString().split(".")[1].length}catch(e){r2=0}
+	m=Math.pow(10,Math.max(r1,r2));
+	return (this*m+arg*m)/m
+};
+//减法
+Number.prototype.sub = function (arg){
+	return this.add(-arg);
+};
+//乘法
+Number.prototype.mul = function (arg)
+{
+	var m=0,s1=this.toString(),s2=arg.toString();
+	try{m+=s1.split(".")[1].length}catch(e){}
+	try{m+=s2.split(".")[1].length}catch(e){}
+	return Number(s1.replace(".",""))*Number(s2.replace(".",""))/Math.pow(10,m);
+};
+//除法
+Number.prototype.div = function (arg){
+	var t1=0,t2=0,r1,r2;
+	try{t1=this.toString().split(".")[1].length}catch(e){}
+	try{t2=arg.toString().split(".")[1].length}catch(e){}
+	with(Math){
+		r1=Number(this.toString().replace(".",""));
+		r2=Number(arg.toString().replace(".",""));
+		return r1/(r2*Math.pow(10,t1-t2));
+	}
+};

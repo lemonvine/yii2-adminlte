@@ -13,7 +13,7 @@ class Logger
 	public static function writeException(\Exception $ex)
 	{
 		try {
-			$data['user'] = Yii::$app->user->identity->id;
+			$data['user'] = Yii::$app->user->identity->id??0;
 			$data['url'] = Yii::$app->request->url;
 			$data['file'] = $ex->getFile();
 			$data['line'] = $ex->getLine();
