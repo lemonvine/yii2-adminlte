@@ -8,18 +8,12 @@ namespace lemon\components;
  */
 class DbManager extends \yii\rbac\DbManager
 {
-	public $itemTable = 'dyzc_auth_item';
-	/**
-	 * @var string the name of the table storing authorization item hierarchy. Defaults to "auth_item_child".
-	 */
-	public $itemChildTable = 'dyzc_auth_item_child';
-	/**
-	 * @var string the name of the table storing authorization item assignments. Defaults to "auth_assignment".
-	 */
-	public $assignmentTable = 'dyzc_auth_assignment';
-	/**
-	 * @var string the name of the table storing rules. Defaults to "auth_rule".
-	 */
-	public $ruleTable = 'dyzc_auth_rule';
+	public $ruleTable = '{{%auth_rule}}';
+	public $roleTable = '{{%auth_role}}';
+	public $itemTable = '{{%auth_item}}';
+	public $assignmentTable = '{{%auth_assignment}}';
+	public $itemChildTable = '{{%auth_item_child}}';
+	public $userRoleTable = '{{%auth_user_role}}';
+	public $logTable = '{{%log_auth}}';
 }
 
