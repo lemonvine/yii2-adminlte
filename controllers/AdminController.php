@@ -5,6 +5,7 @@ use Yii;
 use yii\web\Controller;
 use yii\web\Response;
 use lemon\repository\Utility;
+use yii\helpers\Url;
 
 /*
  * 后台管理员控制器基类
@@ -32,11 +33,9 @@ class AdminController extends Controller
 		if (!empty(Yii::$app->user->identity)) {
 			$this->u = Yii::$app->user->identity;
 			$this->user_id = $this->u->id;
-			//$this->appid = $this->u->appid;
 		}
 		if ($this->user_id == 0) {
-			$this->layout=null;
-			return $this->redirect('login/index');
+			return;
 		}
 		$this->referer = Utility::getReferer();
 		$this->primary = Utility::getPrimary();
@@ -54,9 +53,13 @@ class AdminController extends Controller
 	{
 		$this->u = Yii::$app->user->identity;
 		if (!$this->u) {
+			echo "<script type='text/javascript'>window.location.href='".Url::toRoute(['/site/login'])."';</script>";
 			die;
 		}
-		return parent::beforeAction($action);
+		else{
+			return parent::beforeAction($action);
+		}
+		
 	}
 
 	/**

@@ -1,7 +1,6 @@
 /**
  * 
  */
-'use strict';
 var bolevine = {
 	v: '1',
 	referer: '',

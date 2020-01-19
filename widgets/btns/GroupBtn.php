@@ -83,10 +83,10 @@ class GroupBtn extends Widget
 	}
 	
 	public static function GoButton($config=[]){
-		$params = ['title'=>'保存', 'url'=>'', 'isbtn'=>true, 'color'=>'info'];
+		$params = ['title'=>'保存', 'url'=>'', 'isbtn'=>true, 'color'=>'info', 'target'=>'_self'];
 		$params = array_merge($params, $config);
 		
-		return Html::a($params['title'],  $params['url'], ['class' => ($params['isbtn']?'btn btn-':static::$btn_css).$params['color']]);
+		return Html::a($params['title'],  $params['url'], ['class' => ($params['isbtn']?'btn btn-':static::$btn_css).$params['color'], 'target'=>$params['target']]);
 	}
 	
 	public static function DialogButton($config=[]){
