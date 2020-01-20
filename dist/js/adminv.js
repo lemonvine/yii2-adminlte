@@ -229,6 +229,14 @@ var bolevine = {
 			$(target).addClass('rendered');
 		}
 	},
+	pjaxinit: function(){
+		$('form .js-laydate').each(function(){
+			bolevine.initdate(this);
+		});
+		if(typeof(PJAXMSG)!="undefined" && PJAXMSG){
+			bolevine.alert({message:PJAXMSG, flag:PJAXMSG_FLAG});
+		}
+	},
 	cookie: function(cname, cvalue, exminutes){
 		if(cvalue){
 			var d = new Date();
@@ -323,6 +331,10 @@ $(window).ready(function(){
 
 	$('.table-form').resize(function(){
 		$('.form-btns').width($('.content-wrapper').width()-32)
+	});
+
+	$(document).on('pjax:complete', function() {
+		bolevine.pjaxinit();
 	});
 });
 

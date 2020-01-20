@@ -117,9 +117,9 @@ class AdminController extends Controller
 		return "<script type='text/javascript'>window.parent.bolevine.back2begin('{$msg}', '{$url}');</script>";
 	}
 	
-	public function pjaxSuccess($msg='')
+	public function pjaxSuccess($msg='', $url='')
 	{
 		$msg = addslashes($msg);
-		return "<script type='text/javascript'>layer.msg('{$msg}', {time: 1000},function(){location.href ='{$this->referer}'});</script>";
+		return "<script type='text/javascript'>layer.msg('{$msg}', {time: 1000},function(){".!empty($url)?"location.href ='{$url}'":""."});</script>";
 	}
 }
