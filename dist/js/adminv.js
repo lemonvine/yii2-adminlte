@@ -326,6 +326,16 @@ $(window).ready(function(){
 		}
 	});
 	
+	var menuid = $("#chain_menu").val();
+	if(menuid !=undefined && menuid != ""){
+		$("#sys_"+menuid).addClass('active');
+		var lists = $("#sys_"+menuid).parent().parents('li');
+		for(var i=0; i<lists.length; i++){
+			$(lists[i]).addClass('menu-open');
+			$(lists[i]).children('a').addClass('active');
+		}
+	}
+	
 	$('.js-laydate').each(function(){
 		bolevine.initdate(this);
 	});

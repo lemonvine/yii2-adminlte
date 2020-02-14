@@ -21,6 +21,7 @@ $this->registerAssetBundle(Yii::$app->params['classname_asset']);
 		<?php $this->head() ?>
 	</head>
 	<body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed text-sm">
+		<input type="hidden" id="chain_menu" value="<?=$this->context->m ?>" />
 		<div class="wrapper">
 		<?php $this->beginBody() ?>
 			<?=$this->render('adminlte-header.php')?>

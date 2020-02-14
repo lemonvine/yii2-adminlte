@@ -16,7 +16,7 @@ class Undefinitive {
 		$cache_name = 'DYZC_MENU_F6DiVB3Hf'.$uid;
 		$cache_menu = Utility::getCache($cache_name);
 		if($cache_menu && !$refresh){
-			return $cache_menu;
+			//return $cache_menu;
 		}
 		$auth_rule = Yii::createObject(Yii::$app->params['classname_rule']);
 		$auth_assignment = Yii::createObject(Yii::$app->params['classname_assignment']);

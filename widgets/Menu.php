@@ -11,7 +11,7 @@ use yii\helpers\Html;
  */
 class Menu extends \yii\widgets\Menu
 {
-	public $linkTemplate = '<a href="{url}" class="nav-link">{icon}{label}</a>';
+	public $linkTemplate = '<a id="sys_{name}" href="{url}" class="nav-link">{icon}{label}</a>';
 	public $submenuTemplate = "\n<ul class='nav nav-treeview'{show}>\n{items}\n</ul>\n";
 	public $activateParents = true;
 	public $defaultIconHtml = '<i class="nav-icon fa fa-circle-o @i@"></i> ';
@@ -76,6 +76,7 @@ class Menu extends \yii\widgets\Menu
 			'{icon}' => empty($item['icon']) ? $defaulticon
 				: '<i class="' . static::$iconClassPrefix . $item['icon'] . ' nav-icon"></i> ',
 			'{url}' => isset($item['url']) ? Url::to($item['url']) : 'javascript:void(0);',
+		    '{name}' => $item['name'],
 		];
 
 		$template = ArrayHelper::getValue($item, 'template', isset($item['url']) ? $linkTemplate : $labelTemplate);
