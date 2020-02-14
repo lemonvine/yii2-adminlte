@@ -196,6 +196,7 @@ var bolevine = {
 			var save = $(target).data('save') || 'timestamp';
 			var callback = $(target).data('callback');
 			var hidden = $(target).data('hidden');
+			var btn = $(target).data('btn')||'';
 			var params = {};
 			params.elem = '#'+id;
 			if(type!=''){
@@ -205,6 +206,11 @@ var bolevine = {
 				params.format=format;
 			}
 			params.trigger='click';
+			
+			if(btn!=''){
+				params.btns= ['clear', btn, 'confirm'];
+			}
+			
 			params.done=function(date){
 				if(save == 'string'){
 					if(date){
@@ -213,7 +219,14 @@ var bolevine = {
 						$("#"+hidden).val('');
 					}
 				}else{
-					var newTimestamp = Date.parse(new Date(date.replace('-','/')))/1000;
+					var newTimestamp;
+					if(btn=='long'){
+						newTimestamp=1;
+						$("#"+id).val('2099-12-31');
+					}
+					else{
+						newTimestamp = Date.parse(new Date(date.replace('-','/')))/1000;
+					}
 					if(newTimestamp){
 						$("#"+hidden).val(newTimestamp);
 					}else{
@@ -227,14 +240,6 @@ var bolevine = {
 			};
 			laydate.render(params);
 			$(target).addClass('rendered');
-		}
-	},
-	pjaxinit: function(){
-		$('form .js-laydate').each(function(){
-			bolevine.initdate(this);
-		});
-		if(typeof(PJAXMSG)!="undefined" && PJAXMSG){
-			bolevine.alert({message:PJAXMSG, flag:PJAXMSG_FLAG});
 		}
 	},
 	cookie: function(cname, cvalue, exminutes){
@@ -331,10 +336,6 @@ $(window).ready(function(){
 
 	$('.table-form').resize(function(){
 		$('.form-btns').width($('.content-wrapper').width()-32)
-	});
-
-	$(document).on('pjax:complete', function() {
-		bolevine.pjaxinit();
 	});
 });
 

@@ -13,7 +13,8 @@ class SummernoteAsset extends AssetBundle
 	/** @var array */
 	public $depends = [
 		'lemon\web\AdminlteAsset',
-		'lemon\web\BootstrapAsset',
+	    'lemon\web\BootstrapAsset',
+	    'lemon\web\CodemirrorAsset',
 	];
 	/**
 	 * @inheritdoc
