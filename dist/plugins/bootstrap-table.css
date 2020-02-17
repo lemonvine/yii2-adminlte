@@ -283,13 +283,13 @@ div.fixed-table-scroll-outer {
 
 @keyframes LOADING {
   0% {
-    opacity: 0;
+	opacity: 0;
   }
   50% {
-    opacity: 1;
+	opacity: 1;
   }
   to {
-    opacity: 0;
+	opacity: 0;
   }
 }
 

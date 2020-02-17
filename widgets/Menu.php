@@ -76,7 +76,7 @@ class Menu extends \yii\widgets\Menu
 			'{icon}' => empty($item['icon']) ? $defaulticon
 				: '<i class="' . static::$iconClassPrefix . $item['icon'] . ' nav-icon"></i> ',
 			'{url}' => isset($item['url']) ? Url::to($item['url']) : 'javascript:void(0);',
-		    '{name}' => $item['name'],
+			'{name}' => $item['name'],
 		];
 
 		$template = ArrayHelper::getValue($item, 'template', isset($item['url']) ? $linkTemplate : $labelTemplate);

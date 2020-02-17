@@ -1,6 +1,6 @@
 /*!
  *   AdminLTE v3.0.0
- *     Only Pages
+ *	 Only Pages
  *   Author: Colorlib
  *	 Website: AdminLTE.io <http://adminlte.io>
  *   License: Open source - MIT <http://opensource.org/licenses/MIT>
@@ -226,8 +226,8 @@ a.close.disabled, a.disabled.mailbox-attachment-close {
 @media (max-width: 576px) {
   .login-box,
   .register-box {
-    margin-top: 20px;
-    width: 90%;
+	margin-top: 20px;
+	width: 90%;
   }
 }
 
@@ -302,7 +302,7 @@ a.close.disabled, a.disabled.mailbox-attachment-close {
 
 @media (max-width: 767.98px) {
   .error-page {
-    width: 100%;
+	width: 100%;
   }
 }
 
@@ -314,8 +314,8 @@ a.close.disabled, a.disabled.mailbox-attachment-close {
 
 @media (max-width: 767.98px) {
   .error-page > .headline {
-    float: none;
-    text-align: center;
+	float: none;
+	text-align: center;
   }
 }
 
@@ -326,7 +326,7 @@ a.close.disabled, a.disabled.mailbox-attachment-close {
 
 @media (max-width: 767.98px) {
   .error-page > .error-content {
-    margin-left: 0;
+	margin-left: 0;
   }
 }
 
@@ -337,7 +337,7 @@ a.close.disabled, a.disabled.mailbox-attachment-close {
 
 @media (max-width: 767.98px) {
   .error-page > .error-content > h3 {
-    text-align: center;
+	text-align: center;
   }
 }
 

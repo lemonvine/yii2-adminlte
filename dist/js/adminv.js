@@ -313,6 +313,7 @@ $(window).ready(function(){
 		param.data={id: $(this).val()};
 		param.callback = 'bolevine.linkage';
 		param.target = $(this).data('target');
+		param.type='get';
 		bolevine.vjax(param);
 	});
 	

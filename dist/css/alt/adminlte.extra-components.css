@@ -1,6 +1,6 @@
 /*!
  *   AdminLTE v3.0.0
- *     Only Extra Components
+ *	 Only Extra Components
  *   Author: Colorlib
  *	 Website: AdminLTE.io <http://adminlte.io>
  *   License: Open source - MIT <http://opensource.org/licenses/MIT>
@@ -45,12 +45,12 @@
   .col-xl-2 .small-box h3,
   .col-lg-2 .small-box h3,
   .col-md-2 .small-box h3 {
-    font-size: 1.6rem;
+	font-size: 1.6rem;
   }
   .col-xl-3 .small-box h3,
   .col-lg-3 .small-box h3,
   .col-md-3 .small-box h3 {
-    font-size: 1.6rem;
+	font-size: 1.6rem;
   }
 }
 
@@ -58,12 +58,12 @@
   .col-xl-2 .small-box h3,
   .col-lg-2 .small-box h3,
   .col-md-2 .small-box h3 {
-    font-size: 2.2rem;
+	font-size: 2.2rem;
   }
   .col-xl-3 .small-box h3,
   .col-lg-3 .small-box h3,
   .col-md-3 .small-box h3 {
-    font-size: 2.2rem;
+	font-size: 2.2rem;
   }
 }
 
@@ -115,13 +115,13 @@
 
 @media (max-width: 767.98px) {
   .small-box {
-    text-align: center;
+	text-align: center;
   }
   .small-box .icon {
-    display: none;
+	display: none;
   }
   .small-box p {
-    font-size: 12px;
+	font-size: 12px;
   }
 }
 
@@ -270,12 +270,12 @@
   .col-xl-2 .info-box .progress-description,
   .col-lg-2 .info-box .progress-description,
   .col-md-2 .info-box .progress-description {
-    display: none;
+	display: none;
   }
   .col-xl-3 .info-box .progress-description,
   .col-lg-3 .info-box .progress-description,
   .col-md-3 .info-box .progress-description {
-    display: none;
+	display: none;
   }
 }
 
@@ -283,14 +283,14 @@
   .col-xl-2 .info-box .progress-description,
   .col-lg-2 .info-box .progress-description,
   .col-md-2 .info-box .progress-description {
-    font-size: 0.75rem;
-    display: block;
+	font-size: 0.75rem;
+	display: block;
   }
   .col-xl-3 .info-box .progress-description,
   .col-lg-3 .info-box .progress-description,
   .col-md-3 .info-box .progress-description {
-    font-size: 0.75rem;
-    display: block;
+	font-size: 0.75rem;
+	display: block;
   }
 }
 
@@ -298,14 +298,14 @@
   .col-xl-2 .info-box .progress-description,
   .col-lg-2 .info-box .progress-description,
   .col-md-2 .info-box .progress-description {
-    font-size: 1rem;
-    display: block;
+	font-size: 1rem;
+	display: block;
   }
   .col-xl-3 .info-box .progress-description,
   .col-lg-3 .info-box .progress-description,
   .col-md-3 .info-box .progress-description {
-    font-size: 1rem;
-    display: block;
+	font-size: 1rem;
+	display: block;
   }
 }
 

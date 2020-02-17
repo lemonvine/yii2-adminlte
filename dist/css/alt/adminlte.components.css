@@ -1,6 +1,6 @@
 /*!
  *   AdminLTE v3.0.0
- *     Only Components
+ *	 Only Components
  *   Author: Colorlib
  *	 Website: AdminLTE.io <http://adminlte.io>
  *   License: Open source - MIT <http://opensource.org/licenses/MIT>
@@ -2149,8 +2149,8 @@ html.maximized-card {
 
 @media (max-width: 576px) {
   .chart-legend > li {
-    float: left;
-    margin-right: 10px;
+	float: left;
+	margin-right: 10px;
   }
 }
 

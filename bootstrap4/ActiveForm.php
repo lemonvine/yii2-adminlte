@@ -34,7 +34,7 @@ class ActiveForm extends \yii\bootstrap4\ActiveForm
 		$content = ob_get_clean();
 		$html = Html::beginForm($this->action, $this->method, $this->options);
 		if(isset($this->view->context->referer)){
-		    $html .= Html::hiddenInput('referer_url',$this->view->context->referer, ['id'=>'referer_url']);
+			$html .= Html::hiddenInput('referer_url',$this->view->context->referer, ['id'=>'referer_url']);
 		}
 		$html .= $content;
 		
