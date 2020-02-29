@@ -93,4 +93,12 @@ class AdminLteAsset extends AssetBundle
 		$version = Yii::$app->params['admin_version'];
 		$view->registerJsFile($directoryAsset.DIRECTORY_SEPARATOR."laydate/laydate{$postfix}.js?v=v{$version}", ['depends' => self::className()]);
 	}
+	
+	public static function Ztree($view){
+		$directoryAsset = Yii::$app->assetManager->getPublishedUrl(self::$path);
+		$postfix = YII_DEBUG ? '' : '.min';
+		$version = Yii::$app->params['admin_version'];
+		$view->registerCssFile($directoryAsset.DIRECTORY_SEPARATOR."ztree/css/ztree/ztree{$postfix}.css?v=v{$version}", ['depends' => self::className()]);
+		$view->registerJsFile($directoryAsset.DIRECTORY_SEPARATOR."ztree/js/jquery.ztree.all-3.5{$postfix}.js?v=v{$version}", ['depends' => self::className()]);
+	}
 }
