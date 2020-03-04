@@ -12,6 +12,10 @@ class BootstrapAsset extends AssetBundle
 {
 	public static $path = '@vendor/npm-asset/bootstrap/js/dist';
 	
+	public $depends = [
+		'yii\web\JqueryAsset',
+	];
+	
 	public $js = [
 		'util.js',
 		'tab.js',
