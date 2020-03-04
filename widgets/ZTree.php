@@ -7,13 +7,9 @@ use lemon\web\AdminLteAsset;
 
 class ZTree extends Widget
 {
-
 	private $_setting = '{}';
-
 	private $_nodes = '[]';
-
 	private $id;
-
 
 	public function init()
 	{
@@ -24,9 +20,7 @@ class ZTree extends Widget
 	public function run()
 	{
 		echo '<ul id="'.$this->id.'" class="ztree"></ul>';
-
 		$view = $this->getView();
-		
 		AdminLteAsset::Ztree($view);
 
 		$js = '$.fn.zTree.init($("#'.$this->id.'"), '.$this->_setting.', '.$this->_nodes.');';
