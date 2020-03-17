@@ -316,7 +316,28 @@ $(window).ready(function(){
 		param.type='get';
 		bolevine.vjax(param);
 	});
-	
+	//begin handlebar
+	$(document).on('blur', '.handlebar-blur', function(){
+		var _index=$(this).data('index'), _key = $(this).data('key'), _info = $(this).parents('.handlebar-info')[0];
+		var _id = $(_info).data('hidden');
+		var _v = eval($("#"+_id).val());
+		if(_index!=undefined){
+			_v[_index][_key] = $(this).val();
+		}
+		else if(_key!=undefined){
+			_v[_key] = $(this).val();
+		}
+		$("#"+_id).val(JSON.stringify(_v));
+	});
+	var hbs = $(".handlebar-field");
+	$(hbs).each(function(){
+		var _v = eval($(this).val());
+		var _id = $(this).attr('id');
+		var _tp = $(this).data('template');
+		var _template = Handlebars.compile($(_tp).html());
+		$("#hb_"+_id).html(_template(_v));
+	});
+	//end handlebar
 	$(document).on('click', '.btn-radio',function(){
 		var radio_type = $(this).data("radio");
 		$(".btn-radio[data-radio="+radio_type+"]").removeClass('btn-info');

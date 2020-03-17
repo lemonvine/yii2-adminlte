@@ -160,6 +160,12 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 		
 	}
 	
+	/**
+	 * 取范围值
+	 * @param unknown $options
+	 * @param unknown $type
+	 * @param unknown $items
+	 */
 	public function fieldRange($options=[], $type=ActiveForm::INPUT_TEXT, $items=[]){
 		
 		switch ($type){
@@ -205,6 +211,42 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 		$this->parts['{input}'] = $content;
 		$this->prepend=[];
 		$this->append=[];
+		return $this;
+	}
+	
+	/**
+	 * 显示不需编辑内容
+	 * @param array $attributes
+	 * @param array $options
+	 * @return \lemon\bootstrap4\ActiveField
+	 */
+	public function display($attributes=[], $options=[]){
+		$this->adjustLabelFor($options);
+		
+		if(count($attributes)==0){
+			$attributes[] = $this->attribute;
+		}
+		$separator = ',';
+		if(isset($options['separator'])){
+			$separator = $options['separator'];
+		}
+		$content = '';
+		foreach ($attributes as $attr){
+			$content .= (empty($content)?'':$separator).Html::getAttributeValue($this->model, $attr);
+		}
+		$this->parts['{input}'] = $content;
+		return $this;
+	}
+	
+	public function handlebar($options=[]){
+		AdminLteAsset::Handlebars($this->form->getView());
+		$attribute = $this->attribute;
+		$hidden_id = isset($options['id'])?$options['id']:Html::getInputId($this->model, $attribute);
+		$display_id= 'hb_'.$hidden_id;
+		$value =  Html::getAttributeValue($this->model, $attribute);
+		$hidden = Html::activeHiddenInput($this->model, $attribute, ['value'=>$value, 'id'=>$hidden_id, 'class'=>'handlebar-field', 'data-template'=>$options['template']]);
+		$handlebar = Html::tag('div', '', ['id'=>$display_id, 'class'=>'handlebar-info', 'data-hidden'=>$hidden_id]);
+		$this->parts['{input}'] = $hidden.$handlebar;
 		return $this;
 	}
 	
