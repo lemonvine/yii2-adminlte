@@ -34,6 +34,10 @@ class GroupBtn extends Widget
 		echo Html::endTag(ArrayHelper::remove($this->options, 'tag', 'div'));
 	}
 	
+	public function setSubmitType($is){
+		$this->submit_type = $is;
+	}
+	
 	public static function BackButton($isbtn=true){
 		return Html::Button('返回', ['class' => ($isbtn?'btn btn-':static::$btn_css).'default', 'onclick'=>'bolevine.forward()']);
 	}

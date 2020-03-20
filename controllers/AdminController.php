@@ -106,6 +106,14 @@ class AdminController extends Controller
 		return "<script type='text/javascript'>window.parent.bolevine.dialogok('{$msg}', '{$url}');</script>";
 	}
 	
+	public function modelClose($msg=''){
+		$msg = addslashes($msg);
+		if(!empty($msg)){
+			$msg = '{message:"'.$msg.'"}';
+		}
+		return "<script type='text/javascript'>window.parent.bolevine.alert({$msg});window.parent.bolevine.turnoff();</script>";
+	}
+	
 	/**
 	 * 弹出层保存成功，关闭弹出层
 	 * @param string $msg

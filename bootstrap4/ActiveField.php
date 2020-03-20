@@ -249,7 +249,17 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 		$this->parts['{input}'] = $hidden.$handlebar;
 		return $this;
 	}
-	
+	/**
+	 * 隐藏域
+	 * @see \yii\widgets\ActiveField::hiddenInput()
+	 */
+	public function hiddenInput($options = [])
+	{
+		$options = array_merge($this->inputOptions, $options);
+		$this->parts['{input}'] = Html::activeHiddenInput($this->model, $this->attribute, $options);
+		$this->template = '{input}';
+		return $this;
+	}
 	protected function buildTemplate(){
 		if (empty($this->prepend) || empty($this->append)){
 			$content = $this->generateAddon();
