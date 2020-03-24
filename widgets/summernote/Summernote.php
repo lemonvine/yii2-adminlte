@@ -18,9 +18,19 @@ class Summernote extends InputWidget
 	private $defaultOptions = ['class' => 'form-control'];
 	/** @var array */
 	private $defaultClientOptions = [
-		'height' => 200,
-		'codemirror' => [
-			'theme' => 'monokai'
+		'lang' => 'zh-CN',
+		'height'=>'400',
+		'width'=>'100%',
+		'toolbar'=>[
+			['style', ['style']],
+			['font', ['bold', 'italic', 'underline', 'clear']],
+			['fontname', ['fontname']],
+			['color', ['color']],
+			['para', ['ul', 'ol', 'paragraph']],
+			['height', ['height']],
+			['table', ['table']],
+			['insert', [ 'hr']],
+			// ['view', ['fullscreen']]
 		]
 	];
 	/** @var array */
@@ -31,7 +41,7 @@ class Summernote extends InputWidget
 	
 	public function init()
 	{
-		AdminLteAsset::addScript($this->getView(), 'plugins/popper.min');
+		AdminLteAsset::addScript($this->getView(), 'plugins/popper');
  		BootstrapAsset::addScript($this->getView(), 'tooltip');
 		BootstrapAsset::addScript($this->getView(), 'dropdown');
 		//$this->getView()->registerCss('.tooltip{top:-40px!important;}');
