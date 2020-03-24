@@ -94,6 +94,17 @@ class AdminController extends Controller
 	{
 		$this->layout = "@vendor/lemonvine/yii2-adminlte/views/layouts/pure_html";
 	}
+
+	/**
+	 * 关闭弹出层，无刷新
+	 * @param string $msg
+	 * @return string
+	 */
+	public function modelTipsSuccess($msg="操作成功", $icon= 1)
+	{
+		$msg = addslashes($msg);
+		return "<script type='text/javascript'>window.parent.layer.msg('{$msg}', {icon: '{$icon}'}, {time: 1000});window.parent.bolevine.turnoff();</script>";
+	}
 	
 	/**
 	 * 弹出层保存成功，关闭弹出层
@@ -104,14 +115,6 @@ class AdminController extends Controller
 	{
 		$msg = addslashes($msg);
 		return "<script type='text/javascript'>window.parent.bolevine.dialogok('{$msg}', '{$url}');</script>";
-	}
-	
-	public function modelClose($msg=''){
-		$msg = addslashes($msg);
-		if(!empty($msg)){
-			$msg = '{message:"'.$msg.'"}';
-		}
-		return "<script type='text/javascript'>window.parent.bolevine.alert({$msg});window.parent.bolevine.turnoff();</script>";
 	}
 	
 	/**
