@@ -100,10 +100,12 @@ class AdminController extends Controller
 	 * @param string $msg
 	 * @return string
 	 */
-	public function modelTipsSuccess($msg="操作成功", $icon= 1)
+	public function modelTipsSuccess($msg="操作成功", $icon= 1,$callback='')
 	{
+		
 		$msg = addslashes($msg);
-		return "<script type='text/javascript'>window.parent.layer.msg('{$msg}', {icon: '{$icon}'}, {time: 1000});window.parent.bolevine.turnoff();</script>";
+		$callback = $callback?"window.parent.$callback()":'';
+		return "<script type='text/javascript'>window.parent.layer.msg('{$msg}', {icon: '{$icon}',time:1000});window.parent.bolevine.turnoff();$callback;</script>";
 	}
 	
 	/**
