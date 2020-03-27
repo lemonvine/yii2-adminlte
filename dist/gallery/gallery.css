@@ -1,0 +1,4 @@
+
+.gallery-add div{width: 100%;height: 170px;margin:0 auto;border:1px solid #ccc;text-align: center;vertical-align: inherit;display: flex; align-items: center;justify-content: center;cursor: pointer;background:#eaeaea;}
+.gallery-add div:hover{opacity: 0.6;}
+.gallery-add div i{font-size:40px!important;color:#333}
