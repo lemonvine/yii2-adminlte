@@ -15,12 +15,15 @@ use yii\base\Component;
 
 class GalleryService extends Component
 {
+	public $user_id =0;
+	public $keyid;
+	
 	protected $limit=20;
 	protected $thumb_width = 200;
 	protected $thumb_height = 150;
+	
 	protected $path_http;
 	//protected $folder;  //文件目录名(filetype)
-	public $keyid;
 	
 	protected $max=0;
 	
@@ -97,12 +100,12 @@ class GalleryService extends Component
 	}*/
 	public function paths(){
 		$paths = [
-			'upload'=>Url::toRoute('/loan/files/upload'),
-			'serial'=>Url::toRoute('/loan/files/serial'),
-			'del'=>Url::toRoute('/loan/files/delete'),
-			'replace'=>Url::toRoute('/loan/files/replace'),
-			'move'=>Url::toRoute('/loan/files/move'),
-			'book'=>Url::toRoute('/loan/files/book'),
+			'upload'=>Url::toRoute('/site/error'),
+			'serial'=>Url::toRoute('/site/error'),
+			'del'=>Url::toRoute('/site/error'),
+			'replace'=>Url::toRoute('/site/error'),
+			'move'=>Url::toRoute('/site/error'),
+			'book'=>Url::toRoute('/site/error'),
 		];
 		
 		return $paths;
@@ -133,7 +136,7 @@ class GalleryService extends Component
 				if (!array_key_exists($extension, $this->extension)) {
 					throw new \Exception("暂不支持文件格式{$extension}");
 				}
-				$up = $folder . '_' . time() .'_'. $this->max.Utility::createRandom(2);
+				$up = $folder . '_' . time() . '_w' . $this->user_id . '_' . $this->max.Utility::createRandom(2);
 				$doc = $up . '.' . $extension;
 				$original = $save_path. $doc;
 				
@@ -157,6 +160,9 @@ class GalleryService extends Component
 				$success[] = [
 					'original'=>$original,
 					'thumb' => $thumb,
+					'name' => $file->name,
+					'size' => $file->size,
+					'format' => $this->extension[$extension],
 				];
 				
 			} catch (\Exception $ex) {

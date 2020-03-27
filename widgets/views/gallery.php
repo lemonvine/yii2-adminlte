@@ -30,7 +30,7 @@ if($layout==3){
 <script id="template_upload" type="text/html">
 <form id="uploadForm" enctype="multipart/form-data" style="display: none;">
 	<input id="btn_file_upload" type="file" name="UploadFiles[]" accept="" multiple />
-	<input id="txt_directory" name="directory" value="0" />
+	<input id="txt_folder" name="folder" value="0" />
 	<input id="txt_key" name="key" value="<?=$keyid?>" />
 	<input id="txt_id" name="id" value="0" />
 	<button id="upload" type="button">upload</button>	

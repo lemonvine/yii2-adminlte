@@ -10,7 +10,7 @@ $keyid = $this->context->keyid;
 $categorys = $this->context->category;
 ?>
 <?php if($multiline==1):?>
-
+<?=$this->render('_gallery', ['directory' => $categorys])?>
 <?php else:?>
 <?php foreach ($categorys as $category_id=>$category):?>
 <div id="files<?=$category_id?>" class="card card-default uploadFiles">
