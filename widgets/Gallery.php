@@ -17,6 +17,8 @@ class Gallery extends Widget
 	public $service_calss ='lemon\widgets\services\GalleryService';
 	public $service_init = [];
 	public $paths = [];
+	public $extensions = [];
+	public $accepts = [];
 	
 	public function init()
 	{
@@ -38,7 +40,7 @@ class Gallery extends Widget
 	
 	protected function registerClientScript()
 	{
-		AdminLteAsset::loadModule($this->view, ['handlebar', 'viewer', 'gallery']);
+		AdminLteAsset::loadModule($this->view, ['handlebar', 'viewer', 'gallery', 'icheck']);
 	}
 	
 	/**
@@ -79,6 +81,8 @@ class Gallery extends Widget
 		);
 		if(in_array($this->layout, [1,3])){
 			$this->paths = $service->paths();
+			$this->extensions = $service->extentions();
+			$this->accepts= $service->accepts();
 		}
 		
 		if(in_array($this->layout, [2,3])){

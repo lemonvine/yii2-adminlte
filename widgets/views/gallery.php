@@ -8,7 +8,8 @@ $layout = $this->context->layout;
 $multiline = $this->context->multiline;
 $keyid = $this->context->keyid;
 $categorys = $this->context->category;
-
+$extensions = $this->context->extensions;
+$accepts = $this->context->accepts;
 ?>
 
 <div id="mask"></div>
@@ -25,6 +26,8 @@ if($layout==3){
 	var PATH_PAGEFILE = "<?=$paths['book']?>";
 	var PATH_DELFILE = "<?=$paths['del']?>";
 	var BUSSINESSID = "<?=$keyid?>";
+	var EXTENSION = eval('(<?=json_encode($extensions)?>)');
+	var ACCEPT = eval('(<?=json_encode($accepts)?>)');
 </script>
 
 <script id="template_upload" type="text/html">
@@ -50,52 +53,64 @@ if($layout==3){
 </div>
 </script>
 
-<script id="template_pictures_data" type="text/x-handlebars-template">
-{{#each this}}
-<i id="hid_file_{{file_id}}" data-title="{{title}}" data-file="{{file_path}}" data-thumb="{{thumb_file_path}}" data-id="{{file_id}}" data-serial="{{serial}}"></i>
-{{/each}}
-</script>
 <script id="template_gallery" type="text/x-handlebars-template">
-	{{#each this}}
-		<div class="gallery-thumb col-sm-3 col-md-3 col-lg-2 col-xl-2">
-			<div class="file-view">
-				
-				{{#if video}}
-					<video  width="100%" controls>
-						<source src="{{file}}"  type="video/mp4">
-					</video>
-				{{/if}}
-
-				{{#if audio}}
-					<audio controls="controls">
-						<source src="{{file}}" type="audio/mpeg" />
-					</audio>
-					<span class="audio-file"></span>
-				{{/if}}
-				
-				{{#if word}}
-					<section>
-						<a href='https://view.officeapps.live.com/op/view.aspx?src={{file}}' target="_blank">预览文档</a>
-						<br>
-						<a href="{{file}}" target="_blank">下载文档</a> 
-					</section>
-					<img src="/images/word.jpg">
-				{{/if}}
-
-				{{#if pdf}}
-					<a href='{{file}}' target="_blank">下载</a>
-				{{/if}}
-
-				<img class="img-thumbnail" data-src="{{file}}" src="{{thumb}}" data-name="{{name}}" data-id="{{id}}" alt="">
-			</div>
-			<p class="file-text">{{name}}</p>
+{{#each this}}
+<div class="gallery-thumb col-sm-3 col-md-3 col-lg-2 col-xl-2">
+	<div class="file-view">
+{{#if_even original 1}}
+		<img class="img-thumbnail" data-src="{{file}}" src="{{thumb}}" alt="">
+{{else}}
+	{{#if_even original 2}}
+		<audio controls="controls">
+			<source src="{{original}}" type="audio/mpeg" />
+		</audio>
+	{{else}}
+		{{#if_even original 3}}
+		<video width="320" height="240" controls>
+			<source src="{{original}}" type="video/mp4">
+		</video>
+		{{else}}
+			{{#if_even original 4}}
+		<div class="file-pdf img-thumbnail" data-src="{{original}}"></div>
+			{{else}}
+				{{#if_even original 5}}
+		<div class="file-word img-thumbnail" data-src="{{original}}"></div>
+				{{else}}
+					{{#if_even original 6}}
+		<div class="file-excel img-thumbnail" data-src="{{original}}"></div>
+					{{else}}
+		<div class="file-file img-thumbnail" data-src="{{original}}"></div>
+					{{/if_even}}
+				{{/if_even}}
+			{{/if_even}}
+		{{/if_even}}
+	{{/if_even}}
+{{/if_even}}
+		<div class="hover-mask">
+{{#if_even original 4}}
+			<a href="javascript:;" data-id="{{id}}" class="file-view"><i class="fa fa-eye"></i></a>
+{{else}}
+	{{#if_even original 5}}
+			<a href="javascript:;" data-id="{{id}}" class="file-view"><i class="fa fa-eye"></i></a>
+	{{else}}
+		{{#if_even original 6}}
+			<a href="javascript:;" data-id="{{id}}" class="file-view"><i class="fa fa-eye"></i></a>
+		{{/if_even}}
+	{{/if_even}}
+{{/if_even}}
+			<a href="javascript:;" data-id="{{id}}" class="file-replace"><i class="fa fa-refresh"></i></a>
+			<a href="javascript:;" data-id="{{id}}" class="file-delete"><i class="fa fa-trash"></i></a>
 		</div>
-	{{/each}}
-	<div id="gallery-add" class="gallery-add only-edit col-sm-3 col-md-3 col-lg-2 col-xl-2">
-		<div class="img-thumbnail">
-			<i class="fa fa-upload text-success"></i>
-		</div>
+		<div class="file-filter icheck-primary"><input type="checkbox" id="checkbox{{file_id}}"><label for="checkbox{{file_id}}"></label></div>
 	</div>
+	<p class="file-text">{{title}}</p>
+</div>
+{{/each}}
+<div id="gallery-add" class="gallery-add only-edit col-sm-3 col-md-3 col-lg-2 col-xl-2">
+	<div class="img-thumbnail">
+		<i class="fa fa-upload text-success"></i>
+	</div>
+</div>
 </script>
 
 <?php 

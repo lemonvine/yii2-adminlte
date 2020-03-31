@@ -2,3 +2,18 @@
 .gallery-add div{width: 100%;height: 170px;margin:0 auto;border:1px solid #ccc;text-align: center;vertical-align: inherit;display: flex; align-items: center;justify-content: center;cursor: pointer;background:#eaeaea;}
 .gallery-add div:hover{opacity: 0.6;}
 .gallery-add div i{font-size:40px!important;color:#333}
+
+.file-view{min-width:150px; position: relative;}
+.file-view img,audio,video,.file-pdf,.file-word,.file-excel,.file-file.file-audio{width: 100%; height: 170px; text-align:center;vertical-align:middle;overflow:hidden; background-size:100% 100%;}
+
+.file-view .hover-mask {position: absolute; top: 0px; width:100%; height:48px; line-height:48px; text-align: right; background: #000; color: #fff; opacity: 0.7; display: none;}
+.file-view .hover-mask a{color: #fff; padding-right: 10px;}
+.file-view:hover .hover-mask {display: block;}
+
+.file-view .file-filter{position: absolute; top: 0px; left: 5px; z-index:99 }
+.file-text{text-align: center;padding-top:10px;position: relative;cursor:text}
+.file-pdf{background:url(images/file_pdf.png) no-repeat center; background-size:100% 100%;}
+.file-word{background:url(images/file_word.png) no-repeat center; background-size:100% 100%;}
+.file-excel{background:url(images/file_excel.png) no-repeat center; background-size:100% 100%;}
+.file-file{background:url(images/file_file.png) no-repeat center; background-size:100% 100%;}
+audio{background:url(images/file_audio.png) no-repeat center; background-size:100% 100%;}
