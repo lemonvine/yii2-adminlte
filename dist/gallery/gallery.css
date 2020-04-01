@@ -17,3 +17,6 @@
 .file-excel{background:url(images/file_excel.png) no-repeat center; background-size:100% 100%;}
 .file-file{background:url(images/file_file.png) no-repeat center; background-size:100% 100%;}
 audio{background:url(images/file_audio.png) no-repeat center; background-size:100% 100%;}
+
+
+.gallery-handle .nav{float: right; margin: 8px 30px 8px auto; cursor: pointer;}

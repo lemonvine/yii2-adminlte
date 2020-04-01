@@ -73,6 +73,7 @@ class AdminLteAsset extends AssetBundle
 					break;
 				case 'gallery':
 					$css[] = "gallery/gallery{$postfix}.css?v=v{$version}";
+					$js[] = "plugins/outclick{$postfix}.js?v=v{$version}";
 					$js[] = "gallery/gallery{$postfix}.js?v=v{$version}";
 					break;
 				default:

@@ -12,6 +12,6 @@
 		</button>
 	</div>
 	<?php endforeach;?>
-	<div class="col-12 gallery-upload m-3 row">
+	<div class="gallery-upload col-12 m-3 row">
 	</div>
 </div>
