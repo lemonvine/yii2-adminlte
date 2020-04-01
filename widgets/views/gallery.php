@@ -13,6 +13,7 @@ $accepts = $this->context->accepts;
 ?>
 
 <div id="mask"></div>
+
 <?php 
 if($layout==3){
 	echo $this->render('gallery2');
@@ -54,52 +55,58 @@ if($layout==3){
 </script>
 
 <script id="template_gallery" type="text/x-handlebars-template">
+<div class="gallery-handle col-12">
+	<ul class="nav">
+		<li class="nav-item"><span class="check-all icheck-primary "><input type="checkbox" id="checkboxall"><label for="checkboxall">&nbsp;全选</label></span></li>
+		<li class="nav-item "><span class="move-all" id="button_moveto"><i class="fa fa-mail-forward fa-lg text-success"></i>&nbsp;移动到</span><div id="dropdown_moveto" class="dropdown-menu dropdown-menu-lg dropdown-menu-right">移动到</div></li>
+	</ul>
+</div>
 {{#each this}}
-<div class="gallery-thumb col-sm-3 col-md-3 col-lg-2 col-xl-2">
+<div class="gallery-thumb col-sm-3 col-md-3 col-lg-2 col-xl-2" data-soul="{{json2str this}}">
 	<div class="file-view">
-{{#if_even original 1}}
+{{#ifeven original 1}}
 		<img class="img-thumbnail" data-src="{{file}}" src="{{thumb}}" alt="">
 {{else}}
-	{{#if_even original 2}}
+	{{#ifeven original 2}}
 		<audio controls="controls">
 			<source src="{{original}}" type="audio/mpeg" />
 		</audio>
 	{{else}}
-		{{#if_even original 3}}
+		{{#ifeven original 3}}
 		<video width="320" height="240" controls>
 			<source src="{{original}}" type="video/mp4">
 		</video>
 		{{else}}
-			{{#if_even original 4}}
+			{{#ifeven original 4}}
 		<div class="file-pdf img-thumbnail" data-src="{{original}}"></div>
 			{{else}}
-				{{#if_even original 5}}
+				{{#ifeven original 5}}
 		<div class="file-word img-thumbnail" data-src="{{original}}"></div>
 				{{else}}
-					{{#if_even original 6}}
+					{{#ifeven original 6}}
 		<div class="file-excel img-thumbnail" data-src="{{original}}"></div>
 					{{else}}
 		<div class="file-file img-thumbnail" data-src="{{original}}"></div>
-					{{/if_even}}
-				{{/if_even}}
-			{{/if_even}}
-		{{/if_even}}
-	{{/if_even}}
-{{/if_even}}
+					{{/ifeven}}
+				{{/ifeven}}
+			{{/ifeven}}
+		{{/ifeven}}
+	{{/ifeven}}
+{{/ifeven}}
 		<div class="hover-mask">
-{{#if_even original 4}}
-			<a href="javascript:;" data-id="{{id}}" class="file-view"><i class="fa fa-eye"></i></a>
+{{#ifeven original 4}}
+			<a href="javascript:;" class="file-view"><i class="fa fa-eye"></i></a>
 {{else}}
-	{{#if_even original 5}}
-			<a href="javascript:;" data-id="{{id}}" class="file-view"><i class="fa fa-eye"></i></a>
+	{{#ifeven original 5}}
+			<a href="javascript:;" class="file-view"><i class="fa fa-eye"></i></a>
 	{{else}}
-		{{#if_even original 6}}
-			<a href="javascript:;" data-id="{{id}}" class="file-view"><i class="fa fa-eye"></i></a>
-		{{/if_even}}
-	{{/if_even}}
-{{/if_even}}
-			<a href="javascript:;" data-id="{{id}}" class="file-replace"><i class="fa fa-refresh"></i></a>
-			<a href="javascript:;" data-id="{{id}}" class="file-delete"><i class="fa fa-trash"></i></a>
+		{{#ifeven original 6}}
+			<a href="javascript:;" class="file-view"><i class="fa fa-eye"></i></a>
+		{{/ifeven}}
+	{{/ifeven}}
+{{/ifeven}}
+			<a href="javascript:;" class="file-replace" title="替换"><i class="fa fa-refresh"></i></a>
+			<a href="javascript:;" class="file-delete" title="删除"><i class="fa fa-trash"></i></a>
 		</div>
 		<div class="file-filter icheck-primary"><input type="checkbox" id="checkbox{{file_id}}"><label for="checkbox{{file_id}}"></label></div>
 	</div>
@@ -112,6 +119,8 @@ if($layout==3){
 	</div>
 </div>
 </script>
+
+
 
 <?php 
 $Js = <<<JS

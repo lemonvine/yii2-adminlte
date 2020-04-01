@@ -1,6 +1,9 @@
 var GALLERY_BUTTON;
 var ELEMENT_UPLOAD = '#gallery-add';
 var ELEMENT_FILEINPUT = '#btn_file_upload';
+var ELEMENT_FILEID = '#txt_id';
+var ELEMENT_MOVETO = '#button_moveto';
+var SELECTED_FILES = [];
 
 var initGallery = function(){
 	var formHtml = $("#template_upload").html();
@@ -23,7 +26,17 @@ var initGallery = function(){
 		if($(this).hasClass('disabled')){
 			return;
 		}
+		$(ELEMENT_FILEID).val(0);
 		$(ELEMENT_FILEINPUT).attr('multiple',true).click();
+	});
+	
+	// 替换
+	$(document).on('click', '.file-replace', function(){
+		var e = window.event;
+		e.stopPropagation();
+		var _file = galleryvine.str2json($(this).parents('.gallery-thumb').data('soul'));
+		$(ELEMENT_FILEID).val(_file.file_id);
+		$(ELEMENT_FILEINPUT).removeAttr('multiple').trigger('click');
 	});
 	
 	// 选择图片后，开始上传
@@ -86,18 +99,18 @@ var initGallery = function(){
 	
 	// 删除
 	$(document).on('click', '.file-delete',function(){
-		var _attr = $(GALLERY_BUTTON).data('attr');
+		var _attr = galleryvine.json2str($(GALLERY_BUTTON).data('attr'));
+		var _file = galleryvine.json2str($(this).parents('.gallery-thumb').data('soul'));
 		var _data={};
-		_data.id=$(this).data('id');
 		_data.folder = _attr;
-		var obj_del = $(this);
+		_data.file = _file
 		$.ajax({url: PATH_DELFILE, data: _data, type: 'POST', cache: false,
 			success: function(rd){
 				rd = galleryvine.str2json(rd);
 				if(rd.status==202){
-					var _id = $(obj_del).data('id');
-					$(obj_del).parents('.gallery-thumb');
-					var _files = $(GALLERY_BUTTON).data('attr');
+					var _json = galleryvine.str2json(_file);
+					var _id = _json.file_id;
+					var _files = $(GALLERY_BUTTON).data('files');
 					for(var i=0,len=_files.length; i<len; i++){
 						if(_id==_files[i]['file_id']){
 							_files.splice(i, 1);
@@ -105,7 +118,8 @@ var initGallery = function(){
 						}
 					}
 					$(GALLERY_BUTTON).data('files', galleryvine.json2str(_files));
-					if(upload_type==3 && _files.length==0){
+					_json = galleryvine.str2json(_attr);
+					if(_json.upload_type==3 && _files.length==0){
 						galleryvine.docid(0);
 					}
 					
@@ -113,7 +127,8 @@ var initGallery = function(){
 					bolevine.alert({message:'删除成功', flag: 8});
 				}
 				else{
-					bolevine.alert({message:'删除失败:' + r.message, flag: 4});
+					var msg = '删除失败:' + rd.message;
+					bolevine.alert({message: msg, flag: 4});
 				}
 			},
 			error: function(data){
@@ -122,8 +137,31 @@ var initGallery = function(){
 		});
 	});
 	
+	/********************批量处理*******************/
+
+	// 全选
+	$(document).on('click', '.check-all', function(){
+		var _input = $("#checkboxall");
+		var _checks = $(_input).parents(".gallery-upload").find('.file-filter>input');
+		if(_input[0].checked){
+			$(_checks).each(function(){this.checked=true;});
+		}else{
+			$(_checks).each(function(){this.checked=false;});
+		}
+	});
 	
-	Handlebars.registerHelper('if_even', function (url, extension, options) {
+	// 点击移动到
+	$(document).on('click', '.move-all', function(){
+		galleryvine.select($(this), 'galleryvine.move');
+		
+	});
+	//移动目的目录选中事件
+	$(document).on('click', '.moveto_btn', function(){
+		$("#box_file_moveto .moveto_btn").removeClass('active');
+		$(this).addClass('active');
+	});
+	
+	Handlebars.registerHelper('ifeven', function (url, extension, options) {
 		var point = url.lastIndexOf("."), type = url.substr(point+1);
 		var _extension = EXTENSION[type];
 		if(extension == _extension) {
@@ -131,6 +169,17 @@ var initGallery = function(){
 		} else {
 			return options.inverse(this);
 		}
+	});
+	Handlebars.registerHelper('json2str', function (data) {
+		if(typeof(data)!="string"){
+			try{
+				data = JSON.stringify(data);
+			}
+			catch(error){
+				data = "";
+			}
+		}
+		return data;
 	});
 
 }
@@ -182,6 +231,10 @@ var galleryvine = {
 		else{
 			$(GALLERY_BUTTON).find('span').html(json.length);
 		}
+		/*
+		$("#dropdown_moveto").outclick(function(){
+			$(this).hide();
+		});*/
 	},
 	upfail: function(msg){
 		layer.closeAll();
@@ -199,5 +252,40 @@ var galleryvine = {
 		var _attr = galleryvine.str2json($(GALLERY_BUTTON).data('attr'));
 		_attr.doc_id = docid;
 		$(GALLERY_BUTTON).data('attr', galleryvine.json2str(_attr));
+	},
+	select: function(object, callback){
+		SELECTED_FILES = [];
+		var _checks = $(object).parents(".gallery-upload").find('.file-filter>input:checked');
+		$(_checks).each(function(){
+			var _file = galleryvine.json2str($(this).parents('.gallery-thumb').data('soul'));
+			SELECTED_FILES.push(_file);
+		});
+		if(SELECTED_FILES.length == 0){
+			bolevine.alert({message: '请选择文件', flag: 4});
+			return;
+		}
+		eval(callback+"()");
+	},
+	move: function(){
+		var html = $("#template_move_file").html();
+		$(ELEMENT_MOVETO).dropdown('toggle');
+		
+		return;
+		layer.open({
+			type: 1,
+			btn: ['确定'],
+			area: ['600px', '400px'], //宽高
+			content: html,
+			yes: function(index){
+				var _selected = $("#box_file_moveto .moveto_btn.active");
+				if(_selected.length==1){
+					doMove(_selected[0], index);
+				}
+				else{
+					layer.msg("请选择要移动到的类型");
+				}
+				
+			}
+		});
 	}
 };
