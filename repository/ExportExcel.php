@@ -20,7 +20,7 @@ use lemon\models\LogExport;
  */
 class ExportExcel
 {
-	private $cells = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'AA', 'AB', 'AC', 'AE', 'AD', 'AF', 'AG', 'AH', 'AI', 'AJ', 'AK', 'AL'];
+	private $cells = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'AA', 'AB', 'AC', 'AE', 'AD', 'AF', 'AG', 'AH', 'AI', 'AJ', 'AK', 'AL', 'AM', 'AN', 'AO', 'AP', 'AQ', 'AR', 'AS', 'AT', 'AU', 'AV', 'AW', 'AX', 'AY', 'AZ'];
 	private $cell_format=['text'=>NumberFormat::FORMAT_TEXT];
 	
 	public $export_type = 1;
@@ -107,6 +107,12 @@ class ExportExcel
 						$sheet->getStyle($cell['cell'])->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
 					}
 				}
+				if(!empty($cell['center'])){
+					if($cell['merge']){
+						$sheet->mergeCells($cell['cell'].":".$cell['merge']);
+					}
+					$sheet->getStyle($cell['cell'])->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+				}
 				//$sheet->getStyle($cell['cell'])->getFill()->setFillType(Fill::FILL_SOLID);
 				//$sheet->getStyle($cell['cell'])->getFill()->getStartColor()->setARGB("AA4F81BD");
 				//$sheet->getStyle($cell['cell'])->getFont()->getColor()->setARGB(Color::COLOR_WHITE);
@@ -144,8 +150,14 @@ class ExportExcel
 			if(key_exists('width', $col)){
 				$coldimen->setWidth($col['width']);
 			}
+			if(key_exists('height', $col)){
+				$sheet->getDefaultRowDimension($key)->setRowHeight($col['height']);
+			}
 			if(key_exists('format', $col)){
 				$sheet->getStyle($key.$this->begin_row.':'.$key.$i)->getNumberFormat()->setFormatCode($this->cell_format[$col['format']]);
+			}
+			if(key_exists('center', $col)){
+				$sheet->getStyle($key.$this->begin_row.':'.$key.$i)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 			}
 			if(key_exists('merge', $col)){//值相同的合并单元格
 				$composer = '#b@n';
