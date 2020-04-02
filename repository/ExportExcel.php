@@ -48,6 +48,7 @@ class ExportExcel
 	public $caption = [];
 	public $columns = [];
 	public $begin_row = 2;
+	public $height = 20;
 	
 	/**
 	 * 列宽度、列单元格格式、列相邻同值合并
@@ -136,7 +137,7 @@ class ExportExcel
 		
 		//数据入格
 		foreach ($data as $key=>$row){
-			//$sheet->getRowDimension($i)->setRowHeight(20);
+			$sheet->getRowDimension($i)->setRowHeight($this->height);
 			foreach ($this->columns as $k=>$item){
 				$val = $this->formatter->format($row[$item['attribute']], $item['format']);
 				$r = $this->cells[$k];
@@ -149,9 +150,6 @@ class ExportExcel
 			$coldimen = $sheet->getColumnDimension($key);
 			if(key_exists('width', $col)){
 				$coldimen->setWidth($col['width']);
-			}
-			if(key_exists('height', $col)){
-				$sheet->getDefaultRowDimension($key)->setRowHeight($col['height']);
 			}
 			if(key_exists('format', $col)){
 				$sheet->getStyle($key.$this->begin_row.':'.$key.$i)->getNumberFormat()->setFormatCode($this->cell_format[$col['format']]);
