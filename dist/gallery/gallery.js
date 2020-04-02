@@ -103,7 +103,7 @@ var initGallery = function(){
 		var _file = galleryvine.json2str($(this).parents('.gallery-thumb').data('soul'));
 		var _data={};
 		_data.folder = _attr;
-		_data.file = _file
+		_data.file = _file;
 		$.ajax({url: PATH_DELFILE, data: _data, type: 'POST', cache: false,
 			success: function(rd){
 				rd = galleryvine.str2json(rd);
@@ -152,14 +152,23 @@ var initGallery = function(){
 	
 	// 点击移动到
 	$(document).on('click', '.move-all', function(){
+		//return false;
 		galleryvine.select($(this), 'galleryvine.move');
 		
 	});
 	//移动目的目录选中事件
-	$(document).on('click', '.moveto_btn', function(){
+	/*$(document).on('click', '.moveto_btn', function(){
 		$("#box_file_moveto .moveto_btn").removeClass('active');
 		$(this).addClass('active');
 	});
+	*/
+	//移动目的目录选中事件
+	$(document).on('show.bs.dropdown', '.moveto_btn', function(){
+		return false;
+		$("#box_file_moveto .moveto_btn").removeClass('active');
+		$(this).addClass('active');
+	});
+	
 	
 	Handlebars.registerHelper('ifeven', function (url, extension, options) {
 		var point = url.lastIndexOf("."), type = url.substr(point+1);
@@ -231,10 +240,15 @@ var galleryvine = {
 		else{
 			$(GALLERY_BUTTON).find('span').html(json.length);
 		}
-		/*
-		$("#dropdown_moveto").outclick(function(){
-			$(this).hide();
-		});*/
+		var sortable1 = document.getElementById('gallery-upload'+$(GALLERY_BUTTON).data('index'));
+		new Sortable(sortable1, {
+			handle: '.file-sort',
+			animation: 150,
+			ghostClass: 'blue-background-class',
+			onEnd: function (evt) {
+				galleryvine.sort(evt);
+			}
+		});
 	},
 	upfail: function(msg){
 		layer.closeAll();
@@ -267,25 +281,42 @@ var galleryvine = {
 		eval(callback+"()");
 	},
 	move: function(){
-		var html = $("#template_move_file").html();
-		$(ELEMENT_MOVETO).dropdown('toggle');
-		
-		return;
-		layer.open({
-			type: 1,
-			btn: ['确定'],
-			area: ['600px', '400px'], //宽高
-			content: html,
-			yes: function(index){
-				var _selected = $("#box_file_moveto .moveto_btn.active");
-				if(_selected.length==1){
-					doMove(_selected[0], index);
-				}
-				else{
-					layer.msg("请选择要移动到的类型");
-				}
-				
+		var html ='<div class="card"><div class="card-header"><h3 class="card-title text-primary">请选择移动到的目录</h3></div><div class="card-body"><ul id="category_tree" class="ztree"></ul><a href="#" class="btn btn-primary"><b>确定</b></a></div></div>';
+		layer.open({type: 4, fixed: 0, shade: 0, shadeClose:1, title: false, closeBtn:1, time: 10000,
+			tips: [1, '#efefef'], content: [html, ELEMENT_MOVETO],
+			success: function(layero, index){
+				$.fn.zTree.init($("#category_tree"), {
+					check: {enable: true, chkStyle: "radio", radioType: "all"},
+					view:{showIcon: false}
+				}, galleryvine.str2json(MOVETO_TREE));
+				var treeObj = $.fn.zTree.getZTreeObj("category_tree");
+				treeObj.expandAll(true);
 			}
 		});
+	},
+	moveto: function(){
+		var treeObj = $.fn.zTree.getZTreeObj("category_tree");
+		var nodes = treeObj.getSelectedNodes();
+		if(nodes.length==0){
+			bolevine.alert({message: '请选择要移动到的目录', flag: 4});
+		}
+		var selected = nodes[0].id;
+
+		var _data={};
+		_data.selected = gallery.json2str(SELECTED_FILES);
+		_data.moveto = selected;
+		$.post(PATH_MOVE, _data, function(rd){
+			rd = gallery.str2json(rd);
+			if(rd.status == 202){
+				
+			}
+			else{
+				var msg ="修改失败：" + rd.message;
+				bolevine.alert({message:msg, flag: 4});
+			}
+		})
+	},
+	sort: function(evt){
+		
 	}
 };
