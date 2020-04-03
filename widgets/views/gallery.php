@@ -23,7 +23,7 @@ if($layout==3){
 	var PATH_UPLOAD = "<?=$paths['upload']?>";
 	var PATH_REPLACE = "<?=$paths['replace']?>";
 	var PATH_SERIAL = "<?=$paths['serial']?>";
-	var PATH_FILETYPE = "<?=$paths['move']?>";
+	var PATH_MOVE = "<?=$paths['move']?>";
 	var PATH_PAGEFILE = "<?=$paths['book']?>";
 	var PATH_DELFILE = "<?=$paths['del']?>";
 	var BUSSINESSID = "<?=$keyid?>";
@@ -41,24 +41,11 @@ if($layout==3){
 </form>
 </script>
 
-<script id="template_move_file" type="text/html">
-<div class="list-group" id="box_file_moveto">
-<?php foreach ($categorys as $category_id=>$category):?>
-<p href="javascript:;" class="list-group-item list-group-item-info"><?=$category['category_name']?></p>
-<div class="container">
-<?php foreach ($category['types'] as $filetype):?>
-<a href="javascript:;" class="btn btn-outline-success moveto_btn" data-object="<?=$filetype['object_id']?>" data-type="<?=$filetype['filetype_id']?>"><?=$filetype['filetype_name']?></a>
-<?php endforeach; ?>
-</div>
-<?php endforeach; ?>
-</div>
-</script>
-
 <script id="template_gallery" type="text/x-handlebars-template">
 <div class="gallery-handle col-12">
 	<ul class="nav">
 		<li class="nav-item"><span class="check-all icheck-primary "><input type="checkbox" id="checkboxall"><label for="checkboxall">&nbsp;全选</label></span></li>
-		<li class="nav-item "><span class="move-all" id="button_moveto"><i class="fa fa-mail-forward fa-lg text-success"></i>&nbsp;移动到</span><div id="dropdown_moveto" class="dropdown-menu dropdown-menu-lg dropdown-menu-right">移动到</div></li>
+		<li class="nav-item "><span class="move-all" id="button_moveto"><i class="fa fa-mail-forward fa-lg text-success"></i>&nbsp;移动到</span></li>
 	</ul>
 </div>
 {{#each this}}
@@ -105,6 +92,7 @@ if($layout==3){
 		{{/ifeven}}
 	{{/ifeven}}
 {{/ifeven}}
+			<a href="javascript:;" class="file-sort" title="排序"><i class="fa fa-arrows"></i></a>
 			<a href="javascript:;" class="file-replace" title="替换"><i class="fa fa-refresh"></i></a>
 			<a href="javascript:;" class="file-delete" title="删除"><i class="fa fa-trash"></i></a>
 		</div>

@@ -19,6 +19,7 @@ class Gallery extends Widget
 	public $paths = [];
 	public $extensions = [];
 	public $accepts = [];
+	public $trees = [];
 	
 	public function init()
 	{
@@ -40,7 +41,7 @@ class Gallery extends Widget
 	
 	protected function registerClientScript()
 	{
-		AdminLteAsset::loadModule($this->view, ['handlebar', 'viewer', 'gallery', 'icheck']);
+		AdminLteAsset::loadModule($this->view, ['handlebar', 'viewer', 'gallery', 'icheck', 'ztree', 'sortable']);
 	}
 	
 	/**
@@ -87,6 +88,7 @@ class Gallery extends Widget
 		
 		if(in_array($this->layout, [2,3])){
 			$this->category = $service->widget($this->scene);
+			$this->trees = $service->trees;
 		}
 		
 	}

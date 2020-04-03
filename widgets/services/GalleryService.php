@@ -19,6 +19,8 @@ class GalleryService extends Component
 	public $user_id =0;
 	public $keyid;  //业务编号（工单编号/案件编号）
 	
+	public $trees =[]; //移动到的目录（ztree）
+	
 	protected $limit=20;
 	protected $thumb_width = 200;
 	protected $thumb_height = 150;
@@ -184,7 +186,6 @@ class GalleryService extends Component
 	}
 	
 	public function widget($scene){
-		
 		return [];
 	}
 	
