@@ -13,7 +13,7 @@ class SummernoteAsset extends AssetBundle
 	/** @var array */
 	public $depends = [
 		'lemon\web\AdminlteAsset',
-		'lemon\web\BootstrapAsset',
+		//'lemon\web\BootstrapAsset',
 		'lemon\web\CodemirrorAsset',
 	];
 	/**
@@ -21,7 +21,7 @@ class SummernoteAsset extends AssetBundle
 	 */
 	public function init()
 	{
-		
+		//AdminLteAsset::loadModule($view, $modules);
 		$postfix = YII_DEBUG ? '' : '.min';
 		$this->css[] = 'summernote-bs4.css';
 		$this->js[] = 'summernote-bs4' . $postfix . '.js';

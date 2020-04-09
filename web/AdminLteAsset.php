@@ -13,6 +13,7 @@ class AdminLteAsset extends AssetBundle
 {
 	public static $path = '@vendor/lemonvine/yii2-adminlte/dist';
 	
+	
 	public $depends = [
 		'yii\web\JqueryAsset',
 	];
@@ -26,7 +27,6 @@ class AdminLteAsset extends AssetBundle
 		$this->js[] = "js/adminlte{$postfix}.js?v=v{$version}";
 		$this->js[] = "layer/layer{$postfix}.js?v=v{$version}";
 		$this->js[] = "js/adminv{$postfix}.js?v=v{$version}";
-		//$this->js[] = "plugins/popper.min{$postfix}.js?v=v{$version}";
 		
 		$this->css[] = "css/font-awesome{$postfix}.css?v=v{$version}";
 		$this->css[] = "css/adminlte{$postfix}.css?v=v{$version}";
@@ -34,7 +34,7 @@ class AdminLteAsset extends AssetBundle
 		parent::init();
 	}
 	
-	public static function loadModule($view, $modules){
+	public static function loadModule($view, $modules, $options=[]){
 		$directoryAsset = Yii::$app->assetManager->getPublishedUrl(self::$path);
 		$postfix = YII_DEBUG ? '' : '.min';
 		$version = Yii::$app->params['admin_version'];
@@ -50,121 +50,91 @@ class AdminLteAsset extends AssetBundle
 		}
 		foreach ($needs as $module){
 			switch ($module){
-				case 'bootstraptable':
-					$css[] = "plugins/bootstrap-table{$postfix}.css?v=v{$version}";
-					$js[] = "plugins/bootstrap-table{$postfix}.js?v=v{$version}";
-					break;
-				case 'icheck':
-					$css[] = "plugins/icheck-bootstrap{$postfix}.css?v=v{$version}";
+				case 'datepicker':
+					$js[] = "laydate/laydate";
 					break;
 				case 'handlebar':
-					$js[] = "plugins/handlebars{$postfix}.js?v=v{$version}";
+					$js[] = "plugins/handlebars";
 					break;
-				case 'viewer':
-					$css[] = "viewer/viewer{$postfix}.css?v=v{$version}";
-					$js[] = "viewer/viewer{$postfix}.js?v=v{$version}";
-					break;
-				case 'datepicker':
-					$js[] = "laydate/laydate{$postfix}.js?v=v{$version}";
+				case 'icheck':
+					$css[] = "plugins/icheck-bootstrap";
 					break;
 				case 'ztree':
-					$css[] = "ztree/css/ztree/ztree{$postfix}.css?v=v{$version}";
-					$js[] = "ztree/js/jquery.ztree.all-3.5{$postfix}.js?v=v{$version}";
+					$css[] = "ztree/css/ztree/ztree";
+					$js[] = "ztree/js/jquery.ztree.all-3.5";
 					break;
 				case 'gallery':
-					$css[] = "gallery/gallery{$postfix}.css?v=v{$version}";
-					$js[] = "gallery/gallery{$postfix}.js?v=v{$version}";
+					$css[] = "gallery/gallery";
+					$js[] = "gallery/gallery";
+					break;
+				case 'echarts':
+					$js[] = "plugins/echarts";
+					break;
+				case 'tab':
+					$js[] = "bootstrap/plugins/util";
+					$js[] = "bootstrap/plugins/tab";
+					break;
+				case 'dropdown':
+					$js[] = "plugins/popper";
+					$js[] = "bootstrap/plugins/util";
+					$js[] = "bootstrap/plugins/dropdown";
+					break;
+				case 'bootstraptable':
+					$css[] = "plugins/bootstrap-table";
+					$js[] = "plugins/bootstrap-table";
+					break;
+				case 'viewer':
+					$css[] = "viewer/viewer";
+					$js[] = "viewer/viewer";
+					break;
+				case 'summernote':
+					$js[] = "plugins/popper";
+					$js[] = "bootstrap/plugins/util";
+					$js[] = "bootstrap/plugins/tooltip";
+					$js[] = "bootstrap/plugins/dropdown";
 					break;
 				case 'sortable':
-					$js[] = "plugins/sortable{$postfix}.js?v=v{$version}";
+					$js[] = "plugins/sortable";
+					break;
+				case 'lazyload':
+					$js[] = "plugins/jquery.lazyload";
+					$js[] = "plugins/scrollspy";
+					break;
+				case 'layer':
+					$js[] = "layer/layer";
 					break;
 				default:
 					if(substr($module,0,2)=='js'){
-						$js[] = "{$module}{$postfix}.js?v=v{$version}";
+						$js[] = "{$module}";
 					}
 					elseif(substr($module,0,3)=='css'){
-						$css[] = "{$module}{$postfix}.js?v=v{$version}";
+						$css[] = "{$module}";
 					}
 					break;
 			}
 		}
+		if(count($options)==0){
+			$options = ['depends' => $depend];
+		}
+		else{
+			$maps= [
+				'pos_head' => View::POS_HEAD
+			];
+			foreach ($options as $key=>$option){
+				if(array_key_exists($option, $maps)){
+					$options[$key] = $maps[$option];
+				}
+			}
+		}
 		
 		foreach ($css as $file){
-			$view->registerCssFile($directoryAsset.DIRECTORY_SEPARATOR.$file, ['depends' => $depend]);
+			$view->registerCssFile($directoryAsset.DIRECTORY_SEPARATOR.$file.$postfix.'.css?v=v'.$version, $options);
 		}
 		
 		foreach ($js as $file){
-			$view->registerJsFile($directoryAsset.DIRECTORY_SEPARATOR.$file, ['depends' => $depend]);
+			$view->registerJsFile($directoryAsset.DIRECTORY_SEPARATOR.$file.$postfix.'.js?v=v'.$version, $options);
 		}
 		
-	}
-	//定义按需加载JS方法，注意加载顺序在最后
-	public static function preScript($view, $jsfile) {
-		$directoryAsset = Yii::$app->assetManager->getPublishedUrl(self::$path);
-		$postfix = YII_DEBUG ? '' : '.min';
-		$version = Yii::$app->params['admin_version'];
-		$view->registerJsFile($directoryAsset.DIRECTORY_SEPARATOR.$jsfile.$postfix.".js?v=v".$version, ['position' => View::POS_HEAD]);
-	}
-	
-	//定义按需加载JS方法，注意加载顺序在最后
-	public static function addScript($view, $jsfile) {
-		$directoryAsset = Yii::$app->assetManager->getPublishedUrl(self::$path);
-		$postfix = YII_DEBUG ? '' : '.min';
-		$version = Yii::$app->params['admin_version'];
-		$view->registerJsFile($directoryAsset.DIRECTORY_SEPARATOR.$jsfile.$postfix.".js?v=v".$version, ['depends' => self::className()]);
-	}
-	
-	//定义按需加载css方法，注意加载顺序在最后
-	public static function addCss($view, $cssfile) {
-		$directoryAsset = Yii::$app->assetManager->getPublishedUrl(self::$path);
-		$postfix = YII_DEBUG ? '' : '.min';
-		$version = Yii::$app->params['admin_version'];
-		$view->registerCssFile($directoryAsset.DIRECTORY_SEPARATOR.$cssfile.$postfix.".css?v=v".$version, ['depends' => self::className()]);
-	}
-	
-	public static function BootstrapTable($view){
-		$directoryAsset = Yii::$app->assetManager->getPublishedUrl(self::$path);
-		$postfix = YII_DEBUG ? '' : '.min';
-		$version = Yii::$app->params['admin_version'];
-		$view->registerCssFile($directoryAsset.DIRECTORY_SEPARATOR."plugins/bootstrap-table{$postfix}.css?v=v{$version}", ['depends' => self::className()]);
-		$view->registerJsFile($directoryAsset.DIRECTORY_SEPARATOR."plugins/bootstrap-table{$postfix}.js?v=v{$version}", ['depends' => self::className()]);
-	}
-	
-	public static function BootstrapICheck($view){
-		$directoryAsset = Yii::$app->assetManager->getPublishedUrl(self::$path);
-		$postfix = YII_DEBUG ? '' : '.min';
-		$version = Yii::$app->params['admin_version'];
-		$view->registerCssFile($directoryAsset.DIRECTORY_SEPARATOR."plugins/icheck-bootstrap{$postfix}.css?v=v{$version}", ['depends' => self::className()]);
-	}
-	
-	public static function Handlebars($view){
-		$directoryAsset = Yii::$app->assetManager->getPublishedUrl(self::$path);
-		$postfix = YII_DEBUG ? '' : '.min';
-		$version = Yii::$app->params['admin_version'];
-		$view->registerJsFile($directoryAsset.DIRECTORY_SEPARATOR."plugins/handlebars{$postfix}.js?v=v{$version}", ['depends' => self::className()]);
-	}
-	
-	public static function ImageView($view){
-		$directoryAsset = Yii::$app->assetManager->getPublishedUrl(self::$path);
-		$postfix = YII_DEBUG ? '' : '.min';
-		$version = Yii::$app->params['admin_version'];
-		$view->registerCssFile($directoryAsset.DIRECTORY_SEPARATOR."viewer/viewer{$postfix}.css?v=v{$version}", ['depends' => self::className()]);
-		$view->registerJsFile($directoryAsset.DIRECTORY_SEPARATOR."viewer/viewer{$postfix}.js?v=v{$version}", ['depends' => self::className()]);
-	}
-	
-	public static function DatePicker($view){
-		$directoryAsset = Yii::$app->assetManager->getPublishedUrl(self::$path);
-		$postfix = YII_DEBUG ? '' : '.min';
-		$version = Yii::$app->params['admin_version'];
-		$view->registerJsFile($directoryAsset.DIRECTORY_SEPARATOR."laydate/laydate{$postfix}.js?v=v{$version}", ['depends' => self::className()]);
-	}
-	
-	public static function Ztree($view){
-		$directoryAsset = Yii::$app->assetManager->getPublishedUrl(self::$path);
-		$postfix = YII_DEBUG ? '' : '.min';
-		$version = Yii::$app->params['admin_version'];
-		$view->registerCssFile($directoryAsset.DIRECTORY_SEPARATOR."ztree/css/ztree/ztree{$postfix}.css?v=v{$version}", ['depends' => self::className()]);
-		$view->registerJsFile($directoryAsset.DIRECTORY_SEPARATOR."ztree/js/jquery.ztree.all-3.5{$postfix}.js?v=v{$version}", ['depends' => self::className()]);
 	}
 	
 }

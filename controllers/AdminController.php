@@ -81,6 +81,10 @@ class AdminController extends Controller
 		Yii::$app->response->format = Response::FORMAT_JSON;
 		return ['status'=>'401', 'message'=>$msg];
 	}
+	public function errorMessage($model){
+		$error = array_values($model->getFirstErrors())[0];
+		throw new \Exception($error);
+	}
 
 	/**
 	 * 内容转为弹出层

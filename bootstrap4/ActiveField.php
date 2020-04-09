@@ -328,7 +328,7 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 	}
 	
 	protected function renderDatePicker($options, $attribute){
-		AdminLteAsset::DatePicker($this->form->getView());
+		AdminLteAsset::loadModule($this->form->getView(), 'datepicker');
 		$hidden_id = isset($options['id'])?$options['id']:Html::getInputId($this->model, $attribute);
 		$display_id= 'dt_'.$hidden_id;
 		$value =  Html::getAttributeValue($this->model, $attribute);

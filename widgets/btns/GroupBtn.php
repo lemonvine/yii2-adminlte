@@ -94,14 +94,14 @@ class GroupBtn extends Widget
 	}
 	
 	public static function DialogButton($config=[]){
-		$params = ['title'=>'保存', 'url'=>'', 'isbtn'=>true, 'color'=>'info', 'size'=>'sm', 'badge'=>''];
+		$params = ['title'=>'保存', 'url'=>'', 'isbtn'=>true, 'color'=>'info', 'size'=>'sm', 'badge'=>'', 'class'=>''];
 		$params = array_merge($params, $config);
 		$badge = '';
 		if(!empty($params['badge'])){
 			$badge = '<span class="badge badge-pill badge-danger">'.$params['badge'].'</span>';
 		}
 		return Html::a($params['title'].$badge, 'javascript:;', 
-			['class'=>($params['isbtn']?'btn btn-':static::$btn_css).$params['color'].' modaldialog', 'data-title' => $params['title'],
+			['class'=>$params['class'].($params['isbtn']?'btn btn-':static::$btn_css).$params['color'].' modaldialog', 'data-title' => $params['title'],
 			'data-area' => $params['size'], 'data-url' => $params['url']]);
 	}
 	

@@ -10,7 +10,6 @@ use lemon\web\CodemirrorAsset;
 use lemon\web\SummernoteAsset;
 use lemon\web\SummernoteLanguageAsset;
 use lemon\web\AdminLteAsset;
-use lemon\web\BootstrapAsset;
 
 class Summernote extends InputWidget
 {
@@ -30,7 +29,7 @@ class Summernote extends InputWidget
 			['height', ['height']],
 			['table', ['table']],
 			['insert', [ 'hr']],
-			// ['view', ['fullscreen']]
+			//['view', ['fullscreen']]
 		]
 	];
 	/** @var array */
@@ -41,10 +40,7 @@ class Summernote extends InputWidget
 	
 	public function init()
 	{
-		AdminLteAsset::addScript($this->getView(), 'plugins/popper');
- 		BootstrapAsset::addScript($this->getView(), 'tooltip');
-		BootstrapAsset::addScript($this->getView(), 'dropdown');
-		//$this->getView()->registerCss('.tooltip{top:-40px!important;}');
+		AdminLteAsset::loadModule($this->getView(), 'summernote');
 
 		$this->options = array_merge($this->defaultOptions, $this->options);
 		$this->clientOptions = array_merge($this->defaultClientOptions, $this->clientOptions);
