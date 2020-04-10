@@ -4,10 +4,11 @@ use yii\helpers\Html;
 /* @var $btn_name String */
 /* @var $form_id String */
 /* @var $confirm String */
+/* @var $class String */
 
 ?>
 
-<?= Html::Button($btn_name, ['id' => 'btn_submit', 'class' => 'btn btn-success', 'onclick'=>'onSubmitConfirm()' ]) ?>
+<?= Html::Button($btn_name, ['id' => 'btn_submit', 'class' => $class.'btn btn-success', 'onclick'=>'onSubmitConfirm()' ]) ?>
 
 <script type="text/javascript">
 	var layerSubmitIndex;
@@ -32,11 +33,11 @@ use yii\helpers\Html;
 				}, 500);
 			}
 			catch($er){
-				var message = '提交出现异常,请联系管理员';
+				var message = '出现异常,请联系管理员';
 				bolevine.alert({message: message});
 			}
 		}, function(){
-			var message = '提交已放弃';
+			var message = '已放弃';
 			bolevine.alert({message: message});
 		});
 	}

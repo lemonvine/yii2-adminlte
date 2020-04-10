@@ -6,6 +6,29 @@ var bolevine = {
 	referer: '',
 	opening: null,
 	cookie_name: {save_reappear: "j2u8i3"},
+	str2json: function(data){
+		if(typeof(data)=="string"){
+			try{
+				data = eval('('+data+')');
+			}
+			catch(error){
+				data = {status:401, message:'非法JSON'+error.message};
+			}
+			
+		}
+		return data;
+	},
+	json2str: function(data){
+		if(typeof(data)!="string"){
+			try{
+				data = JSON.stringify(data);
+			}
+			catch(error){
+				data = "";
+			}
+		}
+		return data;
+	},
 	turnoff: function(){
 		if(bolevine.opening){
 			layer.close(bolevine.opening);
@@ -159,6 +182,23 @@ var bolevine = {
 			form = "form";
 		}
 		$(form).submit();
+	},
+	save: function(url, form){
+		if(!form){
+			form = "#main_form";
+		}
+		$.ajax({url: url, type: 'POST', cache: false, processData: false, contentType: false,
+			data: new FormData($(form)[0]),
+			success: function(rd){
+				rd = bolevine.str2json(rd);
+				if(rd.status == 202){
+					bolevine.alert({message: rd.data, flag: 8});
+				}
+				else{
+					bolevine.alert({message:rd.message, flag: 4});
+				}
+			}
+		});
 	},
 	linkage: function(target, data){
 		$(target).html(data);
@@ -346,6 +386,12 @@ $(window).ready(function(){
 		if(_callback){
 			eval(_callback);
 		}
+	});
+	//
+	$(document).on('click', '.btn-save', function(){
+		var url = $(this).data('url');
+		var form = $(this).data('form');
+		bolevine.save(url, form);
 	});
 	
 	var menuid = $("#chain_menu").val();
