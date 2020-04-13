@@ -196,21 +196,16 @@ class GroupBtn extends Widget
 	
 	public function submit($config=[]){
 		$this->submit_type = true;
-		$params = ['btn_name'=>'提交', 'form_id'=>$this->form_id, 'confirm'=>'您确定要提交吗？'];
+		$params = ['btn_name'=>'提交', 'form_id'=>$this->form_id, 'confirm'=>'您确定要提交吗？', 'class'=>''];
 		$params = array_merge($params, $config);
 		echo $this->render($this->view_dir.'submit', $params);
 	}
 	
 	public function export($config=[]){
 		$this->submit_type = true;
-		
 		$params = ['title'=>'提交', 'form_id'=>$this->form_id, 'color'=>'secondary'];
 		$params = array_merge($params, $config);
-		//$params = ['form_id'=>$this->form_id];
-		//$params = array_merge($params, $config);
 		echo Html::button('导出', ['class' => 'btn btn-'.$params['color'], 'onclick'=>"bolevine.export('#".$params['form_id']."')" ]);
-
-		//echo $this->render($this->view_dir.'export', $params);
 	}
 	
 	private function getClass(){
