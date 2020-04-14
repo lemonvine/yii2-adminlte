@@ -1,6 +1,6 @@
 <?php
 namespace lemon\dingtalk;
-use lemon\dingtalk\RequestCheckUtil;
+
 /**
  * dingtalk API: dingtalk.oapi.processinstance.create request
  * 
