@@ -21,7 +21,7 @@ class ZTree extends Widget
 	{
 		echo '<ul id="'.$this->id.'" class="ztree"></ul>';
 		$view = $this->getView();
-		AdminLteAsset::Ztree($view);
+		AdminLteAsset::loadModule($view, 'ztree');
 
 		$js = '$.fn.zTree.init($("#'.$this->id.'"), '.$this->_setting.', '.$this->_nodes.');';
 		$view->registerJs($js);

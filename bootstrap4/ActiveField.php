@@ -33,7 +33,7 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 	public $prepend = [];
 	public $append = [];
 	
-	public $dateOptions = ['save'=>'timestamp', 'format'=>'', 'type'=>'', 'readonly'=>false, 'callback'=>'', 'class' => ''];
+	public $dateOptions = ['save'=>'timestamp', 'format'=>'', 'type'=>'', 'readonly'=>false, 'callback'=>'', 'class' => '', 'btn'=>''];
 	
 	public function render($content = null){
 		$this->buildTemplate();
@@ -334,7 +334,10 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 		$value =  Html::getAttributeValue($this->model, $attribute);
 		$hidden = Html::activeHiddenInput($this->model, $attribute, ['value'=>$value, 'id'=>$hidden_id]);
 		$display_value = '';
-		if(!empty($value) && $options['save']=='timestamp'){
+		if($options['btn']=='long' && $value==1){
+			$display_value = '2099-12-31';
+		}
+		elseif(!empty($value) && $options['save']=='timestamp'){
 			switch (empty($options['format'])?$options['type']:'format'){
 				case '':
 				case 'date':
@@ -361,7 +364,7 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 			$display_value= $value;
 		}
 		$display = Html::input('text', '', $display_value, ['class'=>'form-control js-laydate '.$options['class'], 'id'=>$display_id, 'data-type'=>$options['type'], 'data-save'=>$options['save'],
-			'data-callback'=>$options['callback'], 'data-format'=>$options['format'], 'data-hidden'=>$hidden_id, 'readonly'=>$options['readonly']]);
+			'data-callback'=>$options['callback'], 'data-format'=>$options['format'], 'data-hidden'=>$hidden_id, 'data-btn'=>$options['btn']??'','readonly'=>$options['readonly']]);
 		
 		$connector= '<div class="input-group-append"><div class="input-group-text text-primary"><i class="fa fa-calendar"></i></div></div>';
 		return $hidden.$display.$connector;

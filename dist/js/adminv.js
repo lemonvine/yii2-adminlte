@@ -260,9 +260,8 @@ var bolevine = {
 					}
 				}else{
 					var newTimestamp;
-					if(btn=='long'){
+					if(btn=='long' && date=='2099-12-31'){
 						newTimestamp=1;
-						$("#"+id).val('2099-12-31');
 					}
 					else{
 						newTimestamp = Date.parse(new Date(date.replace('-','/')))/1000;
