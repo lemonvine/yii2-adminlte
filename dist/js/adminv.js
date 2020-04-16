@@ -387,6 +387,17 @@ $(window).ready(function(){
 		}
 	});
 	//
+	//金额转为大写
+	$(document).on('keyup', '.rmb-chinese', function(){
+		var _val = parseFloat($(this).val());
+		var _id = $(this).attr('id');
+		layer.tips(_val.chinese(), "#"+_id, {tips:1});
+	});
+	$(document).on('mousedown', '.rmb-chinese', function(){
+		var _val = parseFloat($(this).val());
+		var _id = $(this).attr('id');
+		layer.tips(_val.chinese(), "#"+_id, {tips:1});
+	});
 	$(document).on('click', '.btn-save', function(){
 		var url = $(this).data('url');
 		var form = $(this).data('form');
@@ -437,7 +448,8 @@ Number.prototype.date = function(){
 	var time = new Date(this);
 	return time;
 };
-Number.prototype.chinese = function(n){
+Number.prototype.chinese = function(){
+	n=this;
 	if (!/^(0|[1-9]\d*)(\.\d+)?$/.test(n))
 		return "";
 	var unit = "仟佰拾亿仟佰拾万仟佰拾元角分", str = "";
