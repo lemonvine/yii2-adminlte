@@ -11,6 +11,7 @@ use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use lemon\components\ExcelValueBinder;
 use lemon\models\LogExport;
+use PhpOffice\PhpSpreadsheet\Style\Border;
 
 /**
  * 导出到excel
@@ -20,45 +21,87 @@ use lemon\models\LogExport;
  */
 class ExportExcel
 {
-	private $cells = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'AA', 'AB', 'AC', 'AD', 'AE', 'AF', 'AG', 'AH', 'AI', 'AJ', 'AK', 'AL', 'AM', 'AN', 'AO', 'AP', 'AQ', 'AR', 'AS', 'AT', 'AU', 'AV', 'AW', 'AX', 'AY', 'AZ'];
-	private $cell_format=['text'=>NumberFormat::FORMAT_TEXT];
-	
-	public $export_type = 1;
 	/**
-	 * 是否为自定义抬头
-	 * @var string
-	 */
-	public $caption_diy = false;
-	
-	/**
-	 * 抬头数组
-	 * @var array
-	 * 
-	 * 
-	 * Custome Caption example
-	 * [
-	 * 	['cell'=>'A1', 'merge'=>'A2', 'label'=>'name'],
-	 * 	['cell'=>'B1', 'merge'=>'D1', 'label'=>'birthday'],
-	 * 	['cell'=>'B2', 'merge'=>'', 'label'=>'year'],
-	 * 	['cell'=>'C2', 'merge'=>'', 'label'=>'month'],
-	 * 	['cell'=>'D2', 'merge'=>'', 'label'=>'day'],
-	 * ]
-			
-	 */
-	public $caption = [];
-	public $columns = [];
-	public $begin_row = 2;
-	public $height = 20;
-	
-	/**
-	 * 列宽度、列单元格格式、列相邻同值合并
-	 * ['A'=>['width'=>15, 'format'=>'', 'merge'=>true], 'N'=>['width'=>40]]
+	 * 多个sheet，传入此参数
 	 * @var array
 	 */
-	public $style = [];
-	public $merge = [];
-	public $formatter;
+	public $sheets = [];
+	
+	/**
+	 * 单个sheet，直接传入以下参数
+	 * @var array
+	 */
+	public $labels = [];
+	public $title = [];
+	public $header = [];
+	public $header_style=[];
+	public $body = [];
 	public $sheet_name = '数据';
+	public $row_height = 25;
+	
+	/**
+	 * 用于记录日志
+	 * @var integer
+	 */
+	public $export_type = 1;
+	
+	/**
+	 * 实例化此类时，传以下参数，如果有多个sheet，传入数组，每个数组元素包含以下参数
+	 * @var array
+	 */
+	private $sheet = [
+		'name' => '',
+		'row_height' => 25,
+		'labels' => [],
+		'title' => [],
+		'header' => [],
+		'header_style'=>[],
+		'body' => [],
+	];
+	
+	/**
+	 * 单元格的所有属性
+	 * @var array
+	 */
+	private $cell = [
+		'attribute'=> '',
+		'label'=> '',
+		'column'=> '',
+		'cell'=> '',
+		'merge'=> '',
+		'align'=> 'center',
+		'valign'=> 'mid',
+		'width'=> 0,
+		'height'=> 0,
+		'fontsize'=> 0,
+		'color'=> '',
+		'background'=> '',
+		'border'=>'',
+		'added'=> '',//merge
+		'format'=> 'text',
+	];
+	/**
+	 * excel样式MAP
+	 * @var array
+	 */
+	private $cell_format=[
+		'center' => Alignment::HORIZONTAL_CENTER,
+		'mid' => Alignment::VERTICAL_CENTER,
+		'text'=> NumberFormat::FORMAT_TEXT,
+		
+	];
+	
+	private $formatter;
+	private $sheet_index = 0;
+	private $row_num = 0;
+	private $heighted_rows = []; //临时变量，title和header中自定义了高度的行
+	private $title_height = 22; //标题部分的高度
+	private $column_width =12; //默认列宽
+	
+	/**
+	 * 用于记录日志
+	 * @var unknown
+	 */
 	private $file_name;
 	private $export_remark;
 	
@@ -76,14 +119,12 @@ class ExportExcel
 		} elseif (is_array($this->formatter)) {
 			$this->formatter = Yii::createObject($this->formatter);
 		}
-		$this->initColumns();
 	}
 	
-	public function out($data, $file_name, $content=''){
+	public function out($file_name, $content=''){
 		$this->file_name = $file_name;
 		$this->export_remark = $content;
-		$row_number = count($data);
-		$col_number = count($this->columns);
+		
 		Cell::setValueBinder(new ExcelValueBinder());
 		$spreadsheet = new Spreadsheet();
 		
@@ -95,89 +136,31 @@ class ExportExcel
 		->setKeywords('office 2007 openxml php')
 		->setCategory('Test result file');
 		
-		$sheet = $spreadsheet->setActiveSheetIndex(0);
-		//$sheet->getDefaultRowDimension()->setRowHeight(20);
-		//$sheet->getDefaultColumnDimension()->setWidth(12);
-		
-		if($this->caption_diy){
-			foreach ($this->caption as $key=>$cell){
-				$sheet->setCellValue($cell['cell'], $cell['label']);
-				if(!empty($cell['merge'])){
-					$sheet->mergeCells($cell['cell'].":".$cell['merge']);
-					if(substr($cell['cell'],0,1)==substr($cell['merge'], 0, 1)){
-						$sheet->getStyle($cell['cell'])->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
-					}
-				}
-				if(!empty($cell['center'])){
-					if($cell['merge']){
-						$sheet->mergeCells($cell['cell'].":".$cell['merge']);
-					}
-					$sheet->getStyle($cell['cell'])->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-					$sheet->getStyle($cell['cell'])->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
-				}
-				//$sheet->getStyle($cell['cell'])->getFill()->setFillType(Fill::FILL_SOLID);
-				//$sheet->getStyle($cell['cell'])->getFill()->getStartColor()->setARGB("AA4F81BD");
-				//$sheet->getStyle($cell['cell'])->getFont()->getColor()->setARGB(Color::COLOR_WHITE);
-				//$sheet->getStyle($cell['cell'])->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+		$sheets = $this->sheets;
+		$sheet_count = count($sheets);
+		if($sheet_count>0){
+			$sheet_0 = $spreadsheet->setActiveSheetIndex(0);
+			$this->buildSheet($sheet_0, $sheets[0]);
+			for($j=1;$j<$sheet_count; $j++){
+				$sheet= $spreadsheet->createSheet();
+				$this->buildSheet($sheet, $sheets[$j]);
 			}
 		}
 		else{
-			foreach ($this->columns as $k=>$item){
-				$sheet->setCellValue($this->cells[$k].'1', $item['label']);
-			}
-			$row_title = 'A1:'.$this->cells[$col_number-1].'1';
-			//$sheet->getStyle($row_title)->getFill()->setFillType(Fill::FILL_SOLID);
-			//$sheet->getStyle($row_title)->getFill()->getStartColor()->setARGB("AA4F81BD");
-			//$sheet->getStyle($row_title)->getFont()->getColor()->setARGB(Color::COLOR_WHITE);
-			//$sheet->getStyle($row_title)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);//水平方向上两端对齐
+			$sheet = [
+				'name' => $this->sheet_name,
+				'row_height'=>$this->row_height,
+				'labels'=> $this->labels,
+				'title'=> $this->title,
+				'header'=> $this->header,
+				'header_style'=> $this->header_style,
+				'body'=> $this->body,
+			];
+			
+			$sheet_0 = $spreadsheet->setActiveSheetIndex(0);
+			$this->buildSheet($sheet_0, $sheet);
+			
 		}
-		$i =$this->begin_row;
-		for($m=1;$m<$i;$m++){
-			$height = $this->titleHeight?$this->titleHeight:'25';
-			$sheet->getRowDimension($m)->setRowHeight($height);
-		}
-		
-		//数据入格
-		foreach ($data as $key=>$row){
-			$sheet->getRowDimension($i)->setRowHeight($this->height);
-			foreach ($this->columns as $k=>$item){
-				$val = $this->formatter->format($row[$item['attribute']], $item['format']);
-				$r = $this->cells[$k];
-				$sheet->setCellValue($r.$i, $val);
-			}
-			$i++;
-		}
-		
-		foreach ($this->style as $key =>$col){
-			$coldimen = $sheet->getColumnDimension($key);
-			if(key_exists('width', $col)){
-				$coldimen->setWidth($col['width']);
-			}
-			if(key_exists('format', $col)){
-				$sheet->getStyle($key.$this->begin_row.':'.$key.$i)->getNumberFormat()->setFormatCode($this->cell_format[$col['format']]);
-			}
-			if(key_exists('center', $col)){
-				$sheet->getStyle($key.$this->begin_row.':'.$key.$i)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-				$sheet->getStyle($key.$this->begin_row.':'.$key.$i)->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
-			}
-			if(key_exists('merge', $col)){//值相同的合并单元格
-				$composer = '#b@n';
-				$merge = 0;
-				for($j=$this->begin_row; $j<=$i+1; $j++){
-					$val = $sheet->getCell($key.$j)->getValue();
-					if($composer!=$val){
-						if($merge>0){
-							$sheet->mergeCells($key.$merge.":".$key.($j-1));
-							echo $key.$merge.":".$key.$j;
-							$sheet->getStyle($key.$merge)->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
-						}
-						$merge = $j;
-						$composer = $val;
-					}
-				}
-			}
-		}
-		$sheet->setTitle($this->sheet_name);
 		
 		$this->writeLog();
 		// Redirect output to a client’s web browser (Xlsx)
@@ -196,6 +179,93 @@ class ExportExcel
 		exit('保存成功');
 	}
 	
+	/**
+	 * 构建sheet
+	 * @param unknown $sheet
+	 * @param unknown $configs
+	 */
+	protected function buildSheet($sheet, $configs){
+		//初始化
+		$configs = array_merge($this->sheet, $configs);
+		$this->row_num= 0;
+		$this->heighted_rows= [];
+		
+		//sheet name
+		if(empty($configs['name'])){
+			$configs['name'] = 'sheet'.($this->sheet_index+1);
+		}
+		$sheet->setTitle($configs['name']);
+		
+		$sheet->getDefaultRowDimension()->setRowHeight($this->title_height);
+		$sheet->getDefaultColumnDimension()->setWidth($this->column_width);
+		
+		$configs = $this->initColumns($configs);
+		$title = $configs['title'];
+		
+		foreach ($title as $item){
+			$this->fillCell($sheet, $item, true);
+		}
+		
+		$header = $configs['header'];
+		$header_begin = $this->row_num +1;//******************
+		
+		foreach ($header as $key=>$item){
+			if(empty($item['cell'])  && !empty($item['column'])){
+				$item['cell'] = $item['column'].$header_begin;
+			}
+			$this->fillCell($sheet, $item, true);
+		}
+		//title和header高度
+		for($i=0; $i<=$this->row_num; $i++){
+			if(!in_array($i, $this->heighted_rows)){
+				$sheet->getRowDimension($i)->setRowHeight($this->title_height);
+			}
+		}
+		
+		//数据入格
+		$body = $configs['body'];
+		$row_begin = $this->row_num+1;
+		$formatter = $this->formatter;
+		foreach ($header as $c=>$column){
+			if(empty($column['column'])){
+				continue;
+			}
+			$attr = $column['attribute'];
+			$format = $column['format']??'text';
+			$added = $column['added'];
+			$col_name = $column['column'];
+			
+			$i =$row_begin;
+			$merge_dealer = '';
+			$merge_begin = $row_begin;
+			foreach ($body as $r=>$row){
+				if($c==0){
+					$sheet->getRowDimension($i)->setRowHeight($this->row_height);
+				}
+				$cell_item = $this->cell;
+				$original = $row[$attr];
+				
+				$value = $formatter->format($original, $format);
+				
+				$cell_item['label'] = $value;
+				$cell_item['cell'] = $column['column'].$i;
+				
+				if($added=='merge'){
+					if($merge_dealer!=$value){
+						if($i>($merge_begin+1)){
+							$sheet->mergeCells($col_name.$merge_dealer.":".$col_name.($i-1));
+						}
+						$merge_begin= $i;
+						$merge_dealer= $value;
+					}
+				}
+				$this->fillCell($sheet, $cell_item);
+				$i++;
+			}
+		}
+		$this->sheet_index ++;
+	}
+	
 	protected function writeLog(){
 		$export_user = Yii::$app->user->identity->id;
 		$model = new LogExport();
@@ -211,22 +281,134 @@ class ExportExcel
 		}
 	}
 	
-	protected function initColumns()
-	{
-		foreach ($this->columns as $i => $column) {
-			if (is_string($column)) {
-				$column = $this->createDataColumn($column);
-			} else {
-				$default_caption = $this->caption_diy?'':($this->caption[$column['attribute']]??'');
-				$column = array_merge([
-					'attribute' => '',
-					'format' => 'text',
-					'label' => $default_caption,
-				], $column);
+	/**
+	 * 填充单元格
+	 * @param unknown $sheet
+	 * @param unknown $item
+	 * @param string $move_row
+	 * @throws Exception
+	 */
+	private function fillCell($sheet, $item, $move_row=false){
+		$cell = $item['cell'];
+		if(empty($cell)){
+			return;
+		}
+		$label = $item['label']??'';
+		$merge = $item['merge']??'';
+		try{
+			$sheet->setCellValue($cell, $label);
+		}catch(\Exception $ex){
+			throw  $ex;
+		}
+		
+		if(!empty($merge)){
+			$sheet->mergeCells($cell.":".$merge);
+		}
+		
+		$sheet->getStyle($cell)->getAlignment()->setHorizontal($this->cell_format[$item['align']]);
+		$sheet->getStyle($cell)->getAlignment()->setVertical($this->cell_format[$item['valign']]);
+		
+		if(!empty($item['color'])){
+			$sheet->getStyle($cell)->getFont()->getColor()->setARGB($item['color']);
+		}
+		if(!empty($item['background'])){
+			$sheet->getStyle($cell)->getFill()->setFillType(Fill::FILL_SOLID);
+			$sheet->getStyle($cell)->getFill()->getStartColor()->setARGB($item['background']);//AA4F81BD
+		}
+		
+		$row_num = 0;
+		$col_num = 0;
+		if(!empty($item['height'])){
+			$row_num= $sheet->getCell($cell)->getRow();
+			$sheet->getRowDimension($row_num)->setRowHeight($item['height']);
+		}
+		if(!empty($item['width'])){
+			$col_num= $sheet->getCell($cell)->getColumn();
+			$sheet->getColumnDimension($col_num)->setWidth($item['width']);
+		}
+		if(!empty($item['fontsize'])){
+			$sheet->getStyle($cell)->getFont()->setSize($item['fontsize']);
+		}
+		if(!empty($item['border'])){
+			$color = new Color();
+			$color->setRGB($item['border']);
+			if(!empty($merge)){
+				$sheet->getStyle($cell.":".$merge)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor($color);
 			}
-			$this->columns[$i] = $column;
+			else{
+				$sheet->getStyle($cell)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN)->setColor($color);
+			}
+			
+		}
+		
+		if($move_row){
+			if($row_num==0){
+				$row_num= $sheet->getCell($cell)->getRow();
+			}
+			if($row_num> $this->row_num){
+				$this->row_num = $row_num;
+			}
+			//自定义了高度的行，标记到全局数组中
+			if(!empty($item['height']) && !in_array($row_num, $this->heighted_rows)){
+				$this->heighted_rows[] = $row_num;
+			}
 		}
 	}
+	
+	/**
+	 * 获得excel列名
+	 * @param unknown $i
+	 * @return string
+	 */
+	protected function columnName($i){
+		$first = floor($i/26);
+		$second = $i%26;
+		return ($first==0?'':chr($first+64)).(chr($second+65));
+	}
+	/**
+	 * 完善title和header
+	 * @param unknown $configs
+	 * @return unknown
+	 */
+	protected function initColumns($configs)
+	{
+		foreach ($configs['title'] as &$title){
+			$title= array_merge($this->cell, $title);
+			
+		}
+		$labels = $configs['labels'];
+		foreach ($configs['header'] as $i=>&$item) {
+			if (is_string($item)) {
+				$item = $this->createDataColumn($item);
+			}
+			$header = array_merge($this->cell, $configs['header_style']);
+			$item= array_merge($header, $item);
+						
+			$attr = $item['attribute'];
+			//label
+			if(!empty($attr) && empty($item['label']) && isset($labels[$attr])){
+				$item['label'] = $labels[$attr];
+			}
+			//column
+			if(!empty($attr) && empty($item['column'])){
+				$cell = $item['cell']??'';
+				if(!empty($cell)){
+					$item['column']=preg_replace("/\\d+/",'', $cell);
+				}
+				else{
+					$item['column'] = $this->columnName($i);
+				}
+			}
+		}
+		return  $configs;
+	}
+	
+	/**
+	 * 解析字符串的header
+	 * @param unknown $text
+	 * @throws \Exception
+	 * @return unknown[]|string[]
+	 */
 	protected function createDataColumn($text)
 	{
 		if (!preg_match('/^([^:]+)(:(\w*))?(:(.*))?$/', $text, $matches)) {
@@ -235,7 +417,7 @@ class ExportExcel
 		return [
 			'attribute' => $matches[1],
 			'format' => isset($matches[3]) ? $matches[3] : 'text',
-			'label' => $this->caption_diy?'':(isset($matches[5]) ? $matches[5] : (isset($this->caption[$matches[1]])?'':'')),
+			'label' => isset($matches[5]) ? $matches[5] : '',
 		];
 	}
 }
