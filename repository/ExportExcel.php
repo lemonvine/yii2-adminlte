@@ -36,8 +36,9 @@ class ExportExcel
 	public $header = [];
 	public $header_style=[];
 	public $body = [];
+	public $body_style=[];
 	public $sheet_name = '数据';
-	public $row_height = 25;
+	public $extra = [];
 	
 	/**
 	 * 用于记录日志
@@ -51,12 +52,13 @@ class ExportExcel
 	 */
 	private $sheet = [
 		'name' => '',
-		'row_height' => 25,
 		'labels' => [],
 		'title' => [],
 		'header' => [],
 		'header_style'=>[],
 		'body' => [],
+		'body_style'=>[],
+		'extra'=> [],
 	];
 	
 	/**
@@ -77,6 +79,7 @@ class ExportExcel
 		'color'=> '',
 		'background'=> '',
 		'border'=>'',
+		'bold'=>false,
 		'added'=> '',//merge
 		'format'=> 'text',
 	];
@@ -85,17 +88,20 @@ class ExportExcel
 	 * @var array
 	 */
 	private $cell_format=[
-		'center' => Alignment::HORIZONTAL_CENTER,
-		'mid' => Alignment::VERTICAL_CENTER,
+		'left'=> Alignment::HORIZONTAL_LEFT,
+		'center'=> Alignment::HORIZONTAL_CENTER,
+		'right'=> Alignment::HORIZONTAL_RIGHT,
+		'mid'=> Alignment::VERTICAL_CENTER,
 		'text'=> NumberFormat::FORMAT_TEXT,
 		
 	];
 	
 	private $formatter;
 	private $sheet_index = 0;
+	private $row_begin= 9999;
 	private $row_num = 0;
 	private $heighted_rows = []; //临时变量，title和header中自定义了高度的行
-	private $title_height = 22; //标题部分的高度
+	private $row_height = 22; //标题部分的高度
 	private $column_width =12; //默认列宽
 	
 	/**
@@ -141,20 +147,30 @@ class ExportExcel
 		if($sheet_count>0){
 			$sheet_0 = $spreadsheet->setActiveSheetIndex(0);
 			$this->buildSheet($sheet_0, $sheets[0]);
+			$sheet_indexs= [];
 			for($j=1;$j<$sheet_count; $j++){
-				$sheet= $spreadsheet->createSheet();
+				$sheet_name = $sheets[$j]['name'];
+				if(in_array($sheet_name, $sheet_indexs)){
+					$sheet = $spreadsheet->getSheetByName($sheet_name);
+				}
+				else{
+					$sheet= $spreadsheet->createSheet();
+					$sheet_indexs[] = $sheet_name;
+				}
+				
 				$this->buildSheet($sheet, $sheets[$j]);
 			}
 		}
 		else{
 			$sheet = [
 				'name' => $this->sheet_name,
-				'row_height'=>$this->row_height,
 				'labels'=> $this->labels,
 				'title'=> $this->title,
 				'header'=> $this->header,
 				'header_style'=> $this->header_style,
 				'body'=> $this->body,
+				'body_style'=> $this->body_style,
+				'extra'=>$this->extra,
 			];
 			
 			$sheet_0 = $spreadsheet->setActiveSheetIndex(0);
@@ -188,6 +204,7 @@ class ExportExcel
 		//初始化
 		$configs = array_merge($this->sheet, $configs);
 		$this->row_num= 0;
+		$this->row_begin=9999;
 		$this->heighted_rows= [];
 		
 		//sheet name
@@ -196,7 +213,7 @@ class ExportExcel
 		}
 		$sheet->setTitle($configs['name']);
 		
-		$sheet->getDefaultRowDimension()->setRowHeight($this->title_height);
+		$sheet->getDefaultRowDimension()->setRowHeight($this->row_height);
 		$sheet->getDefaultColumnDimension()->setWidth($this->column_width);
 		
 		$configs = $this->initColumns($configs);
@@ -216,9 +233,9 @@ class ExportExcel
 			$this->fillCell($sheet, $item, true);
 		}
 		//title和header高度
-		for($i=0; $i<=$this->row_num; $i++){
+		for($i=$this->row_begin; $i<=$this->row_num; $i++){
 			if(!in_array($i, $this->heighted_rows)){
-				$sheet->getRowDimension($i)->setRowHeight($this->title_height);
+				$sheet->getRowDimension($i)->setRowHeight($this->row_height);
 			}
 		}
 		
@@ -226,6 +243,12 @@ class ExportExcel
 		$body = $configs['body'];
 		$row_begin = $this->row_num+1;
 		$formatter = $this->formatter;
+		$body_height = $this->row_height;
+		if(isset($configs['body_style']['height'])){
+			$body_height = $configs['body_style']['height'];
+			unset($configs['body_style']['height']);
+		}
+		$flag_row_height= true;
 		foreach ($header as $c=>$column){
 			if(empty($column['column'])){
 				continue;
@@ -239,46 +262,44 @@ class ExportExcel
 			$merge_dealer = '';
 			$merge_begin = $row_begin;
 			foreach ($body as $r=>$row){
-				if($c==0){
-					$sheet->getRowDimension($i)->setRowHeight($this->row_height);
+				if($flag_row_height){
+					$sheet->getRowDimension($i)->setRowHeight($body_height);
 				}
-				$cell_item = $this->cell;
+				
 				$original = $row[$attr];
-				
 				$value = $formatter->format($original, $format);
-				
-				$cell_item['label'] = $value;
-				$cell_item['cell'] = $column['column'].$i;
-				
 				if($added=='merge'){
 					if($merge_dealer!=$value){
 						if($i>($merge_begin+1)){
-							$sheet->mergeCells($col_name.$merge_dealer.":".$col_name.($i-1));
+							$sheet->mergeCells($col_name.$merge_begin.":".$col_name.($i-1));
 						}
 						$merge_begin= $i;
 						$merge_dealer= $value;
 					}
 				}
+				$cell_item = $this->cell;
+				$cell_item = array_merge($cell_item, $configs['body_style']);
+				
+				$cell_item['label'] = $value;
+				$cell_item['cell'] = $column['column'].$i;
+				
 				$this->fillCell($sheet, $cell_item);
 				$i++;
 			}
+			if($added=='merge'){
+				if($i>($merge_begin+1)){
+					$sheet->mergeCells($col_name.$merge_begin.":".$col_name.($i-1));
+				}
+			}
+			$flag_row_height = false;
+		}
+		if(count($configs['extra'])>0){
+			$extra = $configs['extra'];
+			if(isset($extra['freeze'])){
+				$sheet->freezePane($extra['freeze']);
+			}
 		}
 		$this->sheet_index ++;
-	}
-	
-	protected function writeLog(){
-		$export_user = Yii::$app->user->identity->id;
-		$model = new LogExport();
-		$model->export_file = $this->file_name;
-		$model->export_type = $this->export_type;
-		$model->export_time = time();
-		$model->export_user = $export_user;
-		$model->export_remark = $this->export_remark;
-		//$model->operate_ip = Helpers::
-		if(!$model->save()){
-			$error = array_values($model->getFirstErrors())[0];
-			throw new \Exception($error . '[D01]');
-		}
 	}
 	
 	/**
@@ -341,6 +362,24 @@ class ExportExcel
 			}
 			
 		}
+		if($item['bold']){
+			if(!empty($merge)){
+				$sheet->getStyle($cell.":".$merge)->getFont()->setBold(true);
+			}
+			else{
+				$sheet->getStyle($cell)->getFont()->setBold(true);
+			}
+		}
+		if(!empty($item['format'])){
+			$format = $item['format'];
+			switch ($format){
+				case 'money':
+					$sheet->getStyle($cell)->getNumberFormat()->setFormatCode('_(* #,##0.00_);_(* (#,##0.00);_(* "-"??_);_(@_)');
+					break;
+				default:
+					break;
+			}
+		}
 		
 		if($move_row){
 			if($row_num==0){
@@ -348,6 +387,9 @@ class ExportExcel
 			}
 			if($row_num> $this->row_num){
 				$this->row_num = $row_num;
+			}
+			if($row_num<$this->row_begin){
+				$this->row_begin = $row_num;
 			}
 			//自定义了高度的行，标记到全局数组中
 			if(!empty($item['height']) && !in_array($row_num, $this->heighted_rows)){
@@ -374,6 +416,7 @@ class ExportExcel
 	protected function initColumns($configs)
 	{
 		foreach ($configs['title'] as &$title){
+			//var_dump($title);die;
 			$title= array_merge($this->cell, $title);
 			
 		}
@@ -420,6 +463,21 @@ class ExportExcel
 			'format' => isset($matches[3]) ? $matches[3] : 'text',
 			'label' => isset($matches[5]) ? $matches[5] : '',
 		];
+	}
+	
+	protected function writeLog(){
+		$export_user = Yii::$app->user->identity->id;
+		$model = new LogExport();
+		$model->export_file = $this->file_name;
+		$model->export_type = $this->export_type;
+		$model->export_time = time();
+		$model->export_user = $export_user;
+		$model->export_remark = $this->export_remark;
+		//$model->operate_ip = Helpers::
+		if(!$model->save()){
+			$error = array_values($model->getFirstErrors())[0];
+			throw new \Exception($error . '[D01]');
+		}
 	}
 }
 
