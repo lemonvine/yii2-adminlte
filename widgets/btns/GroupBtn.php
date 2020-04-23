@@ -203,9 +203,9 @@ class GroupBtn extends Widget
 	
 	public function export($config=[]){
 		$this->submit_type = true;
-		$params = ['title'=>'提交', 'form_id'=>$this->form_id, 'color'=>'secondary'];
+		$params = ['title'=>'导出', 'form_id'=>$this->form_id, 'color'=>'secondary'];
 		$params = array_merge($params, $config);
-		echo Html::button('导出', ['class' => 'btn btn-'.$params['color'], 'onclick'=>"bolevine.export('#".$params['form_id']."')" ]);
+		echo Html::button($params['title'], ['class' => 'btn btn-'.$params['color'], 'onclick'=>"bolevine.export('#".$params['form_id']."')" ]);
 	}
 	
 	private function getClass(){

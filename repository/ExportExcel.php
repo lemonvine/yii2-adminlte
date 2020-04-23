@@ -338,6 +338,7 @@ class ExportExcel
 		
 		$sheet->getStyle($cell)->getAlignment()->setHorizontal($this->cell_format[$item['align']]);
 		$sheet->getStyle($cell)->getAlignment()->setVertical($this->cell_format[$item['valign']]);
+		$sheet->getStyle($cell)->getAlignment()->setWrapText(TRUE);
 		
 		if(!empty($item['color'])){
 			$sheet->getStyle($cell)->getFont()->getColor()->setARGB($item['color']);
