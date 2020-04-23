@@ -31,13 +31,13 @@ class ExportExcel
 	 * 单个sheet，直接传入以下参数
 	 * @var array
 	 */
-	public $labels = [];
-	public $title = [];
-	public $header = [];
-	public $header_style=[];
-	public $body = [];
-	public $body_style=[];
-	public $sheet_name = '数据';
+	public $labels= [];
+	public $title= [];
+	public $head= [];
+	public $body= [];
+	public $foot= [];
+	public $sheet_name= '数据';
+	public $style= [];
 	public $extra = [];
 	
 	/**
@@ -54,10 +54,10 @@ class ExportExcel
 		'name' => '',
 		'labels' => [],
 		'title' => [],
-		'header' => [],
-		'header_style'=>[],
+		'head' => [],
 		'body' => [],
-		'body_style'=>[],
+		'foot' => [],
+		'style'=>[],
 		'extra'=> [],
 	];
 	
@@ -100,7 +100,7 @@ class ExportExcel
 	private $sheet_index = 0;
 	private $row_begin= 9999;
 	private $row_num = 0;
-	private $heighted_rows = []; //临时变量，title和header中自定义了高度的行
+	private $heighted_rows = []; //临时变量，title和head中自定义了高度的行
 	private $row_height = 22; //标题部分的高度
 	private $column_width =12; //默认列宽
 	
@@ -166,10 +166,10 @@ class ExportExcel
 				'name' => $this->sheet_name,
 				'labels'=> $this->labels,
 				'title'=> $this->title,
-				'header'=> $this->header,
-				'header_style'=> $this->header_style,
+				'head'=> $this->head,
 				'body'=> $this->body,
-				'body_style'=> $this->body_style,
+				'foot'=> $this->foot,
+				'style'=> $this->style,
 				'extra'=>$this->extra,
 			];
 			
@@ -217,39 +217,41 @@ class ExportExcel
 		$sheet->getDefaultColumnDimension()->setWidth($this->column_width);
 		
 		$configs = $this->initColumns($configs);
-		$title = $configs['title'];
 		
+		/**********************************标题**********************************/
+		$title = $configs['title'];
 		foreach ($title as $item){
 			$this->fillCell($sheet, $item, true);
 		}
 		
-		$header = $configs['header'];
-		$header_begin = $this->row_num +1;//******************
-		
-		foreach ($header as $key=>$item){
+		/**********************************表头**********************************/
+		$head = $configs['head'];
+		$head_begin = $this->row_num +1;
+		foreach ($head as $key=>$item){
 			if(empty($item['cell'])  && !empty($item['column'])){
-				$item['cell'] = $item['column'].$header_begin;
+				$item['cell'] = $item['column'].$head_begin;
 			}
 			$this->fillCell($sheet, $item, true);
 		}
-		//title和header高度
+		//title和head高度
 		for($i=$this->row_begin; $i<=$this->row_num; $i++){
 			if(!in_array($i, $this->heighted_rows)){
 				$sheet->getRowDimension($i)->setRowHeight($this->row_height);
 			}
 		}
 		
+		/**********************************数据**********************************/
 		//数据入格
 		$body = $configs['body'];
 		$row_begin = $this->row_num+1;
 		$formatter = $this->formatter;
 		$body_height = $this->row_height;
-		if(isset($configs['body_style']['height'])){
-			$body_height = $configs['body_style']['height'];
-			unset($configs['body_style']['height']);
+		if(isset($configs['style']['body']['height'])){
+			$body_height = $configs['style']['body']['height'];
+			unset($configs['style']['body']['height']);
 		}
 		$flag_row_height= true;
-		foreach ($header as $c=>$column){
+		foreach ($head as $c=>$column){
 			if(empty($column['column'])){
 				continue;
 			}
@@ -278,7 +280,9 @@ class ExportExcel
 					}
 				}
 				$cell_item = $this->cell;
-				$cell_item = array_merge($cell_item, $configs['body_style']);
+				if(isset($configs['style']['body']) && count($configs['style']['body'])>0){
+					$cell_item = array_merge($cell_item, $configs['style']['body']);
+				}
 				
 				$cell_item['label'] = $value;
 				$cell_item['cell'] = $column['column'].$i;
@@ -298,6 +302,12 @@ class ExportExcel
 			if(isset($extra['freeze'])){
 				$sheet->freezePane($extra['freeze']);
 			}
+		}
+		
+		/**********************************底部**********************************/
+		$foot = $configs['foot'];
+		foreach ($foot as $c=>$column){
+			
 		}
 		$this->sheet_index ++;
 	}
@@ -408,7 +418,7 @@ class ExportExcel
 		return ($first==0?'':chr($first+64)).(chr($second+65));
 	}
 	/**
-	 * 完善title和header
+	 * 完善title和head
 	 * @param unknown $configs
 	 * @return unknown
 	 */
@@ -420,12 +430,15 @@ class ExportExcel
 			
 		}
 		$labels = $configs['labels'];
-		foreach ($configs['header'] as $i=>&$item) {
+		foreach ($configs['head'] as $i=>&$item) {
 			if (is_string($item)) {
 				$item = $this->createDataColumn($item);
 			}
-			$header = array_merge($this->cell, $configs['header_style']);
-			$item= array_merge($header, $item);
+			$head = $this->cell;
+			if(isset($configs['style']['head'])){
+				$head = array_merge($head, $configs['style']['head']);
+			}
+			$item= array_merge($head, $item);
 						
 			$attr = $item['attribute'];
 			//label
@@ -447,7 +460,7 @@ class ExportExcel
 	}
 	
 	/**
-	 * 解析字符串的header
+	 * 解析字符串的head
 	 * @param unknown $text
 	 * @throws \Exception
 	 * @return unknown[]|string[]
