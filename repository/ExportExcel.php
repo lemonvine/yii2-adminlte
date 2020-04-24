@@ -17,6 +17,8 @@ use PhpOffice\PhpSpreadsheet\Style\Border;
  * 导出到excel
  * shaodd 2019-12-11
  * 
+ * 序号：attribute的值为#serial#
+ * 在foot中，如果要用到当前行的行号，在label中用#this#表示，如果要用到数据的最后一行行号，用#data#表示
  *
  */
 class ExportExcel
@@ -31,14 +33,14 @@ class ExportExcel
 	 * 单个sheet，直接传入以下参数
 	 * @var array
 	 */
-	public $labels = [];
-	public $title = [];
-	public $header = [];
-	public $header_style=[];
-	public $body = [];
-	public $body_style=[];
-	public $sheet_name = '数据';
+	public $labels= [];
+	public $title= [];
+	public $head= [];
+	public $body= [];
+	public $foot= [];
+	public $style= [];
 	public $extra = [];
+	public $sheet_name= '数据';
 	
 	/**
 	 * 用于记录日志
@@ -54,10 +56,10 @@ class ExportExcel
 		'name' => '',
 		'labels' => [],
 		'title' => [],
-		'header' => [],
-		'header_style'=>[],
+		'head' => [],
 		'body' => [],
-		'body_style'=>[],
+		'foot' => [],
+		'style'=>[],
 		'extra'=> [],
 	];
 	
@@ -80,6 +82,7 @@ class ExportExcel
 		'background'=> '',
 		'border'=>'',
 		'bold'=>false,
+		'wrap'=>false,
 		'added'=> '',//merge
 		'format'=> 'text',
 	];
@@ -100,7 +103,7 @@ class ExportExcel
 	private $sheet_index = 0;
 	private $row_begin= 9999;
 	private $row_num = 0;
-	private $heighted_rows = []; //临时变量，title和header中自定义了高度的行
+	private $heighted_rows = []; //临时变量，title和head中自定义了高度的行
 	private $row_height = 22; //标题部分的高度
 	private $column_width =12; //默认列宽
 	
@@ -156,8 +159,8 @@ class ExportExcel
 				else{
 					$sheet= $spreadsheet->createSheet();
 					$sheet_indexs[] = $sheet_name;
+					$this->sheet_index ++;
 				}
-				
 				$this->buildSheet($sheet, $sheets[$j]);
 			}
 		}
@@ -166,10 +169,10 @@ class ExportExcel
 				'name' => $this->sheet_name,
 				'labels'=> $this->labels,
 				'title'=> $this->title,
-				'header'=> $this->header,
-				'header_style'=> $this->header_style,
+				'head'=> $this->head,
 				'body'=> $this->body,
-				'body_style'=> $this->body_style,
+				'foot'=> $this->foot,
+				'style'=> $this->style,
 				'extra'=>$this->extra,
 			];
 			
@@ -177,7 +180,7 @@ class ExportExcel
 			$this->buildSheet($sheet_0, $sheet);
 			
 		}
-		
+		//die;
 		$this->writeLog();
 		// Redirect output to a client’s web browser (Xlsx)
 		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
@@ -207,99 +210,173 @@ class ExportExcel
 		$this->row_begin=9999;
 		$this->heighted_rows= [];
 		
-		//sheet name
+		//sheet名称
 		if(empty($configs['name'])){
-			$configs['name'] = 'sheet'.($this->sheet_index+1);
+			$configs['name'] = $this->sheet_name.($this->sheet_index);
 		}
 		$sheet->setTitle($configs['name']);
 		
+		//默认高度
 		$sheet->getDefaultRowDimension()->setRowHeight($this->row_height);
 		$sheet->getDefaultColumnDimension()->setWidth($this->column_width);
 		
-		$configs = $this->initColumns($configs);
+		/**********************************标题**********************************/
 		$title = $configs['title'];
-		
 		foreach ($title as $item){
+			$item= array_merge($this->cell, $item);
 			$this->fillCell($sheet, $item, true);
 		}
 		
-		$header = $configs['header'];
-		$header_begin = $this->row_num +1;//******************
-		
-		foreach ($header as $key=>$item){
-			if(empty($item['cell'])  && !empty($item['column'])){
-				$item['cell'] = $item['column'].$header_begin;
+		/**********************************表头**********************************/
+		$head = $configs['head'];
+		if(count($head)>0){
+			$labels = $configs['labels'];
+			$begin = $this->row_num +1;
+			$default = $this->cell;
+			if(isset($configs['style']['head']) && count($configs['style']['head'])>0){
+				$default= array_merge($default, $configs['style']['head']);
 			}
-			$this->fillCell($sheet, $item, true);
+			foreach ($head as $key=>$item){
+				if (is_string($item)) {
+					$item = $this->createDataColumn($item);
+				}
+				$item= array_merge($default, $item);
+				
+				$attr = $item['attribute'];
+				
+				if(!empty($attr) && empty($item['label']) && isset($labels[$attr])){//label
+					$item['label'] = $labels[$attr];
+				}
+				
+				if(!empty($attr) && empty($item['column'])){//column
+					$cell = $item['cell']??'';
+					if(!empty($cell)){
+						$item['column']=preg_replace("/\\d+/",'', $cell);
+					}
+					else{
+						$item['column'] = $this->columnName($key);
+					}
+				}
+				
+				if(empty($item['cell'])  && !empty($item['column'])){
+					//$item['cell'] = $item['column'].$begin;
+				}
+				$head[$key]=$item;
+				//echo $item['cell'].'-'.$item['attribute'].'-'.$item['label'].'<br>';
+				if(!empty($item['cell'])){
+					$this->fillCell($sheet, $item, true);
+				}
+				
+			}
 		}
-		//title和header高度
+		
+		/**********************************标题部分的空行**********************************/
+		//title和head高度,未设置的高度的行，默认高度
 		for($i=$this->row_begin; $i<=$this->row_num; $i++){
 			if(!in_array($i, $this->heighted_rows)){
 				$sheet->getRowDimension($i)->setRowHeight($this->row_height);
 			}
 		}
 		
+		/**********************************数据**********************************/
 		//数据入格
 		$body = $configs['body'];
-		$row_begin = $this->row_num+1;
-		$formatter = $this->formatter;
-		$body_height = $this->row_height;
-		if(isset($configs['body_style']['height'])){
-			$body_height = $configs['body_style']['height'];
-			unset($configs['body_style']['height']);
-		}
-		$flag_row_height= true;
-		foreach ($header as $c=>$column){
-			if(empty($column['column'])){
-				continue;
+		if(count($body)>0){
+			$begin = $this->row_num+1;
+			$formatter = $this->formatter;
+			$body_height = $this->row_height;
+			if(isset($configs['style']['body']['height'])){
+				$body_height = $configs['style']['body']['height'];
+				unset($configs['style']['body']['height']);
 			}
-			$attr = $column['attribute'];
-			$format = $column['format']??'text';
-			$added = $column['added'];
-			$col_name = $column['column'];
 			
-			$i =$row_begin;
-			$merge_dealer = '';
-			$merge_begin = $row_begin;
-			foreach ($body as $r=>$row){
-				if($flag_row_height){
-					$sheet->getRowDimension($i)->setRowHeight($body_height);
+			$default = $this->cell;
+			if(isset($configs['style']['body']) && count($configs['style']['body'])>0){
+				$default= array_merge($default, $configs['style']['body']);
+			}
+			$flag_row_height= true;
+			foreach ($head as $c=>$column){
+				if(empty($column['attribute'])){
+					continue;
 				}
+				$attr = $column['attribute'];
+				$format = $column['format']??'text';
+				$added = $column['added'];
+				$col_name = $column['column'];
 				
-				$original = $row[$attr];
-				$value = $formatter->format($original, $format);
-				if($added=='merge'){
-					if($merge_dealer!=$value){
-						if($i>($merge_begin+1)){
-							$sheet->mergeCells($col_name.$merge_begin.":".$col_name.($i-1));
+				$i =$begin;
+				$merge_dealer = '';
+				$merge_begin = $begin;
+				foreach ($body as $r=>$row){
+					if($flag_row_height){
+						$sheet->getRowDimension($i)->setRowHeight($body_height);
+					}
+					
+					if($attr=='#serial#'){
+						$value = $i-$begin+1;
+					}
+					else{
+						$value = $formatter->format($row[$attr], $format);
+						if($added=='merge'){
+							if($merge_dealer!=$value){
+								if($i>($merge_begin+1)){
+									$sheet->mergeCells($col_name.$merge_begin.":".$col_name.($i-1));
+								}
+								$merge_begin= $i;
+								$merge_dealer= $value;
+							}
 						}
-						$merge_begin= $i;
-						$merge_dealer= $value;
+					}
+					
+					$item = $default;
+					$item['label'] = $value;
+					$item['cell'] = $column['column'].$i;
+					$this->fillCell($sheet, $item);
+					$i++;
+				}
+				if($added=='merge'){
+					if($i>($merge_begin+1)){
+						$sheet->mergeCells($col_name.$merge_begin.":".$col_name.($i-1));
 					}
 				}
-				$cell_item = $this->cell;
-				$cell_item = array_merge($cell_item, $configs['body_style']);
-				
-				$cell_item['label'] = $value;
-				$cell_item['cell'] = $column['column'].$i;
-				
-				$this->fillCell($sheet, $cell_item);
-				$i++;
+				$flag_row_height = false;
 			}
-			if($added=='merge'){
-				if($i>($merge_begin+1)){
-					$sheet->mergeCells($col_name.$merge_begin.":".$col_name.($i-1));
+		}
+		
+		/**********************************底部**********************************/
+		$foot = $configs['foot'];
+		if(count($foot)>0){
+			$this->row_num += count($body);
+			$begin= $this->row_num+1;
+			$default = $this->cell;
+			if(isset($configs['style']['foot']) && count($configs['style']['foot'])>0){
+				$default= array_merge($default, $configs['style']['foot']);
+			}
+			
+			for($i=0; $i<count($foot);$i++){
+				$row = $foot[$i];
+				foreach ($row as $item){
+					$item= array_merge($default, $item);
+					if(empty($item['cell']) && !empty($item['column'])){
+						$item['cell'] = $item['column'].($begin+$i);
+						if(!empty($item['merge'])){
+							$item['merge'] = $item['merge'].($begin+$i);
+						}
+					}
+					$item['label']= str_replace('#this#', $begin+$i, $item['label']);
+					$item['label']= str_replace('#data#', $begin-1, $item['label']);
+					$this->fillCell($sheet, $item);
 				}
 			}
-			$flag_row_height = false;
 		}
+		
+		/**********************************特殊处理**********************************/
 		if(count($configs['extra'])>0){
 			$extra = $configs['extra'];
 			if(isset($extra['freeze'])){
 				$sheet->freezePane($extra['freeze']);
 			}
 		}
-		$this->sheet_index ++;
 	}
 	
 	/**
@@ -328,7 +405,6 @@ class ExportExcel
 		
 		$sheet->getStyle($cell)->getAlignment()->setHorizontal($this->cell_format[$item['align']]);
 		$sheet->getStyle($cell)->getAlignment()->setVertical($this->cell_format[$item['valign']]);
-		$sheet->getStyle($cell)->getAlignment()->setWrapText(TRUE);
 		
 		if(!empty($item['color'])){
 			$sheet->getStyle($cell)->getFont()->getColor()->setARGB($item['color']);
@@ -370,6 +446,14 @@ class ExportExcel
 				$sheet->getStyle($cell)->getFont()->setBold(true);
 			}
 		}
+		if($item['wrap']){
+			if(!empty($merge)){
+				$sheet->getStyle($cell.":".$merge)->getAlignment()->setWrapText(true);
+			}
+			else{
+				$sheet->getStyle($cell)->getAlignment()->setWrapText(true);
+			}
+		}
 		if(!empty($item['format'])){
 			$format = $item['format'];
 			switch ($format){
@@ -408,47 +492,9 @@ class ExportExcel
 		$second = $i%26;
 		return ($first==0?'':chr($first+64)).(chr($second+65));
 	}
-	/**
-	 * 完善title和header
-	 * @param unknown $configs
-	 * @return unknown
-	 */
-	protected function initColumns($configs)
-	{
-		foreach ($configs['title'] as &$title){
-			//var_dump($title);die;
-			$title= array_merge($this->cell, $title);
-			
-		}
-		$labels = $configs['labels'];
-		foreach ($configs['header'] as $i=>&$item) {
-			if (is_string($item)) {
-				$item = $this->createDataColumn($item);
-			}
-			$header = array_merge($this->cell, $configs['header_style']);
-			$item= array_merge($header, $item);
-						
-			$attr = $item['attribute'];
-			//label
-			if(!empty($attr) && empty($item['label']) && isset($labels[$attr])){
-				$item['label'] = $labels[$attr];
-			}
-			//column
-			if(!empty($attr) && empty($item['column'])){
-				$cell = $item['cell']??'';
-				if(!empty($cell)){
-					$item['column']=preg_replace("/\\d+/",'', $cell);
-				}
-				else{
-					$item['column'] = $this->columnName($i);
-				}
-			}
-		}
-		return  $configs;
-	}
 	
 	/**
-	 * 解析字符串的header
+	 * 解析字符串的head
 	 * @param unknown $text
 	 * @throws \Exception
 	 * @return unknown[]|string[]
