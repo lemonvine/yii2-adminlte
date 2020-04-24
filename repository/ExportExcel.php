@@ -18,6 +18,7 @@ use PhpOffice\PhpSpreadsheet\Style\Border;
  * shaodd 2019-12-11
  * 
  * 序号：attribute的值为#serial#
+ * cell的值为####，表示该单元格不处理，跳过，主要针对head部分
  * 在foot中，如果要用到当前行的行号，在label中用#this#表示，如果要用到数据的最后一行行号，用#data#表示
  *
  */
@@ -83,6 +84,7 @@ class ExportExcel
 		'border'=>'',
 		'bold'=>false,
 		'wrap'=>false,
+		'move'=>true,
 		'added'=> '',//merge
 		'format'=> 'text',
 	];
@@ -94,6 +96,7 @@ class ExportExcel
 		'left'=> Alignment::HORIZONTAL_LEFT,
 		'center'=> Alignment::HORIZONTAL_CENTER,
 		'right'=> Alignment::HORIZONTAL_RIGHT,
+		'top'=> Alignment::VERTICAL_TOP,
 		'mid'=> Alignment::VERTICAL_CENTER,
 		'text'=> NumberFormat::FORMAT_TEXT,
 		
@@ -259,11 +262,11 @@ class ExportExcel
 				}
 				
 				if(empty($item['cell'])  && !empty($item['column'])){
-					//$item['cell'] = $item['column'].$begin;
+					$item['cell'] = $item['column'].$begin;
 				}
 				$head[$key]=$item;
-				//echo $item['cell'].'-'.$item['attribute'].'-'.$item['label'].'<br>';
-				if(!empty($item['cell'])){
+				
+				if($item['cell']!='####'){
 					$this->fillCell($sheet, $item, true);
 				}
 				
@@ -465,7 +468,7 @@ class ExportExcel
 			}
 		}
 		
-		if($move_row){
+		if($move_row && $item['move']){
 			if($row_num==0){
 				$row_num= $sheet->getCell($cell)->getRow();
 			}
