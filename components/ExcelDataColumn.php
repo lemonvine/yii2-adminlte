@@ -21,5 +21,6 @@ class ExcelDataColumn extends DataColumn
 	public $cell;
 	public $merge;
 	public $width;
+	public $height;
 	public $wrap;
 }
