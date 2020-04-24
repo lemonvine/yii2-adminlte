@@ -110,13 +110,15 @@ var initGallery = function(){
 				if(rd.status==202){
 					var _json = galleryvine.str2json(_file);
 					var _id = _json.file_id;
-					var _files = $(GALLERY_BUTTON).data('files');
+					var _files = galleryvine.str2json($(GALLERY_BUTTON).data('files'));
+
 					for(var i=0,len=_files.length; i<len; i++){
 						if(_id==_files[i]['file_id']){
 							_files.splice(i, 1);
 							break;
 						}
 					}
+
 					$(GALLERY_BUTTON).data('files', galleryvine.json2str(_files));
 					_json = galleryvine.str2json(_attr);
 					if(_json.upload_type==3 && _files.length==0){
@@ -240,11 +242,12 @@ var galleryvine = {
 		else{
 			$(GALLERY_BUTTON).find('span').html(json.length);
 		}
-		var sortable1 = document.getElementById('gallery-upload'+$(GALLERY_BUTTON).data('index'));
+		var sortable1 = document.getElementById('gallery-content');
 		new Sortable(sortable1, {
 			handle: '.file-sort',
-			animation: 150,
-			ghostClass: 'blue-background-class',
+			animation: 300,
+			filter:'.gallery-add',
+			ghostClass: '.gallery-add',
 			onEnd: function (evt) {
 				galleryvine.sort(evt);
 			}
@@ -281,42 +284,161 @@ var galleryvine = {
 		eval(callback+"()");
 	},
 	move: function(){
-		var html ='<div class="card"><div class="card-header"><h3 class="card-title text-primary">请选择移动到的目录</h3></div><div class="card-body"><ul id="category_tree" class="ztree"></ul><a href="#" class="btn btn-primary"><b>确定</b></a></div></div>';
-		layer.open({type: 4, fixed: 0, shade: 0, shadeClose:1, title: false, closeBtn:1, time: 10000,
+		var html ='<div class="card"><div class="card-header"><h3 class="card-title text-primary">请选择移动到的目录</h3></div><div class="card-body"><ul id="category_tree" class="ztree"></ul><a href="javascript:;" class="btn btn-primary" onclick="galleryvine.moveto();"><b>确定</b></a></div></div>';
+		layer.open({type: 4, fixed: 0, shade: 0, shadeClose:1, title: false, closeBtn:1, time: 18000,
 			tips: [1, '#efefef'], content: [html, ELEMENT_MOVETO],
 			success: function(layero, index){
 				$.fn.zTree.init($("#category_tree"), {
-					check: {enable: true, chkStyle: "radio", radioType: "all"},
+					check: {enable: false, chkStyle: "radio", radioType: "all"},
 					view:{showIcon: false}
 				}, galleryvine.str2json(MOVETO_TREE));
+
 				var treeObj = $.fn.zTree.getZTreeObj("category_tree");
 				treeObj.expandAll(true);
 			}
 		});
 	},
-	moveto: function(){
+	moveto: function(nodes){
+		var _attr = galleryvine.json2str($(GALLERY_BUTTON).data('attr'));
 		var treeObj = $.fn.zTree.getZTreeObj("category_tree");
-		var nodes = treeObj.getSelectedNodes();
+		var nodes = treeObj.getSelectedNodes(true);
+
 		if(nodes.length==0){
 			bolevine.alert({message: '请选择要移动到的目录', flag: 4});
+			return false;
 		}
+		
 		var selected = nodes[0].id;
 
+		if(selected == galleryvine.str2json(_attr).folder_id){
+			bolevine.alert({message: '不可移动到当前目录', flag: 4});
+			return false;
+		}
+
 		var _data={};
-		_data.selected = gallery.json2str(SELECTED_FILES);
+		_data.files = galleryvine.json2str(SELECTED_FILES);
 		_data.moveto = selected;
-		$.post(PATH_MOVE, _data, function(rd){
-			rd = gallery.str2json(rd);
-			if(rd.status == 202){
-				
-			}
-			else{
-				var msg ="修改失败：" + rd.message;
-				bolevine.alert({message:msg, flag: 4});
+
+		$.ajax({url: PATH_MOVE, data: _data, type: 'POST', cache: false,
+			success: function(rd){
+				rd = galleryvine.str2json(rd);
+				if(rd.status==202){
+					var _select = SELECTED_FILES;
+					var _files = galleryvine.str2json($(GALLERY_BUTTON).data('files'));
+					var to_label = $('#file-label-'+ selected).find('button'),
+						to_files = galleryvine.str2json(to_label.data('files'));
+
+					for(var i=0; i < _select.length; i++){
+						_select[i] = galleryvine.str2json(_select[i]);
+						_select[i]['folder_id'] = selected;
+						to_files.push(_select[i]);
+						var _id = _select[i]['file_id'];
+
+						for(var j=0; j < _files.length; j++){
+							if(_id == _files[j]['file_id']){
+								_files.splice(j, 1);
+							}
+						}
+					}
+
+					$(GALLERY_BUTTON).data('files', galleryvine.json2str(_files));
+					$(to_label).data('files', galleryvine.json2str(to_files));
+
+					_json = galleryvine.str2json(_attr);
+					if(_json.upload_type==3 && _files.length==0){
+						galleryvine.docid(0);
+					}
+
+					galleryvine.layout();
+
+					layer.closeAll();
+					bolevine.alert({message:'修改成功', flag: 8});
+				}
+				else{
+					var msg = '修改失败:' + rd.message;
+					bolevine.alert({message: msg, flag: 4});
+				}
+			},
+			error: function(data){
+				bolevine.alert({message:'修改失败', flag: 4});
 			}
 		})
 	},
+
 	sort: function(evt){
-		
+		var _files = galleryvine.str2json($(GALLERY_BUTTON).data('files')),
+			old_index = evt.oldIndex;
+			new_index = evt.newIndex,
+			old_array = galleryvine.str2json(_files[old_index]),
+			new_array = galleryvine.str2json(_files[new_index]),
+			old_serial = old_array.serial,
+			news_erial = new_array.serial,
+			_data={};
+
+		_data.files={};
+		_data.files[0] = {file:old_array,serial:news_erial};
+		_data.files[1] = {file:new_array,serial:old_serial};
+
+		$.ajax({url: PATH_SERIAL, data: _data, type: 'POST', cache: false,
+			success: function(rd){
+				rd = galleryvine.str2json(rd);
+				if(rd.status==202){
+					old_array['serial'] = news_erial;
+					new_array['serial'] = old_serial;
+
+					_files[old_index] = new_array;
+					_files[new_array] = old_array;
+					
+					$(GALLERY_BUTTON).data('files', galleryvine.json2str(_files));
+				}
+				else{
+					galleryvine.layout();
+					var msg = '修改失败:' + rd.message;
+					bolevine.alert({message: msg, flag: 4});
+				}
+			},
+			error: function(data){
+				galleryvine.layout();
+				bolevine.alert({message:'修改失败', flag: 4});
+			}
+		})
+	},
+	edit: function(){
+		var _files = galleryvine.str2json($(GALLERY_BUTTON).data('files')),
+			old_index = evt.oldIndex;
+			new_index = evt.newIndex,
+			old_array = galleryvine.str2json(_files[old_index]),
+			new_array = galleryvine.str2json(_files[new_index]),
+			old_serial = old_array.serial,
+			news_erial = new_array.serial,
+			_data={};
+			_data.folder = _attr;
+			_data.files={};
+			_data.files[0] = {file:old_array,serial:news_erial};
+			_data.files[1] = {file:new_array,serial:old_serial};
+
+		$.ajax({url: PATH_SERIAL, data: _data, type: 'POST', cache: false,
+			success: function(rd){
+				rd = galleryvine.str2json(rd);
+				if(rd.status==202){
+					old_array['serial'] = news_erial;
+					new_array['serial'] = old_serial;
+
+					_files[old_index] = new_array;
+					_files[new_array] = old_array;
+					
+					$(GALLERY_BUTTON).data('files', galleryvine.json2str(_files));
+				}
+				else{
+					galleryvine.layout();
+					var msg = '修改失败:' + rd.message;
+					bolevine.alert({message: msg, flag: 4});
+				}
+			},
+			error: function(data){
+				galleryvine.layout();
+				bolevine.alert({message:'修改失败', flag: 4});
+			}
+		})
 	}
 };

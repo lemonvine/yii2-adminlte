@@ -6,7 +6,7 @@
 ?>
 <div class="row gallery-box">
 	<?php foreach ($directory as $folder):?>
-	<div class="col-sm-3 col-md-6 col-lg-4 col-xl-2">
+	<div class="col-sm-3 col-md-6 col-lg-4 col-xl-2" id="file-label-<?= $folder['attr']['folder_id'] ?>">
 		<button type="button" class="btn btn-block <?=($folder['attr']['mininum']>0)?'btn-outline-danger':'btn-outline-primary'?> gallery-button"
 		data-index='<?=$index?>' data-attr='<?=json_encode($folder['attr'])?>' data-files='<?=json_encode($folder['files'])?>'>
 			<?=$folder['attr']['folder_name']?> <span class="badge bg-purple"><?=count($folder['files'])?count($folder['files']):''?></span>

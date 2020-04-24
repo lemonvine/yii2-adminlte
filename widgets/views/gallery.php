@@ -48,67 +48,68 @@ if($layout==3){
 		<li class="nav-item "><span class="move-all" id="button_moveto"><i class="fa fa-mail-forward fa-lg text-success"></i>&nbsp;移动到</span></li>
 	</ul>
 </div>
-{{#each this}}
-<div class="gallery-thumb col-sm-3 col-md-3 col-lg-2 col-xl-2" data-soul="{{json2str this}}">
-	<div class="file-view">
-{{#ifeven original 1}}
-		<img class="img-thumbnail" data-src="{{file}}" src="{{thumb}}" alt="">
-{{else}}
-	{{#ifeven original 2}}
-		<audio controls="controls">
-			<source src="{{original}}" type="audio/mpeg" />
-		</audio>
+<div id="gallery-content" class=" col-12 row">
+	{{#each this}}
+	<div class="gallery-thumb col-sm-3 col-md-3 col-lg-2 col-xl-2" data-soul="{{json2str this}}">
+		<div class="file-view">
+	{{#ifeven original 1}}
+			<img class="img-thumbnail" data-src="{{file}}" src="{{thumb}}" alt="">
 	{{else}}
-		{{#ifeven original 3}}
-		<video width="320" height="240" controls>
-			<source src="{{original}}" type="video/mp4">
-		</video>
+		{{#ifeven original 2}}
+			<audio controls="controls">
+				<source src="{{original}}" type="audio/mpeg" />
+			</audio>
 		{{else}}
-			{{#ifeven original 4}}
-		<div class="file-pdf img-thumbnail" data-src="{{original}}"></div>
+			{{#ifeven original 3}}
+			<video width="320" height="240" controls>
+				<source src="{{original}}" type="video/mp4">
+			</video>
 			{{else}}
-				{{#ifeven original 5}}
-		<div class="file-word img-thumbnail" data-src="{{original}}"></div>
+				{{#ifeven original 4}}
+			<div class="file-pdf img-thumbnail" data-src="{{original}}"></div>
 				{{else}}
-					{{#ifeven original 6}}
-		<div class="file-excel img-thumbnail" data-src="{{original}}"></div>
+					{{#ifeven original 5}}
+			<div class="file-word img-thumbnail" data-src="{{original}}"></div>
 					{{else}}
-		<div class="file-file img-thumbnail" data-src="{{original}}"></div>
+						{{#ifeven original 6}}
+			<div class="file-excel img-thumbnail" data-src="{{original}}"></div>
+						{{else}}
+			<div class="file-file img-thumbnail" data-src="{{original}}"></div>
+						{{/ifeven}}
 					{{/ifeven}}
 				{{/ifeven}}
 			{{/ifeven}}
 		{{/ifeven}}
 	{{/ifeven}}
-{{/ifeven}}
-		<div class="hover-mask">
-{{#ifeven original 4}}
-			<a href="javascript:;" class="file-view"><i class="fa fa-eye"></i></a>
-{{else}}
-	{{#ifeven original 5}}
-			<a href="javascript:;" class="file-view"><i class="fa fa-eye"></i></a>
-	{{else}}
-		{{#ifeven original 6}}
-			<a href="javascript:;" class="file-view"><i class="fa fa-eye"></i></a>
+			<div class="hover-mask">
+			{{#ifeven original 4}}
+				<a href="https://view.officeapps.live.com/op/view.aspx?src={{original}};" target="_blank" class="file-view"><i class="fa fa-eye"></i></a>
+			{{else}}
+			{{#ifeven original 5}}
+				<a href="https://view.officeapps.live.com/op/view.aspx?src={{original}};" target="_blank" class="file-view"><i class="fa fa-eye"></i></a>
+			{{else}}
+			{{#ifeven original 6}}
+				<a href="https://view.officeapps.live.com/op/view.aspx?src={{original}};" target="_blank" class="file-view"><i class="fa fa-eye"></i></a>
+			{{/ifeven}}
 		{{/ifeven}}
 	{{/ifeven}}
-{{/ifeven}}
-			<a href="javascript:;" class="file-sort" title="排序"><i class="fa fa-arrows"></i></a>
-			<a href="javascript:;" class="file-replace" title="替换"><i class="fa fa-refresh"></i></a>
-			<a href="javascript:;" class="file-delete" title="删除"><i class="fa fa-trash"></i></a>
+				<a href="javascript:;" class="file-sort" title="排序"><i class="fa fa-arrows"></i></a>
+				<a href="javascript:;" class="file-replace" title="替换"><i class="fa fa-refresh"></i></a>
+				<a href="javascript:;" class="file-delete" title="删除"><i class="fa fa-trash"></i></a>
+			</div>
+			<div class="file-filter icheck-primary"><input type="checkbox" id="checkbox{{file_id}}"><label for="checkbox{{file_id}}"></label></div>
 		</div>
-		<div class="file-filter icheck-primary"><input type="checkbox" id="checkbox{{file_id}}"><label for="checkbox{{file_id}}"></label></div>
+		<p class="file-text">{{title}}</p>
 	</div>
-	<p class="file-text">{{title}}</p>
+	{{/each}}
 </div>
-{{/each}}
 <div id="gallery-add" class="gallery-add only-edit col-sm-3 col-md-3 col-lg-2 col-xl-2">
 	<div class="img-thumbnail">
 		<i class="fa fa-upload text-success"></i>
 	</div>
 </div>
+
 </script>
-
-
 
 <?php 
 $Js = <<<JS
