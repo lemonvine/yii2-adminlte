@@ -24,6 +24,7 @@ if($layout==3){
 	var PATH_REPLACE = "<?=$paths['replace']?>";
 	var PATH_SERIAL = "<?=$paths['serial']?>";
 	var PATH_MOVE = "<?=$paths['move']?>";
+	var PATH_EDIT = "<?=$paths['edit']?>";
 	var PATH_PAGEFILE = "<?=$paths['book']?>";
 	var PATH_DELFILE = "<?=$paths['del']?>";
 	var BUSSINESSID = "<?=$keyid?>";
@@ -82,6 +83,7 @@ if($layout==3){
 		{{/ifeven}}
 	{{/ifeven}}
 			<div class="hover-mask">
+			<a href="javascript:;" class="file-pencil" title="修改名称"><i class="fa fa-pencil"></i></a>
 			{{#ifeven original 4}}
 				<a href="https://view.officeapps.live.com/op/view.aspx?src={{original}};" target="_blank" class="file-view"><i class="fa fa-eye"></i></a>
 			{{else}}
@@ -93,6 +95,7 @@ if($layout==3){
 			{{/ifeven}}
 		{{/ifeven}}
 	{{/ifeven}}
+	
 				<a href="javascript:;" class="file-sort" title="排序"><i class="fa fa-arrows"></i></a>
 				<a href="javascript:;" class="file-replace" title="替换"><i class="fa fa-refresh"></i></a>
 				<a href="javascript:;" class="file-delete" title="删除"><i class="fa fa-trash"></i></a>
@@ -100,6 +103,10 @@ if($layout==3){
 			<div class="file-filter icheck-primary"><input type="checkbox" id="checkbox{{file_id}}"><label for="checkbox{{file_id}}"></label></div>
 		</div>
 		<p class="file-text">{{title}}</p>
+		<div class="file-edit">
+			<textarea>{{title}}</textarea>
+			<button id="edit_submit" type="button" class="btn btn-primary">确认</button>
+		</div>
 	</div>
 	{{/each}}
 </div>
