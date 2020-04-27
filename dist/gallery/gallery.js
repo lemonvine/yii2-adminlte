@@ -29,6 +29,51 @@ var initGallery = function(){
 		$(ELEMENT_FILEID).val(0);
 		$(ELEMENT_FILEINPUT).attr('multiple',true).click();
 	});
+
+	// 显示名称编辑
+	$(document).on('click', '.file-pencil', function(){
+		$(this).parents('.gallery-thumb').find('.file-text').hide().siblings('.file-edit').css('display','flex');
+	});
+
+	// 修改名称
+	$(document).on('click', '#edit_submit', function(){
+		var _this = this;
+			new_title = $(_this).siblings('textarea').val(),
+			_file = galleryvine.json2str($(this).parents('.gallery-thumb').data('soul'));
+
+		var _data={};
+			_data.title = new_title;
+			_data.file = _file;
+
+		$.ajax({url: PATH_EDIT, data: _data, type: 'POST', cache: false,
+			success: function(rd){
+				rd = galleryvine.str2json(rd);
+				if(rd.status==202){
+					var _json = galleryvine.str2json(_file);
+					var _id = _json.file_id;
+					var _files = galleryvine.str2json($(GALLERY_BUTTON).data('files'));
+
+					for(var i=0,len=_files.length; i<len; i++){
+						if(_id==_files[i]['file_id']){
+							_files[i]['title'] = new_title;
+							break;
+						}
+					}
+
+					$(_this).parents('.gallery-thumb').find('.file-edit').hide().siblings('.file-text').html(new_title).fadeIn();
+
+					bolevine.alert({message:'修改成功', flag: 8});
+				}
+				else{
+					var msg = '修改失败:' + rd.message;
+					bolevine.alert({message: msg, flag: 4});
+				}
+			},
+			error: function(data){
+				bolevine.alert({message:'修改失败', flag: 4});
+			}
+		});
+	});
 	
 	// 替换
 	$(document).on('click', '.file-replace', function(){
@@ -378,44 +423,6 @@ var galleryvine = {
 		_data.files={};
 		_data.files[0] = {file:old_array,serial:news_erial};
 		_data.files[1] = {file:new_array,serial:old_serial};
-
-		$.ajax({url: PATH_SERIAL, data: _data, type: 'POST', cache: false,
-			success: function(rd){
-				rd = galleryvine.str2json(rd);
-				if(rd.status==202){
-					old_array['serial'] = news_erial;
-					new_array['serial'] = old_serial;
-
-					_files[old_index] = new_array;
-					_files[new_array] = old_array;
-					
-					$(GALLERY_BUTTON).data('files', galleryvine.json2str(_files));
-				}
-				else{
-					galleryvine.layout();
-					var msg = '修改失败:' + rd.message;
-					bolevine.alert({message: msg, flag: 4});
-				}
-			},
-			error: function(data){
-				galleryvine.layout();
-				bolevine.alert({message:'修改失败', flag: 4});
-			}
-		})
-	},
-	edit: function(){
-		var _files = galleryvine.str2json($(GALLERY_BUTTON).data('files')),
-			old_index = evt.oldIndex;
-			new_index = evt.newIndex,
-			old_array = galleryvine.str2json(_files[old_index]),
-			new_array = galleryvine.str2json(_files[new_index]),
-			old_serial = old_array.serial,
-			news_erial = new_array.serial,
-			_data={};
-			_data.folder = _attr;
-			_data.files={};
-			_data.files[0] = {file:old_array,serial:news_erial};
-			_data.files[1] = {file:new_array,serial:old_serial};
 
 		$.ajax({url: PATH_SERIAL, data: _data, type: 'POST', cache: false,
 			success: function(rd){
