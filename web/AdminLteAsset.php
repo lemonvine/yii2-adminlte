@@ -103,6 +103,11 @@ class AdminLteAsset extends AssetBundle
 				case 'layer':
 					$js[] = "layer/layer";
 					break;
+				case 'layui':
+					$css[] = "layui/layui";
+					$js[] = "layui/layui";
+					$js[] = "layui/modules/form";
+					break;
 				default:
 					if(substr($module,0,2)=='js'){
 						$js[] = "{$module}";

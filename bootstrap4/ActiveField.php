@@ -239,7 +239,7 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 	}
 	
 	public function handlebar($options=[]){
-		AdminLteAsset::Handlebars($this->form->getView());
+		AdminLteAsset::loadModule($this->form->getView(), 'handlebar');
 		$attribute = $this->attribute;
 		$hidden_id = isset($options['id'])?$options['id']:Html::getInputId($this->model, $attribute);
 		$display_id= 'hb_'.$hidden_id;
