@@ -359,18 +359,32 @@ $(window).ready(function(){
 	$(document).on('blur', '.handlebar-blur', function(){
 		var _index=$(this).data('index'), _key = $(this).data('key'), _info = $(this).parents('.handlebar-info')[0];
 		var _id = $(_info).data('hidden');
-		var _v = eval($("#"+_id).val());
+		var _v = $("#"+_id).val();
+		if(!_v){
+			_v = '{}';
+		}
+		_v = eval("("+_v+")");
+
 		if(_index!=undefined){
+			if(!_v[_index]){
+				// _v = new Array();
+			}
 			_v[_index][_key] = $(this).val();
 		}
 		else if(_key!=undefined){
 			_v[_key] = $(this).val();
 		}
+
 		$("#"+_id).val(JSON.stringify(_v));
 	});
 	var hbs = $(".handlebar-field");
 	$(hbs).each(function(){
-		var _v = eval($(this).val());
+		var _v = $(this).val();
+		if(!_v){
+			_v = '{}';
+		}
+		_v = eval("("+_v+")");
+		
 		var _id = $(this).attr('id');
 		var _tp = $(this).data('template');
 		var _template = Handlebars.compile($(_tp).html());
