@@ -40,7 +40,8 @@ var bolevine = {
 	},
 	alert: function(param){
 		var base = {flag: 1, message: 'md', icon: 1, time: 2000, callback:null};
-		base = bolevine.merge(base, param);
+		//base = bolevine.merge(base, param);
+		$.extend(base, param);
 		switch (base.flag.toString()){
 			case "4":
 				base.icon = 5;
@@ -108,7 +109,8 @@ var bolevine = {
 	dialog:function(param){
 		var size = {xs:['420px', '280px'], sm:['600px', '450px'], md: ['800px', '600px'], lg: ['1000px', '750px']};
 		var base = {title:'信息', size: 'md', resize:false, max:false, url: '', html:'', callback:null};
-		base = bolevine.merge(base, param);
+		//base = bolevine.merge(base, param);
+		$.extend(base, param);
 		var config = {type: 1, title: base.title, area:size[base.size], resize: base.resize};
 		if(base.max) config.maxmin = true;
 		if(base.url) {
@@ -125,7 +127,8 @@ var bolevine = {
 	},
 	confirm: function(param){
 		var base = {title: '询问', word:'', way: '', url:'', type:'post', data:'', target: null, callback:null};
-		base = bolevine.merge(base, param);
+		//base = bolevine.merge(base, param);
+		$.extend(base, param);
 		layer.confirm(base.word, {icon: 3, title:base.title}, function(index){
 			layer.close(index);
 			switch(base.way){
@@ -148,7 +151,8 @@ var bolevine = {
 	},
 	vjax: function(param){
 		var base = {url:'', type:'post', data:'', target: null, callback:null};
-		base = bolevine.merge(base, param);
+		//base = bolevine.merge(base, param);
+		$.extend(base, param);
 		$.ajax({type: base.type, url: base.url, data: base.data, success: function(r) {
 			if(r.status==202){
 				if(base.callback){
@@ -431,11 +435,13 @@ $(window).ready(function(){
 	$('.js-laydate').each(function(){
 		bolevine.initdate(this);
 	});
+	$('.combo').each(function(){
+		$(this).comboselect();
+	});
 	
 	if(typeof(MESSAGE)!="undefined" && MESSAGE){
 		bolevine.alert({message:MESSAGE, flag:MESSAGE_FLAG});
 	}
-
 	$('.table-form').resize(function(){
 		$('.form-btns').width($('.content-wrapper').width()-32)
 	});

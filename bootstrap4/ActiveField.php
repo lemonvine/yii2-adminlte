@@ -249,6 +249,71 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 		$this->parts['{input}'] = $hidden.$handlebar;
 		return $this;
 	}
+	
+	public function combo($items=[], $options=[]){
+		AdminLteAsset::loadModule($this->form->getView(), 'combo');
+		$options = array_merge($this->inputOptions, $options);
+		
+		if ($this->form->validationStateOn === ActiveForm::VALIDATION_STATE_ON_INPUT) {
+			$this->addErrorClassIfNeeded($options);
+		}
+		
+		$this->addAriaAttributes($options);
+		$this->adjustLabelFor($options);
+		$options['class'] .= ' combo';
+		//var_dump($options);die;
+		
+		$content = Html::activeTextInput($this->model, $this->attribute, $options);
+		
+		$separator = "\n";
+		$li = [];
+		$i=1;
+		foreach ($items as $index => $item) {
+			$li[] = Html::tag('li', $item, ['class'=>'combo-item', 'data-value'=>$index, 'data-index'=>$i]);
+			$i++;
+		}
+		
+		$ul = Html::tag('ul', $separator . implode($separator, $li) . $separator, ['class'=>'combo-dropdown']);
+		
+		$content.=$ul;
+		
+		$this->parts['{input}'] = $content;
+		
+		return $this;
+		
+		AdminLteAsset::loadModule($this->form->getView(), 'combo');
+		$options['data-combo']='combo';
+		$options = array_merge($this->inputOptions, $options);
+		
+		if ($this->form->validationStateOn === ActiveForm::VALIDATION_STATE_ON_INPUT) {
+			$this->addErrorClassIfNeeded($options);
+		}
+		
+		$this->addAriaAttributes($options);
+		$this->adjustLabelFor($options);
+		$this->parts['{input}'] = Html::activeDropDownList($this->model, $this->attribute, $items, $options);
+		
+		return $this;
+	}
+	
+	
+	private function comboUl($items, $options=[]){
+		
+		$tag = ArrayHelper::remove($options, 'tag', 'ul');
+		$encode = ArrayHelper::remove($options, 'encode', true);
+		$separator = ArrayHelper::remove($options, 'separator', "\n");
+		$itemOptions = ArrayHelper::remove($options, 'itemOptions', []);
+		
+		if (empty($items)) {
+			return static::tag($tag, '', $options);
+		}
+		
+		
+		
+		
+		
+		return Html::tag('li', $item, []);
+	}
 	/**
 	 * 隐藏域
 	 * @see \yii\widgets\ActiveField::hiddenInput()

@@ -30,6 +30,7 @@ class AdminLteAsset extends AssetBundle
 		
 		$this->css[] = "css/font-awesome{$postfix}.css?v=v{$version}";
 		$this->css[] = "css/adminlte{$postfix}.css?v=v{$version}";
+		$this->css[] = "css/adminv{$postfix}.css?v=v{$version}";
 		
 		parent::init();
 	}
@@ -55,6 +56,10 @@ class AdminLteAsset extends AssetBundle
 					break;
 				case 'handlebar':
 					$js[] = "plugins/handlebars";
+					break;
+				case 'combo':
+					//$css[] = "plugins/combo";
+					$js[] = "plugins/combo";
 					break;
 				case 'icheck':
 					$css[] = "plugins/icheck-bootstrap";
