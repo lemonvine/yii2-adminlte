@@ -30,9 +30,18 @@ var initGallery = function(){
 		$(ELEMENT_FILEINPUT).attr('multiple',true).click();
 	});
 
-	// 显示名称编辑
+	// 打开名称编辑
 	$(document).on('click', '.file-pencil', function(){
-		$(this).parents('.gallery-thumb').find('.file-text').hide().siblings('.file-edit').css('display','flex');
+		var _this = this,
+			_title = $(this).parents('.gallery-thumb').find('.file-text').text();
+			EDIT_FILE = galleryvine.json2str($(this).parents('.gallery-thumb'));
+		layer.prompt({title: '修改名称', formType: 0,value:_title}, function(text, index){
+			if(_title == text){
+				layer.close(index);
+				return false;
+			}
+			galleryvine.edit(text,index,_this);
+		});
 	});
 
 	// 修改名称
@@ -203,12 +212,7 @@ var initGallery = function(){
 		galleryvine.select($(this), 'galleryvine.move');
 		
 	});
-	//移动目的目录选中事件
-	/*$(document).on('click', '.moveto_btn', function(){
-		$("#box_file_moveto .moveto_btn").removeClass('active');
-		$(this).addClass('active');
-	});
-	*/
+
 	//移动目的目录选中事件
 	$(document).on('show.bs.dropdown', '.moveto_btn', function(){
 		return false;
@@ -240,7 +244,6 @@ var initGallery = function(){
 
 }
 
-
 var galleryvine = {
 	v: "1",
 	str2json: function(data){
@@ -251,7 +254,6 @@ var galleryvine = {
 			catch(error){
 				data = {status:401, message:'非法JSON'+error.message};
 			}
-			
 		}
 		return data;
 	},
@@ -288,16 +290,19 @@ var galleryvine = {
 			$(GALLERY_BUTTON).find('span').html(json.length);
 		}
 		var sortable1 = document.getElementById('gallery-content');
-		new Sortable(sortable1, {
+		var order;
+		var sortable = new Sortable(sortable1, {
 			handle: '.file-sort',
+			sort: true, 
 			animation: 300,
-			filter:'.gallery-add',
-			ghostClass: '.gallery-add',
+			draggable: ".gallery-thumb",
+			fallbackClass:'.gallery-add',
 			onEnd: function (evt) {
 				galleryvine.sort(evt);
 			}
 		});
 	},
+	
 	upfail: function(msg){
 		layer.closeAll();
 		$(ELEMENT_UPLOAD).removeClass('disabled');
@@ -411,14 +416,27 @@ var galleryvine = {
 	},
 
 	sort: function(evt){
+		var old_index = evt.oldIndex,
+			new_index = evt.newIndex;
+
+		if(old_index == new_index){
+			return false;
+		}
+		
+		var _length = $('#gallery-content').children().length;
+		if(_length-1 == new_index){
+			var new_div = $('#gallery-content>div').eq(new_index),
+				old_div	= $('#gallery-content>div').eq(old_index);
+			$(new_div).insertBefore(old_div); 
+			return false;
+		}
+		
 		var _files = galleryvine.str2json($(GALLERY_BUTTON).data('files')),
-			old_index = evt.oldIndex;
-			new_index = evt.newIndex,
-			old_array = galleryvine.str2json(_files[old_index]),
-			new_array = galleryvine.str2json(_files[new_index]),
-			old_serial = old_array.serial,
-			news_erial = new_array.serial,
-			_data={};
+		old_array = galleryvine.str2json(_files[old_index]),
+		new_array = galleryvine.str2json(_files[new_index]),
+		old_serial = old_array.serial,
+		news_erial = new_array.serial,
+		_data={};
 
 		_data.files={};
 		_data.files[0] = {file:old_array,serial:news_erial};
@@ -447,5 +465,43 @@ var galleryvine = {
 				bolevine.alert({message:'修改失败', flag: 4});
 			}
 		})
+	},
+
+	edit: function(new_title,index,_this){
+		var _file = galleryvine.json2str($(_this).parents('.gallery-thumb').data('soul'));
+
+		var _data={};
+			_data.title = new_title;
+			_data.file = _file;
+
+		$.ajax({url: PATH_EDIT, data: _data, type: 'POST', cache: false,
+			success: function(rd){
+				rd = galleryvine.str2json(rd);
+				if(rd.status==202){
+					var _json = galleryvine.str2json(_file);
+					var _id = _json.file_id;
+					var _files = galleryvine.str2json($(GALLERY_BUTTON).data('files'));
+
+					for(var i=0,len=_files.length; i<len; i++){
+						if(_id==_files[i]['file_id']){
+							_files[i]['title'] = new_title;
+							break;
+						}
+					}
+
+					$(_this).parents('.gallery-thumb').find('.file-text').html(new_title);
+					bolevine.alert({message:'修改成功', flag: 8});
+				}
+				else{
+					var msg = '修改失败:' + rd.message;
+					bolevine.alert({message: msg, flag: 4});
+				}
+				layer.close(index);
+			},
+			error: function(data){
+				bolevine.alert({message:'修改失败', flag: 4});
+				layer.close(index);
+			}
+		});
 	}
 };

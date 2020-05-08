@@ -371,7 +371,7 @@ $(window).ready(function(){
 
 		if(_index!=undefined){
 			if(!_v[_index]){
-				// _v = new Array();
+				_v[_index] = new Array();
 			}
 			_v[_index][_key] = $(this).val();
 		}

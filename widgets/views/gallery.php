@@ -103,16 +103,12 @@ if($layout==3){
 			<div class="file-filter icheck-primary"><input type="checkbox" id="checkbox{{file_id}}"><label for="checkbox{{file_id}}"></label></div>
 		</div>
 		<p class="file-text">{{title}}</p>
-		<div class="file-edit">
-			<textarea>{{title}}</textarea>
-			<button id="edit_submit" type="button" class="btn btn-primary">确认</button>
-		</div>
 	</div>
 	{{/each}}
-</div>
-<div id="gallery-add" class="gallery-add only-edit col-sm-3 col-md-3 col-lg-2 col-xl-2">
-	<div class="img-thumbnail">
-		<i class="fa fa-upload text-success"></i>
+	<div id="gallery-add" class="gallery-add only-edit col-sm-3 col-md-3 col-lg-2 col-xl-2">
+		<div class="img-thumbnail">
+			<i class="fa fa-upload text-success"></i>
+		</div>
 	</div>
 </div>
 
