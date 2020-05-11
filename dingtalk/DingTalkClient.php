@@ -57,6 +57,10 @@ class DingTalkClient
 			$postMultipart = false;
 			foreach ($postFields as $k => $v)
 			{
+				if(!is_string($v)){
+					$v = json_encode($v);
+				}
+
 				if("@" != substr($v, 0, 1))//判断是不是文件上传
 				{
 					$postBodyString .= "$k=" . urlencode($v) . "&"; 
@@ -185,6 +189,10 @@ class DingTalkClient
             $postMultipart = false;
             foreach ($postFields as $k => $v)
             {
+				if(!is_string($v)){
+					$v = json_encode($v);
+				}
+				
                 if("@" != substr($v, 0, 1))//判断是不是文件上传
                 {
                     $postBodyString .= "$k=" . urlencode($v) . "&";
