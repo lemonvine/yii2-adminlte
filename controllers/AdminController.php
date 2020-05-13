@@ -94,7 +94,7 @@ class AdminController extends Controller
 		$this->layout = "@vendor/lemonvine/yii2-adminlte/views/layouts/adminlte-model";
 	}
 	
-	public function turnToHtml()
+	public function partHtml()
 	{
 		$this->layout = "@vendor/lemonvine/yii2-adminlte/views/layouts/pure_html";
 	}
