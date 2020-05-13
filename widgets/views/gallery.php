@@ -38,7 +38,8 @@ if($layout==3){
 	<input id="txt_folder" name="folder" value="0" />
 	<input id="txt_key" name="key" value="<?=$keyid?>" />
 	<input id="txt_id" name="id" value="0" />
-	<button id="upload" type="button">upload</button>	
+	<button id="upload" type="button">upload</button>
+	<input type="hidden" id="upload_callback" value="">
 </form>
 </script>
 

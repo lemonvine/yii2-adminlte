@@ -4,7 +4,7 @@ namespace lemon\components;
 use yii\web\View;
 
 /**
- * 继承yii2框架的RBAC权限, 解决表名是写死的的问题
+ * 继承View,增加常用代码归置
  * @author shaodd
  *
  */

@@ -135,6 +135,9 @@ var initGallery = function(){
 						if(_upload.fail!=""){
 							galleryvine.upfail(_upload.fail);
 						}
+						if($("#upload_callback").val()!=""){
+							eval($("#upload_callback").val()+"("+_uploaded+")");
+						}
 					}
 					else{
 						galleryvine.upfail('无上传成功文件');
