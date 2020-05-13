@@ -137,14 +137,16 @@ class AdminLteAsset extends AssetBundle
 			}
 		}
 		
+		$asset = new AdminLteAsset();
 		foreach ($css as $file){
+			$url = $directoryAsset.DIRECTORY_SEPARATOR.$file.$postfix.'.css?v=v'.$version;
 			$view->registerCssFile($directoryAsset.DIRECTORY_SEPARATOR.$file.$postfix.'.css?v=v'.$version, $options);
 		}
 		
 		foreach ($js as $file){
+			$url = $directoryAsset.DIRECTORY_SEPARATOR.$file.$postfix.'.js?v=v'.$version;
 			$view->registerJsFile($directoryAsset.DIRECTORY_SEPARATOR.$file.$postfix.'.js?v=v'.$version, $options);
 		}
 		
 	}
-	
 }
