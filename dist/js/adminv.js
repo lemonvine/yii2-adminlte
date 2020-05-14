@@ -304,6 +304,22 @@ var bolevine = {
 	},
 	sy: function(){
 		layer.alert('only test');
+	},
+	
+	handlebarReady:function(){
+		var hbs = $(".handlebar-field");
+		$(hbs).each(function(){
+			var _v = $(this).val();
+			if(!_v){
+				_v = '{}';
+			}
+			_v = eval("("+_v+")");
+			
+			var _id = $(this).attr('id');
+			var _tp = $(this).data('template');
+			var _template = Handlebars.compile($(_tp).html());
+			$("#hb_"+_id).html(_template(_v));
+		});
 	}
 };
 
@@ -381,19 +397,8 @@ $(window).ready(function(){
 
 		$("#"+_id).val(JSON.stringify(_v));
 	});
-	var hbs = $(".handlebar-field");
-	$(hbs).each(function(){
-		var _v = $(this).val();
-		if(!_v){
-			_v = '{}';
-		}
-		_v = eval("("+_v+")");
-		
-		var _id = $(this).attr('id');
-		var _tp = $(this).data('template');
-		var _template = Handlebars.compile($(_tp).html());
-		$("#hb_"+_id).html(_template(_v));
-	});
+	
+	bolevine.handlebarReady();
 	//end handlebar
 	$(document).on('click', '.btn-radio',function(){
 		var radio_type = $(this).data("radio");
