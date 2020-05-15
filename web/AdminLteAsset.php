@@ -2,8 +2,8 @@
 namespace lemon\web;
 
 use Yii;
-use yii\web\AssetBundle;
 use yii\web\View;
+use yii\web\AssetBundle;
 
 /**
  * AdminLte AssetBundle
@@ -58,7 +58,7 @@ class AdminLteAsset extends AssetBundle
 					$js[] = "plugins/handlebars";
 					break;
 				case 'combo':
-					//$css[] = "plugins/combo";
+					$css[] = "plugins/combo";
 					$js[] = "plugins/combo";
 					break;
 				case 'icheck':
