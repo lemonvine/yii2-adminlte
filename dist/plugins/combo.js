@@ -6,7 +6,7 @@
 		factory(require('jquery'));
 	} else {
 		factory(jQuery);
-	}
+	};
 }(function ( $, undefined ) {
 	var pluginName = "comboselect",
 		dataKey = 'comboselect';
@@ -45,9 +45,9 @@
 		/* Name of the plugin */
 		this._name = pluginName;
 		/* Reverse lookup */
-		this.input = element
+		this.input = element;
 		/* Element */
-		this.$input = $(element)
+		this.$input = $(element);
 		
 		/* Settings */
 		this.settings = $.extend( {}, defaults, options, this.$input.data() );
@@ -68,26 +68,26 @@
 			this._events();
 		},
 		_construct: function(){
-			var self = this
+			var self = this;
 			this.$container = this.$input.parent().addClass(this.settings.comboPluginClass);
 			this.$arrow = this.$input.siblings(this.settings.comboArrowClass);
 			this.$dropdown = this.$input.siblings('ul');
 			if(false){
 				var o = '', k = 0, p = '';
-				this.selectedIndex = this.$input.prop('selectedIndex')
+				this.selectedIndex = this.$input.prop('selectedIndex');
 				this.$options.each(function(i, e){
 					if(e.nodeName.toLowerCase() == 'optgroup'){
 						return o+='<li class="option-group">'+this.label+'</li>'
-					}
-					if(!e.value) p = e.innerHTML
-					o+='<li class="'+(this.disabled? self.settings.disabledClass : "combo-item") + ' ' +(k == self.selectedIndex? self.settings.selectedClass : '')+ '" data-index="'+(k)+'" data-value="'+this.value+'">'+ (this.innerHTML) + '</li>'
+					};
+					if(!e.value) p = e.innerHTML;
+					o+='<li class="'+(this.disabled? self.settings.disabledClass : "combo-item") + ' ' +(k == self.selectedIndex? self.settings.selectedClass : '')+ '" data-index="'+(k)+'" data-value="'+this.value+'">'+ (this.innerHTML) + '</li>';
 					k++;
-				})
-				this.$dropdown.html(o)
+				});
+				this.$dropdown.html(o);
 			}
 			this.$items = this.$dropdown.children();
 			
-			this._valued()
+			this._valued();
 		},
 		_events: function(){
 			/* Input: focus */
@@ -122,10 +122,10 @@
 		_keydown: function(event){
 			switch(event.which){
 				case keys.UP:
-					this._move('up', event)
+					this._move('up', event);
 					break;
 				case keys.DOWN:
-					this._move('down', event)
+					this._move('down', event);
 					break;
 				case keys.RIGHT:
 					this._autofill(event);
@@ -141,7 +141,7 @@
 			
 			switch(event.which){
 				case keys.ESC:													
-					this.$container.trigger('comboselect:close')
+					this.$container.trigger('comboselect:close');
 					break;
 				case keys.ENTER:
 				case keys.UP:
@@ -151,12 +151,12 @@
 				case keys.SHIFT:							
 					break;
 				default:							
-					this._filter(event.target.value)
+					this._filter(event.target.value);
 					break;
 			}
 		},
 		_enter: function(event){
-			var item = this._getHovered()
+			var item = this._getHovered();
 			item.length && this._select(item);
 			if(event && event.which == keys.ENTER){
 				if(!item.length) {
@@ -164,13 +164,13 @@
 					return true;
 				}
 				event.preventDefault();
-			}
+			};
 		},
 		_move: function(dir){
 			var items = this._getVisible(),
 				current = this._getHovered(),
 				index = current.prevAll('.combo-item').filter(':visible').length,
-				total = items.length
+				total = items.length;
 			
 			switch(dir){
 				case 'up':
@@ -186,10 +186,10 @@
 			items
 				.removeClass(this.settings.hoverClass)
 				.eq(index)
-				.addClass(this.settings.hoverClass)
+				.addClass(this.settings.hoverClass);
 
 			if(!this.opened) this.$container.trigger('comboselect:open');
-			this._fixScroll()
+			this._fixScroll();
 		},
 		_select: function(event){
 			var item = event.currentTarget? $(event.currentTarget) : $(event);
@@ -197,7 +197,7 @@
 			var value = item.html();
 			this.$input.val(value);
 			this._valued();
-			this.$container.trigger('comboselect:close')
+			this.$container.trigger('comboselect:close');
 		},
 		_valued: function(){
 			var value = this.$input.val();
@@ -214,14 +214,14 @@
 			}
 			else{
 				this.$input.addClass(this.settings.unMatchClass);
-			}
+			};
 		},
 		_autofill: function(){
 			var item = this._getHovered();
 			if(item.length){
 				this.$input.val(item.html());
 				var index = 
-				this._selectByIndex()
+				this._selectByIndex();
 			}
 		},
 		_filter: function(search){
@@ -234,7 +234,7 @@
 			if(needle){
 				this.$items.filter('.option-group, .option-disabled').hide();
 				items.hide()
-					.filter(function(){
+				.filter(function(){
 						var $this = $(this),
 							text = $.trim($this.text()).toLowerCase();
 						
@@ -243,11 +243,11 @@
 							$this
 								.html(function(index, oldhtml){
 								return oldhtml.replace(new RegExp(pattern, 'gi'), '<span class="'+self.settings.markerClass+'">$1</span>')
-							})									
-							return true
+							});									
+							return true;
 						}
 					})
-					.show()
+					.show();
 			}else{
 								
 				this.$items.show();
@@ -258,7 +258,7 @@
 		},
 		_highlight: function(){
 			var visible = this._getVisible().removeClass(this.settings.hoverClass),
-				$selected = visible.filter('.'+this.settings.selectedClass)
+				$selected = visible.filter('.'+this.settings.selectedClass);
 			if($selected.length){
 				
 				$selected.addClass(this.settings.hoverClass);
@@ -266,7 +266,7 @@
 				visible
 					.removeClass(this.settings.hoverClass)
 					.first()
-					.addClass(this.settings.hoverClass)
+					.addClass(this.settings.hoverClass);
 			}
 		},
 		_blurSelect: function(){
@@ -285,32 +285,32 @@
 			this._valued();
 		},
 		_getAll: function(){
-			return this.$items.filter('.combo-item')
+			return this.$items.filter('.combo-item');
 		},
 		_getVisible: function(){
-			return this.$items.filter('.combo-item').filter(':visible')
+			return this.$items.filter('.combo-item').filter(':visible');
 		},
 		_getHovered: function(){
 			return this._getVisible().filter('.' + this.settings.hoverClass);
 		},
 		_open: function(){
-			var self = this
-			this.$container.addClass('combo-open')			
-			this.opened = true
+			var self = this;
+			this.$container.addClass('combo-open');			
+			this.opened = true;
 			this.settings.focusInput && setTimeout(function(){ !self.$input.is(':focus') && self.$input.focus(); });
-			this._highlight()
-			this._fixScroll()
+			this._highlight();
+			this._fixScroll();
 			$.each($.fn[ pluginName ].instances, function(i, plugin){
-				if(plugin != self && plugin.opened) plugin.$container.trigger('comboselect:close')
+				if(plugin != self && plugin.opened) plugin.$container.trigger('comboselect:close');
 			})
 		},
 		_toggle: function(){
-			this.opened? this._close.call(this) : this._open.call(this)
+			this.opened? this._close.call(this) : this._open.call(this);
 		},
 		_close: function(){				
-			this.$container.removeClass('combo-open combo-focus')
-			this.$container.trigger('comboselect:closed')
-			this.opened = false
+			this.$container.removeClass('combo-open combo-focus');
+			this.$container.trigger('comboselect:closed');
+			this.opened = false;
 			/* Show all items */
 			this.$items.show();
 		},
@@ -321,7 +321,7 @@
 			var offsetTop,
 				upperBound,
 				lowerBound,
-				heightDelta = item.outerHeight()
+				heightDelta = item.outerHeight();
 			offsetTop = item[0].offsetTop;
 			
 			upperBound = this.$dropdown.scrollTop();
@@ -336,13 +336,13 @@
 			}
 		},
 		dispose: function(){
-			this.$input.removeData('plugin_'+dataKey)
+			this.$input.removeData('plugin_'+dataKey);
 		}	
 	});
 	$.fn[ pluginName ] = function ( options, args ) {
 		this.each(function() {
 			var $e = $(this),
-				instance = $e.data('plugin_'+dataKey)
+				instance = $e.data('plugin_'+dataKey);
 			if (typeof options === 'string') {
 				if (instance && typeof instance[options] === 'function') {
 						instance[options](args);
