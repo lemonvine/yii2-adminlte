@@ -14,8 +14,7 @@ var bolevine = {
 			catch(error){
 				data = {status:401, message:'非法JSON'+error.message};
 			}
-			
-		}
+		};
 		return data;
 	},
 	json2str: function(data){
@@ -26,21 +25,20 @@ var bolevine = {
 			catch(error){
 				data = "";
 			}
-		}
+		};
 		return data;
 	},
 	turnoff: function(){
 		if(bolevine.opening){
 			layer.close(bolevine.opening);
 			bolevine.opening = null;
-		}
+		};
 	},
 	suicide: function(){
 		parent.bolevine.turnoff();
 	},
 	alert: function(param){
 		var base = {flag: 1, message: 'md', icon: 1, time: 2000, callback:null};
-		//base = bolevine.merge(base, param);
 		$.extend(base, param);
 		switch (base.flag.toString()){
 			case "4":
@@ -56,7 +54,7 @@ var bolevine = {
 					if(base.callback) eval(base.callback);
 				});
 				break;
-		}
+		};
 	},
 	forward: function(url){
 		if(url){
@@ -74,10 +72,10 @@ var bolevine = {
 			});
 		}else{
 			bolevine.forward(url);
-		}
+		};
 	},
 	reload: function(is_chain){
-		url = location.href;
+		var url = location.href;
 		if(!url.includes('referer_url')){
 			if(url.includes('?')){
 				url = url + "&referer_url="+encodeURI(bolevine.referer);
@@ -85,7 +83,7 @@ var bolevine = {
 			else{
 				url = url + "?referer_url="+encodeURI(bolevine.referer);
 			}
-		}
+		};
 		location.href=url;
 	},
 	dialogok: function(msg, url, chain){
@@ -104,12 +102,11 @@ var bolevine = {
 				bolevine.forward(url);
 			else 
 				bolevine.reload(is_chain);
-		}
+		};
 	},
 	dialog:function(param){
 		var size = {xs:['420px', '280px'], sm:['600px', '450px'], md: ['800px', '600px'], lg: ['1000px', '750px']};
 		var base = {title:'信息', size: 'md', resize:false, max:false, url: '', html:'', callback:null};
-		//base = bolevine.merge(base, param);
 		$.extend(base, param);
 		var config = {type: 1, title: base.title, area:size[base.size], resize: base.resize};
 		if(base.max) config.maxmin = true;
@@ -119,15 +116,14 @@ var bolevine = {
 		}
 		else{
 			config.content = base.html
-		}
+		};
 		if(base.callback){
 			config.success = function(layero, index){eval(base.callback+"(layero, index)");};
-		}
+		};
 		bolevine.opening = layer.open(config);
 	},
 	confirm: function(param){
 		var base = {title: '询问', word:'', way: '', url:'', type:'post', data:'', target: null, callback:null};
-		//base = bolevine.merge(base, param);
 		$.extend(base, param);
 		layer.confirm(base.word, {icon: 3, title:base.title}, function(index){
 			layer.close(index);
@@ -143,7 +139,7 @@ var bolevine = {
 					break;
 				default:
 					break;
-			}
+			};
 			
 		}, function(){
 			
@@ -159,10 +155,10 @@ var bolevine = {
 					var target = base.target;
 					var data = r.data;
 					eval(base.callback+"(target, data)");
-				}
+				};
 			}else{
 				bolevine.alert({message: r.message, flag: 4});
-			}
+			};
 		}, error : function(e){bolevine.alert({message: "错误："+e.responseText, flag: 4});}
 		});
 	},
@@ -170,27 +166,27 @@ var bolevine = {
 		var _precall = $(target).data('precall');
 		if(_precall){
 			return eval(_precall+"(target)");
-		}
+		};
 		return true;
 	},
 	search: function(form){
 		$('#submit_type').val('search');
 		if(!form){
 			form = "form";
-		}
+		};
 		$(form).submit();
 	},
 	export: function(form){
 		$('#submit_type').val('export');
 		if(!form){
 			form = "form";
-		}
+		};
 		$(form).submit();
 	},
 	save: function(url, form){
 		if(!form){
 			form = "#main_form";
-		}
+		};
 		$.ajax({url: url, type: 'POST', cache: false, processData: false, contentType: false,
 			data: new FormData($(form)[0]),
 			success: function(rd){
@@ -211,8 +207,8 @@ var bolevine = {
 		for(item in array2){
 			if(array2[item]!=undefined){
 				array1[item] = array2[item];
-			}
-		}
+			};
+		};
 		return array1;
 	},
 	calldel: function(target, json){
@@ -245,15 +241,15 @@ var bolevine = {
 			params.elem = '#'+id;
 			if(type!=''){
 				params.type=type;
-			}
+			};
 			if(format!=''){
 				params.format=format;
-			}
+			};
 			params.trigger='click';
 			
 			if(btn!=''){
 				params.btns= ['clear', btn, 'confirm'];
-			}
+			};
 			
 			params.done=function(date){
 				if(save == 'string'){
@@ -275,15 +271,15 @@ var bolevine = {
 					}else{
 						$("#"+hidden).val('');
 					}
-				}
+				};
 				
 				if(callback){
 					eval(callback+"(target)");
-				}
+				};
 			};
 			laydate.render(params);
 			$(target).addClass('rendered');
-		}
+		};
 	},
 	cookie: function(cname, cvalue, exminutes){
 		if(cvalue){
@@ -298,9 +294,9 @@ var bolevine = {
 			{
 				var c = ca[i].trim();
 				if (c.indexOf(name)==0) return c.substring(name.length,c.length);
-			}
+			};
 			return null;
-		}
+		};
 	},
 	sy: function(){
 		layer.alert('only test');
@@ -312,7 +308,7 @@ var bolevine = {
 			var _v = $(this).val();
 			if(!_v){
 				_v = '{}';
-			}
+			};
 			_v = eval("("+_v+")");
 			
 			var _id = $(this).attr('id');
