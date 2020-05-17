@@ -95,7 +95,7 @@ class JavascriptPacker
     }
 
     // zero encoding - just removal of white space and comments
-    private function _basicCompression($script)
+    public function _basicCompression($script)
     {
         $parser = new ParseMaster();
         // make safe

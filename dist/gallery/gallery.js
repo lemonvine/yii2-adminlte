@@ -13,7 +13,7 @@ var initGallery = function(){
 	$(document).on('click', '.gallery-button',function(){
 		if($(this).hasClass('active')){
 			return;
-		}
+		};
 		$(".gallery-button").removeClass('active');
 		$(this).addClass('active');
 		GALLERY_BUTTON = $(this);
@@ -25,7 +25,7 @@ var initGallery = function(){
 	$(document).on('click', ELEMENT_UPLOAD,function(){
 		if($(this).hasClass('disabled')){
 			return;
-		}
+		};
 		$(ELEMENT_FILEID).val(0);
 		$(ELEMENT_FILEINPUT).attr('multiple',true).click();
 	});
@@ -39,7 +39,7 @@ var initGallery = function(){
 			if(_title == text){
 				layer.close(index);
 				return false;
-			}
+			};
 			galleryvine.edit(text,index,_this);
 		});
 	});
