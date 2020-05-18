@@ -136,7 +136,7 @@ var initGallery = function(){
 							galleryvine.upfail(_upload.fail);
 						}
 						if($("#upload_callback").val()!=""){
-							eval($("#upload_callback").val()+"("+_uploaded+")");
+							eval($("#upload_callback").val()+"("+galleryvine.json2str(_uploaded)+")");
 						}
 					}
 					else{

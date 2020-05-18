@@ -41,7 +41,6 @@
 	 * @param {[Object]} options [Option object]
 	 */
 	function Plugin (element, options ) {
-			
 		/* Name of the plugin */
 		this._name = pluginName;
 		/* Reverse lookup */
@@ -79,9 +78,11 @@
 					if(e.nodeName.toLowerCase() == 'optgroup'){
 						return o+='<li class="option-group">'+this.label+'</li>'
 					};
-					if(!e.value) p = e.innerHTML;
-					o+='<li class="'+(this.disabled? self.settings.disabledClass : "combo-item") + ' ' +(k == self.selectedIndex? self.settings.selectedClass : '')+ '" data-index="'+(k)+'" data-value="'+this.value+'">'+ (this.innerHTML) + '</li>';
+					if(!e.value) p = e.innerText;
+
+					o+='<li class="'+(this.disabled? self.settings.disabledClass : "combo-item") + ' ' +(k == self.selectedIndex? self.settings.selectedClass : '')+ '" data-index="'+(k)+'" data-value="'+this.value+'">'+ (this.innerText) + '</li>';
 					k++;
+					
 				});
 				this.$dropdown.html(o);
 			}
@@ -242,7 +243,7 @@
 						if(text.toString().indexOf(needle) != -1){
 							$this
 								.html(function(index, oldhtml){
-								return oldhtml.replace(new RegExp(pattern, 'gi'), '<span class="'+self.settings.markerClass+'">$1</span>')
+								return oldhtml.replace(new RegExp(pattern, 'gi'), '$1');
 							});									
 							return true;
 						}
