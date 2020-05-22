@@ -66,8 +66,8 @@ var initGallery = function(){
 						if(_id==_files[i]['file_id']){
 							_files[i]['title'] = new_title;
 							break;
-						}
-					}
+						};
+					};
 
 					$(_this).parents('.gallery-thumb').find('.file-edit').hide().siblings('.file-text').html(new_title).fadeIn();
 
@@ -76,7 +76,7 @@ var initGallery = function(){
 				else{
 					var msg = '修改失败:' + rd.message;
 					bolevine.alert({message: msg, flag: 4});
-				}
+				};
 			},
 			error: function(data){
 				bolevine.alert({message:'修改失败', flag: 4});
@@ -136,7 +136,7 @@ var initGallery = function(){
 							galleryvine.upfail(_upload.fail);
 						}
 						if($("#upload_callback").val()!=""){
-							eval($("#upload_callback").val()+"("+_uploaded+")");
+							eval($("#upload_callback").val()+"("+galleryvine.json2str(_uploaded)+")");
 						}
 					}
 					else{
@@ -245,7 +245,7 @@ var initGallery = function(){
 		return data;
 	});
 
-}
+};
 
 var galleryvine = {
 	v: "1",
@@ -256,8 +256,8 @@ var galleryvine = {
 			}
 			catch(error){
 				data = {status:401, message:'非法JSON'+error.message};
-			}
-		}
+			};
+		};
 		return data;
 	},
 	json2str: function(data){
@@ -267,8 +267,8 @@ var galleryvine = {
 			}
 			catch(error){
 				data = "";
-			}
-		}
+			};
+		};
 		return data;
 	},
 	initup: function(){
@@ -291,7 +291,7 @@ var galleryvine = {
 		}
 		else{
 			$(GALLERY_BUTTON).find('span').html(json.length);
-		}
+		};
 		var sortable1 = document.getElementById('gallery-content');
 		var order;
 		var sortable = new Sortable(sortable1, {
@@ -315,7 +315,7 @@ var galleryvine = {
 		}
 		else{
 			msg = "上传失败！";
-		}
+		};
 		bolevine.alert({message:msg, flag: 4});
 	},
 	docid: function(docid){//更新button的doc_id
@@ -333,7 +333,7 @@ var galleryvine = {
 		if(SELECTED_FILES.length == 0){
 			bolevine.alert({message: '请选择文件', flag: 4});
 			return;
-		}
+		};
 		eval(callback+"()");
 	},
 	move: function(){
@@ -359,14 +359,14 @@ var galleryvine = {
 		if(nodes.length==0){
 			bolevine.alert({message: '请选择要移动到的目录', flag: 4});
 			return false;
-		}
+		};
 		
 		var selected = nodes[0].id;
 
 		if(selected == galleryvine.str2json(_attr).folder_id){
 			bolevine.alert({message: '不可移动到当前目录', flag: 4});
 			return false;
-		}
+		};
 
 		var _data={};
 		_data.files = galleryvine.json2str(SELECTED_FILES);
@@ -410,7 +410,7 @@ var galleryvine = {
 				else{
 					var msg = '修改失败:' + rd.message;
 					bolevine.alert({message: msg, flag: 4});
-				}
+				};
 			},
 			error: function(data){
 				bolevine.alert({message:'修改失败', flag: 4});
@@ -424,7 +424,7 @@ var galleryvine = {
 
 		if(old_index == new_index){
 			return false;
-		}
+		};
 		
 		var _length = $('#gallery-content').children().length;
 		if(_length-1 == new_index){
@@ -432,7 +432,7 @@ var galleryvine = {
 				old_div	= $('#gallery-content>div').eq(old_index);
 			$(new_div).insertBefore(old_div); 
 			return false;
-		}
+		};
 		
 		var _files = galleryvine.str2json($(GALLERY_BUTTON).data('files')),
 		old_array = galleryvine.str2json(_files[old_index]),
@@ -461,7 +461,7 @@ var galleryvine = {
 					galleryvine.layout();
 					var msg = '修改失败:' + rd.message;
 					bolevine.alert({message: msg, flag: 4});
-				}
+				};
 			},
 			error: function(data){
 				galleryvine.layout();
@@ -490,7 +490,7 @@ var galleryvine = {
 							_files[i]['title'] = new_title;
 							break;
 						}
-					}
+					};
 
 					$(_this).parents('.gallery-thumb').find('.file-text').html(new_title);
 					bolevine.alert({message:'修改成功', flag: 8});
@@ -498,7 +498,7 @@ var galleryvine = {
 				else{
 					var msg = '修改失败:' + rd.message;
 					bolevine.alert({message: msg, flag: 4});
-				}
+				};
 				layer.close(index);
 			},
 			error: function(data){
