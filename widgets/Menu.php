@@ -14,13 +14,13 @@ class Menu extends \yii\widgets\Menu
 	public $linkTemplate = '<a id="sys_{name}" href="{url}" class="nav-link">{icon}{label}</a>';
 	public $submenuTemplate = "\n<ul class='nav nav-treeview'{show}>\n{items}\n</ul>\n";
 	public $activateParents = true;
-	public $defaultIconHtml = '<i class="nav-icon fa fa-circle-o @i@"></i> ';
+	public $defaulticon= 'circle-o';
 	public $options = ['class' => 'sidebar-menu', 'data-widget' => 'tree'];
 	public static $iconClassPrefix = 'fa fa-';
 
 	private $noDefaultAction;
 	private $noDefaultRoute;
-	private $icons = ['text-primary', 'text-success', 'text-info', 'text-warning', 'text-danger', 'text-white', 'text-success', 'text-purple'];
+	private $icons = ['text-orange', 'text-teal', 'text-info', 'text-warning', 'text-danger', 'text-primary', 'text-success', 'text-purple'];
 	private $i=0;
 
 	public function run()
@@ -68,13 +68,19 @@ class Menu extends \yii\widgets\Menu
 		if ($item['active']) {
 			$active= 'active';
 		}
+		if(empty($item['icon'])){
+			$icon = $this->defaulticon;// str_replace("@i@", $this->icons[$this->i%8], $this->defaultIconHtml);
+			$text_color=' '.$this->icons[$this->i%8];
+			$this->i++;
+		}
+		else{
+			$icon = $item['icon'];// str_replace("@i@", $this->icons[$this->i%8], $this->defaultIconHtml);
+			$text_color='';
+		}
 		
-		$defaulticon = str_replace("@i@", $this->icons[$this->i%8], $this->defaultIconHtml);
-		$this->i++;
 		$replacements = [
 			'{label}' => strtr($this->labelTemplate, ['{label}' => $item['label'],]),
-			'{icon}' => empty($item['icon']) ? $defaulticon
-				: '<i class="' . static::$iconClassPrefix . $item['icon'] . ' nav-icon"></i> ',
+			'{icon}' => '<i class="nav-icon ' . static::$iconClassPrefix . $icon. $text_color.'"></i> ',
 			'{url}' => isset($item['url']) ? Url::to($item['url']) : 'javascript:void(0);',
 			'{name}' => $item['name'],
 		];

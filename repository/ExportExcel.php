@@ -42,6 +42,7 @@ class ExportExcel
 	public $style= [];
 	public $extra = [];
 	public $sheet_name= '数据';
+	public $multiple= FALSE;
 	
 	/**
 	 * 用于记录日志
@@ -62,6 +63,7 @@ class ExportExcel
 		'foot' => [],
 		'style'=>[],
 		'extra'=> [],
+		'multiple'=>FALSE,
 	];
 	
 	/**
@@ -148,6 +150,8 @@ class ExportExcel
 		->setKeywords('office 2007 openxml php')
 		->setCategory('Test result file');
 		
+		$spreadsheet->getDefaultStyle()->getFont()->setName('黑体');//字体
+		
 		$sheets = $this->sheets;
 		$sheet_count = count($sheets);
 		if($sheet_count>0){
@@ -177,17 +181,18 @@ class ExportExcel
 				'foot'=> $this->foot,
 				'style'=> $this->style,
 				'extra'=>$this->extra,
+				'multiple'=>$this->multiple,
 			];
 			
 			$sheet_0 = $spreadsheet->setActiveSheetIndex(0);
 			$this->buildSheet($sheet_0, $sheet);
 			
 		}
-		//die;
-		$this->writeLog();
+		//$this->writeLog();
+		
 		// Redirect output to a client’s web browser (Xlsx)
 		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-		header('Content-Disposition: attachment;filename="'.$file_name.'.xlsx"');
+		header('Content-Disposition: attachment;filename="'.Utility::encodeChinese($file_name).'.xlsx"');
 		header('Cache-Control: max-age=0');
 		//header('Cache-Control: max-age=1');
 		// If you're serving to IE over SSL, then the following may be needed
@@ -230,148 +235,170 @@ class ExportExcel
 			$this->fillCell($sheet, $item, true);
 		}
 		
-		/**********************************表头**********************************/
-		$head = $configs['head'];
-		if(count($head)>0){
-			$labels = $configs['labels'];
-			$begin = $this->row_num +1;
-			$default = $this->cell;
-			if(isset($configs['style']['head']) && count($configs['style']['head'])>0){
-				$default= array_merge($default, $configs['style']['head']);
-			}
-			foreach ($head as $key=>$item){
-				if (is_string($item)) {
-					$item = $this->createDataColumn($item);
-				}
-				$item= array_merge($default, $item);
-				
-				$attr = $item['attribute'];
-				
-				if(!empty($attr) && empty($item['label']) && isset($labels[$attr])){//label
-					$item['label'] = $labels[$attr];
-				}
-				
-				if(!empty($attr) && empty($item['column'])){//column
-					$cell = $item['cell']??'';
-					if(!empty($cell)){
-						$item['column']=preg_replace("/\\d+/",'', $cell);
-					}
-					else{
-						$item['column'] = $this->columnName($key);
-					}
-				}
-				
-				if(empty($item['cell'])  && !empty($item['column'])){
-					$item['cell'] = $item['column'].$begin;
-				}
-				$head[$key]=$item;
-				
-				if($item['cell']!='####'){
-					$this->fillCell($sheet, $item, true);
-				}
-				
+		$blocks=[];
+		if($configs['multiple']){
+			foreach ($configs['head'] as $index=>$block){
+				$blocks[]=[
+					'head'=>$configs['head'][$index],
+					'body'=>$configs['body'][$index],
+					'foot'=>$configs['foot'][$index]??[],
+				];
 			}
 		}
-		
-		/**********************************标题部分的空行**********************************/
-		//title和head高度,未设置的高度的行，默认高度
-		for($i=$this->row_begin; $i<=$this->row_num; $i++){
-			if(!in_array($i, $this->heighted_rows)){
-				$sheet->getRowDimension($i)->setRowHeight($this->row_height);
-			}
+		else{
+			$blocks[]=[
+				'head'=>$configs['head'],
+				'body'=>$configs['body'],
+				'foot'=>$configs['foot'],
+			];
 		}
 		
-		/**********************************数据**********************************/
-		//数据入格
-		$body = $configs['body'];
-		if(count($body)>0){
-			$begin = $this->row_num+1;
-			$formatter = $this->formatter;
-			$body_height = $this->row_height;
-			if(isset($configs['style']['body']['height'])){
-				$body_height = $configs['style']['body']['height'];
-				unset($configs['style']['body']['height']);
-			}
-			
-			$default = $this->cell;
-			if(isset($configs['style']['body']) && count($configs['style']['body'])>0){
-				$default= array_merge($default, $configs['style']['body']);
-			}
-			$flag_row_height= true;
-			foreach ($head as $c=>$column){
-				if(empty($column['attribute'])){
-					continue;
+		foreach ($blocks as $index=>$block){
+			/**********************************表头**********************************/
+			$head = $block['head'];
+			if(count($head)>0){
+				$labels = $configs['labels'];
+				$begin = $this->row_num +1;
+				$default = $this->cell;
+				if(isset($configs['style']['head']) && count($configs['style']['head'])>0){
+					$default= array_merge($default, $configs['style']['head']);
 				}
-				$attr = $column['attribute'];
-				$format = $column['format']??'text';
-				$added = $column['added'];
-				$col_name = $column['column'];
-				
-				$i =$begin;
-				$merge_dealer = '';
-				$merge_begin = $begin;
-				foreach ($body as $r=>$row){
-					if($flag_row_height){
-						$sheet->getRowDimension($i)->setRowHeight($body_height);
+				foreach ($head as $key=>$item){
+					if (is_string($item)) {
+						$item = $this->createDataColumn($item);
+					}
+					$item= array_merge($default, $item);
+					
+					$attr = $item['attribute'];
+					
+					if(!empty($attr) && empty($item['label']) && isset($labels[$attr])){//label
+						$item['label'] = $labels[$attr];
 					}
 					
-					if($attr=='#serial#'){
-						$value = $i-$begin+1;
+					if(!empty($attr) && empty($item['column'])){//column
+						$cell = $item['cell']??'';
+						if(!empty($cell)){
+							$item['column']=preg_replace("/\\d+/",'', $cell);
+						}
+						else{
+							$item['column'] = $this->columnName($key);
+						}
 					}
-					else{
-						$value = $formatter->format($row[$attr], $format);
-						if($added=='merge'){
-							if($merge_dealer!=$value){
-								if($i>($merge_begin+1)){
-									$sheet->mergeCells($col_name.$merge_begin.":".$col_name.($i-1));
+					
+					if(empty($item['cell'])  && !empty($item['column'])){
+						$item['cell'] = $item['column'].$begin;
+					}
+					$head[$key]=$item;
+					
+					if($item['cell']!='####'){
+						$this->fillCell($sheet, $item, true);
+					}
+					
+				}
+			}
+			
+			/**********************************标题部分的空行**********************************/
+			//title和head高度,未设置的高度的行，默认高度
+			for($i=$this->row_begin; $i<=$this->row_num; $i++){
+				if(!in_array($i, $this->heighted_rows)){
+					$sheet->getRowDimension($i)->setRowHeight($this->row_height);
+				}
+			}
+			
+			/**********************************数据**********************************/
+			//数据入格
+			$body = $block['body'];
+			if(count($body)>0){
+				$begin = $this->row_num+1;
+				$formatter = $this->formatter;
+				$body_height = $this->row_height;
+				if(isset($configs['style']['body']['height'])){
+					$body_height = $configs['style']['body']['height'];
+					unset($configs['style']['body']['height']);
+				}
+				
+				$default = $this->cell;
+				if(isset($configs['style']['body']) && count($configs['style']['body'])>0){
+					$default= array_merge($default, $configs['style']['body']);
+				}
+				$flag_row_height= true;
+				foreach ($head as $c=>$column){
+					if(empty($column['attribute'])){
+						continue;
+					}
+					$attr = $column['attribute'];
+					$format = $column['format']??'text';
+					$added = $column['added'];
+					$col_name = $column['column'];
+					
+					$i =$begin;
+					$merge_dealer = '';
+					$merge_begin = $begin;
+					foreach ($body as $r=>$row){
+						if($flag_row_height){
+							$sheet->getRowDimension($i)->setRowHeight($body_height);
+						}
+						
+						if($attr=='#serial#'){
+							$value = $i-$begin+1;
+						}
+						else{
+							$value = $formatter->format($row[$attr], $format);
+							if($added=='merge'){
+								if($merge_dealer!=$value){
+									if($i>($merge_begin+1)){
+										$sheet->mergeCells($col_name.$merge_begin.":".$col_name.($i-1));
+									}
+									$merge_begin= $i;
+									$merge_dealer= $value;
 								}
-								$merge_begin= $i;
-								$merge_dealer= $value;
 							}
 						}
+						
+						$item = $default;
+						$item['label'] = $value;
+						$item['cell'] = $column['column'].$i;
+						$this->fillCell($sheet, $item);
+						$i++;
 					}
-					
-					$item = $default;
-					$item['label'] = $value;
-					$item['cell'] = $column['column'].$i;
-					$this->fillCell($sheet, $item);
-					$i++;
+					if($added=='merge'){
+						if($i>($merge_begin+1)){
+							$sheet->mergeCells($col_name.$merge_begin.":".$col_name.($i-1));
+						}
+					}
+					$flag_row_height = false;
 				}
-				if($added=='merge'){
-					if($i>($merge_begin+1)){
-						$sheet->mergeCells($col_name.$merge_begin.":".$col_name.($i-1));
+			}
+			
+			/**********************************底部**********************************/
+			$foot = $block['foot'];
+			if(count($foot)>0){
+				$this->row_num += count($body);
+				$begin= $this->row_num+1;
+				$default = $this->cell;
+				if(isset($configs['style']['foot']) && count($configs['style']['foot'])>0){
+					$default= array_merge($default, $configs['style']['foot']);
+				}
+				
+				for($i=0; $i<count($foot);$i++){
+					$row = $foot[$i];
+					foreach ($row as $item){
+						$item= array_merge($default, $item);
+						if(empty($item['cell']) && !empty($item['column'])){
+							$item['cell'] = $item['column'].($begin+$i);
+							if(!empty($item['merge'])){
+								$item['merge'] = $item['merge'].($begin+$i);
+							}
+						}
+						$item['label']= str_replace('#this#', $begin+$i, $item['label']);
+						$item['label']= str_replace('#data#', $begin-1, $item['label']);
+						$this->fillCell($sheet, $item);
 					}
 				}
-				$flag_row_height = false;
 			}
 		}
 		
-		/**********************************底部**********************************/
-		$foot = $configs['foot'];
-		if(count($foot)>0){
-			$this->row_num += count($body);
-			$begin= $this->row_num+1;
-			$default = $this->cell;
-			if(isset($configs['style']['foot']) && count($configs['style']['foot'])>0){
-				$default= array_merge($default, $configs['style']['foot']);
-			}
-			
-			for($i=0; $i<count($foot);$i++){
-				$row = $foot[$i];
-				foreach ($row as $item){
-					$item= array_merge($default, $item);
-					if(empty($item['cell']) && !empty($item['column'])){
-						$item['cell'] = $item['column'].($begin+$i);
-						if(!empty($item['merge'])){
-							$item['merge'] = $item['merge'].($begin+$i);
-						}
-					}
-					$item['label']= str_replace('#this#', $begin+$i, $item['label']);
-					$item['label']= str_replace('#data#', $begin-1, $item['label']);
-					$this->fillCell($sheet, $item);
-				}
-			}
-		}
+		
 		
 		/**********************************特殊处理**********************************/
 		if(count($configs['extra'])>0){

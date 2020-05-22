@@ -156,4 +156,10 @@ class Utility
 	public static function addon($char, $type='char'){
 		return ['append' => ['type'=>$type, 'content' => $char]];
 	}
+	
+	public static function encodeChinese($str){
+		$encoded_str = urlencode($str);
+		$encoded_str= str_replace("+", "%20", $encoded_str);
+		return $encoded_str;
+	}
 }
