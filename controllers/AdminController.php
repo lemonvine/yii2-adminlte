@@ -65,7 +65,7 @@ class AdminController extends Controller
 	/**
 	 * 返回成功json
 	 */
-	public function success($data)
+	public function success($data='')
 	{
 		Yii::$app->response->format = Response::FORMAT_JSON;
 		return ['status'=>'202', 'data'=>$data];
