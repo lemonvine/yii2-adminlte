@@ -74,6 +74,7 @@ class ExportExcel
 		'attribute'=> '',
 		'label'=> '',
 		'column'=> '',
+		'column2'=> '',
 		'cell'=> '',
 		'merge'=> '',
 		'align'=> 'center',
@@ -88,7 +89,7 @@ class ExportExcel
 		'wrap'=>false,
 		'move'=>true,
 		'added'=> '',//merge
-		'format'=> 'text',
+		'datatype'=> '',
 	];
 	/**
 	 * excel样式MAP
@@ -106,9 +107,7 @@ class ExportExcel
 	
 	private $formatter;
 	private $sheet_index = 0;
-	private $row_begin= 9999;
 	private $row_num = 0;
-	private $heighted_rows = []; //临时变量，title和head中自定义了高度的行
 	private $row_height = 22; //标题部分的高度
 	private $column_width =12; //默认列宽
 	
@@ -189,7 +188,6 @@ class ExportExcel
 			
 		}
 		//$this->writeLog();
-		
 		// Redirect output to a client’s web browser (Xlsx)
 		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 		header('Content-Disposition: attachment;filename="'.Utility::encodeChinese($file_name).'.xlsx"');
@@ -203,7 +201,8 @@ class ExportExcel
 		ob_clean(); //解决输出带bom头的问题
 		$writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
 		$writer->save('php://output');
-		exit('保存成功');
+		exit;
+		//exit('保存成功');
 	}
 	
 	/**
@@ -213,10 +212,8 @@ class ExportExcel
 	 */
 	protected function buildSheet($sheet, $configs){
 		//初始化
+		$this->row_num = 0;
 		$configs = array_merge($this->sheet, $configs);
-		$this->row_num= 0;
-		$this->row_begin=9999;
-		$this->heighted_rows= [];
 		
 		//sheet名称
 		if(empty($configs['name'])){
@@ -255,6 +252,9 @@ class ExportExcel
 		
 		foreach ($blocks as $index=>$block){
 			/**********************************表头**********************************/
+			if($configs['multiple']){
+				$this->row_num = 0;
+			}
 			$head = $block['head'];
 			if(count($head)>0){
 				$labels = $configs['labels'];
@@ -264,6 +264,7 @@ class ExportExcel
 					$default= array_merge($default, $configs['style']['head']);
 				}
 				foreach ($head as $key=>$item){
+					//$begin = $this->row_num;
 					if (is_string($item)) {
 						$item = $this->createDataColumn($item);
 					}
@@ -284,12 +285,11 @@ class ExportExcel
 							$item['column'] = $this->columnName($key);
 						}
 					}
-					
 					if(empty($item['cell'])  && !empty($item['column'])){
 						$item['cell'] = $item['column'].$begin;
 					}
 					$head[$key]=$item;
-					
+					$item['datatype']='';
 					if($item['cell']!='####'){
 						$this->fillCell($sheet, $item, true);
 					}
@@ -299,11 +299,6 @@ class ExportExcel
 			
 			/**********************************标题部分的空行**********************************/
 			//title和head高度,未设置的高度的行，默认高度
-			for($i=$this->row_begin; $i<=$this->row_num; $i++){
-				if(!in_array($i, $this->heighted_rows)){
-					$sheet->getRowDimension($i)->setRowHeight($this->row_height);
-				}
-			}
 			
 			/**********************************数据**********************************/
 			//数据入格
@@ -327,9 +322,12 @@ class ExportExcel
 						continue;
 					}
 					$attr = $column['attribute'];
-					$format = $column['format']??'text';
+					$format = $column['format']??'';
 					$added = $column['added'];
 					$col_name = $column['column'];
+					$border = $column['border'];
+					$merge = $column['column2'];
+					$datatype = $column['datatype'];
 					
 					$i =$begin;
 					$merge_dealer = '';
@@ -343,7 +341,13 @@ class ExportExcel
 							$value = $i-$begin+1;
 						}
 						else{
-							$value = $formatter->format($row[$attr], $format);
+							if(empty($format)){
+								$value = $row[$attr];
+							}
+							else{
+								$value = $formatter->format($row[$attr], $format);
+							}
+							
 							if($added=='merge'){
 								if($merge_dealer!=$value){
 									if($i>($merge_begin+1)){
@@ -358,6 +362,11 @@ class ExportExcel
 						$item = $default;
 						$item['label'] = $value;
 						$item['cell'] = $column['column'].$i;
+						if(!empty($column['column2'])){
+							$item['merge'] = $column['column2'].$i;
+						}
+						$item['border'] = $border;
+						$item['datatype'] = $datatype;
 						$this->fillCell($sheet, $item);
 						$i++;
 					}
@@ -484,8 +493,8 @@ class ExportExcel
 				$sheet->getStyle($cell)->getAlignment()->setWrapText(true);
 			}
 		}
-		if(!empty($item['format'])){
-			$format = $item['format'];
+		if(!empty($item['datatype'])){
+			$format = $item['datatype'];
 			switch ($format){
 				case 'money':
 					$sheet->getStyle($cell)->getNumberFormat()->setFormatCode('_(* #,##0.00_);_(* (#,##0.00);_(* "-"??_);_(@_)');
@@ -501,13 +510,6 @@ class ExportExcel
 			}
 			if($row_num> $this->row_num){
 				$this->row_num = $row_num;
-			}
-			if($row_num<$this->row_begin){
-				$this->row_begin = $row_num;
-			}
-			//自定义了高度的行，标记到全局数组中
-			if(!empty($item['height']) && !in_array($row_num, $this->heighted_rows)){
-				$this->heighted_rows[] = $row_num;
 			}
 		}
 	}
