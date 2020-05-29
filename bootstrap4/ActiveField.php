@@ -312,7 +312,7 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 		
 		
 		
-		return Html::tag('li', $item, []);
+		return Html::tag('li', $items, []);
 	}
 	/**
 	 * 隐藏域
@@ -397,7 +397,8 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 		$hidden_id = isset($options['id'])?$options['id']:Html::getInputId($this->model, $attribute);
 		$display_id= 'dt_'.$hidden_id;
 		$value =  Html::getAttributeValue($this->model, $attribute);
-		$hidden = Html::activeHiddenInput($this->model, $attribute, ['value'=>$value, 'id'=>$hidden_id]);
+		$hidden_options = array_merge(['value'=>$value, 'id'=>$hidden_id], $options['options']??[]);
+		$hidden = Html::activeHiddenInput($this->model, $attribute, $hidden_options);
 		$display_value = '';
 		if($options['btn']=='long' && $value==1){
 			$display_value = '2099-12-31';

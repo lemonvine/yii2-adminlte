@@ -132,7 +132,7 @@ var bolevine = {
 					bolevine.forward(base.url);
 					break;
 				case "dialog":
-					bolevine.dialog({url:base.url});
+					bolevine.dialog({title:base.title, url:base.url});
 					break;
 				case "ajax":
 					bolevine.vjax(base);
