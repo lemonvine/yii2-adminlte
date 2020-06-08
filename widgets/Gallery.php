@@ -20,6 +20,7 @@ class Gallery extends Widget
 	public $extensions = [];
 	public $accepts = [];
 	public $trees = [];
+	public $extra = [];
 	
 	public function init()
 	{
@@ -87,7 +88,7 @@ class Gallery extends Widget
 		}
 		
 		if(in_array($this->layout, [2,3])){
-			$this->category = $service->widget($this->scene);
+			$this->category = $service->widget($this->scene,$this->extra);
 			$this->trees = $service->trees;
 		}
 		

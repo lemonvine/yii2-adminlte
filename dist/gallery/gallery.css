@@ -7,7 +7,8 @@
 .file-view img,audio,video,.file-pdf,.file-word,.file-excel,.file-file.file-audio{width: 100%; height: 170px; text-align:center;vertical-align:middle;overflow:hidden; background-size:100% 100%;}
 
 .file-view .hover-mask {position: absolute; top: 0px; width:100%; height:48px; line-height:48px; text-align: right; background: #000; color: #fff; opacity: 0.7; display: none;}
-.file-view .hover-mask a{color: #fff; padding-right: 10px;}
+.file-view .hover-mask a{color: #fff; padding-right: 7px;}
+.file-view .hover-mask a i{cursor: pointer;}
 .file-view:hover .hover-mask {display: block;}
 
 .file-view .file-filter{position: absolute; top: 0px; left: 5px; z-index:99 }
