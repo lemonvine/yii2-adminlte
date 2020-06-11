@@ -61,6 +61,9 @@ class AdminLteAsset extends AssetBundle
 					$css[] = "plugins/combo";
 					$js[] = "plugins/combo";
 					break;
+				case 'collapse':
+					$js[] = "bootstrap/plugins/collapse";
+					break;
 				case 'icheck':
 					$css[] = "plugins/icheck-bootstrap";
 					break;
