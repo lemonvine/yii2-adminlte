@@ -185,7 +185,7 @@ class GalleryService extends Component
 		
 	}
 	
-	public function widget($scene){
+	public function widget($scene, $mulitline, $extra=[]){
 		return [];
 	}
 	

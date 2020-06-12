@@ -88,7 +88,7 @@ class Gallery extends Widget
 		}
 		
 		if(in_array($this->layout, [2,3])){
-			$this->category = $service->widget($this->scene,$this->extra);
+			$this->category = $service->widget($this->scene, $this->multiline, $this->extra);
 			$this->trees = $service->trees;
 		}
 		

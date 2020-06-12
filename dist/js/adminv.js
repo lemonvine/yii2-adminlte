@@ -298,10 +298,6 @@ var bolevine = {
 			return null;
 		};
 	},
-	sy: function(){
-		layer.alert('only test');
-	},
-	
 	handlebarReady:function(){
 		var hbs = $(".handlebar-field");
 		$(hbs).each(function(){
@@ -371,6 +367,27 @@ $(window).ready(function(){
 		param.type='get';
 		bolevine.vjax(param);
 	});
+	$(document).on('change', '.leafblinds', function(){
+		var _val=$(this).val();
+		var _mutex=""+$(this).data('mutex');
+		var _map=bolevine.str2json($(this).data('map'));
+		var _land=$(this).data('land');
+		if(_mutex=="1"){
+			for(var key in _map ){
+				$(_map[key]).hide();
+			}
+			if(_land!=""){
+				$(_land).hide();
+			}
+		}else if(_mutex!=""){
+			$(_mutex).hide();
+		}
+		if(_map.hasOwnProperty(_val)){
+			$(_map[_val]).show();
+		}else if(_land!=""){
+			$(_land).show();
+		}
+	});
 	//begin handlebar
 	$(document).on('blur', '.handlebar-blur', function(){
 		var _index=$(this).data('index'), _key = $(this).data('key'), _info = $(this).parents('.handlebar-info')[0];
@@ -438,6 +455,9 @@ $(window).ready(function(){
 	});
 	$('.combo').each(function(){
 		$(this).comboselect();
+	});
+	$(".leafblinds").each(function(){
+		$(this).change();
 	});
 	
 	if(typeof(MESSAGE)!="undefined" && MESSAGE){
