@@ -108,6 +108,10 @@ class AdminLteAsset extends AssetBundle
 					$js[] = "plugins/jquery.lazyload";
 					$js[] = "plugins/scrollspy";
 					break;
+				case 'album':
+					$js[] = "gallery/album";
+					$css[] = "gallery/album";
+					break;
 				case 'layer':
 					$js[] = "layer/layer";
 					break;

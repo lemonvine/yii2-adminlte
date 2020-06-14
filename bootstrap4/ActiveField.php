@@ -11,6 +11,7 @@ namespace lemon\bootstrap4;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use lemon\web\AdminLteAsset;
+use lemon\widgets\Album;
 
 /**
  * Extends the ActiveField component to handle various bootstrap4 form handle input groups.
@@ -292,6 +293,15 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 		$this->addAriaAttributes($options);
 		$this->adjustLabelFor($options);
 		$this->parts['{input}'] = Html::activeDropDownList($this->model, $this->attribute, $items, $options);
+		
+		return $this;
+	}
+	
+	public function album($items, $options=[]){
+		$this->template="{input}";
+		$content = Html::activeHiddenInput($this->model, $this->attribute);
+		$content .= Album::widget([]);
+		$this->parts['{input}'] = $content;
 		
 		return $this;
 	}
