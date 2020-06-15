@@ -281,20 +281,6 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 		$this->parts['{input}'] = $content;
 		
 		return $this;
-		
-		AdminLteAsset::loadModule($this->form->getView(), 'combo');
-		$options['data-combo']='combo';
-		$options = array_merge($this->inputOptions, $options);
-		
-		if ($this->form->validationStateOn === ActiveForm::VALIDATION_STATE_ON_INPUT) {
-			$this->addErrorClassIfNeeded($options);
-		}
-		
-		$this->addAriaAttributes($options);
-		$this->adjustLabelFor($options);
-		$this->parts['{input}'] = Html::activeDropDownList($this->model, $this->attribute, $items, $options);
-		
-		return $this;
 	}
 	
 	public function album($items, $options=[]){
@@ -306,24 +292,6 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 		return $this;
 	}
 	
-	
-	private function comboUl($items, $options=[]){
-		
-		$tag = ArrayHelper::remove($options, 'tag', 'ul');
-		$encode = ArrayHelper::remove($options, 'encode', true);
-		$separator = ArrayHelper::remove($options, 'separator', "\n");
-		$itemOptions = ArrayHelper::remove($options, 'itemOptions', []);
-		
-		if (empty($items)) {
-			return static::tag($tag, '', $options);
-		}
-		
-		
-		
-		
-		
-		return Html::tag('li', $items, []);
-	}
 	/**
 	 * 隐藏域
 	 * @see \yii\widgets\ActiveField::hiddenInput()
