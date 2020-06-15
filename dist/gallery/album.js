@@ -42,4 +42,7 @@ $(function(){
 		//gallerySort($(_target).parent().prop('id'));
 	});
 	
+	$(".lemon-album").each(function(){
+		
+	});
 });

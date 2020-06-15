@@ -12,6 +12,7 @@ use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use lemon\web\AdminLteAsset;
 use lemon\widgets\Album;
+use yii\helpers\Json;
 
 /**
  * Extends the ActiveField component to handle various bootstrap4 form handle input groups.
@@ -283,10 +284,20 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 		return $this;
 	}
 	
-	public function album($items, $options=[]){
+	public function album($items=[], $options=[]){
+		$album_id = 'album_'.$this->attribute;
 		$this->template="{input}";
-		$content = Html::activeHiddenInput($this->model, $this->attribute);
-		$content .= Album::widget([]);
+		$handlebar = ArrayHelper::remove($options, 'handlebar', 'handlebar_album');
+		$hidOption =[
+			'class'=>'lemon-album',
+			'data-item'=>Json::encode($items),
+			'data-dirt'=> $album_id,
+			'data-hdbar'=> $handlebar,
+		];
+		$hidOption['data-item']=Json::encode($items);
+		//$hidOption['class']
+		$content = Html::activeHiddenInput($this->model, $this->attribute, $hidOption);
+		$content .= Album::widget(['elid'=>$album_id, 'handlebar'=>$handlebar]);
 		$this->parts['{input}'] = $content;
 		
 		return $this;

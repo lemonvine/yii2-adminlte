@@ -11,9 +11,16 @@ use lemon\components\WebView;
 
 class Album extends Widget
 {
+	public $elid;
+	public $handlebar;
 	public function init()
 	{
-		
+		if (is_null($this->elid)){
+			$this->elid = $this->getId();
+		}
+		if(is_null($this->handlebar)){
+			$this->handlebar = 'handlebar_album';
+		}
 	}
 	
 	public function run()
@@ -35,7 +42,8 @@ class Album extends Widget
 	protected function registerClientScript()
 	{
 		$script = $this->render('album-img');
-		$this->view->registerJs($script, WebView::POS_HDB, 'handlebar_album');
+		$this->view->registerJs($script, WebView::POS_HDB, $this->handlebar);
+		AdminLteAsset::loadModule($this->view, ['album', 'handlebar']);
 		//echo Html::script($script, ['id'=>'abcde1']);
 		//AdminLteAsset::loadModule($this->view, ['handlebar', 'viewer', 'gallery', 'icheck', 'ztree', 'sortable']);
 	}
