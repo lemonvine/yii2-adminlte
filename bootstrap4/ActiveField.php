@@ -295,10 +295,10 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 			'data-hdbar'=> $handlebar,
 		];
 		$hidOption['data-item']=Json::encode($items);
-		//$hidOption['class']
 		$content = Html::activeHiddenInput($this->model, $this->attribute, $hidOption);
 		$content .= Album::widget(['elid'=>$album_id, 'handlebar'=>$handlebar]);
 		$this->parts['{input}'] = $content;
+		$this->template = '{input}';
 		
 		return $this;
 	}
@@ -315,7 +315,7 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 		return $this;
 	}
 	protected function buildTemplate(){
-		if (empty($this->prepend) || empty($this->append)){
+		if (!empty($this->prepend) || !empty($this->append)){
 			$content = $this->generateAddon();
 			$group = $this->addon;
 			Html::addCssClass($group, 'input-group');
