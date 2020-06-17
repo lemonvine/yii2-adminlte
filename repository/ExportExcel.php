@@ -202,7 +202,6 @@ class ExportExcel
 		$writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
 		$writer->save('php://output');
 		exit;
-		//exit('保存成功');
 	}
 	
 	/**
@@ -364,6 +363,9 @@ class ExportExcel
 						$item['cell'] = $column['column'].$i;
 						if(!empty($column['column2'])){
 							$item['merge'] = $column['column2'].$i;
+						}
+						if($column['wrap']){
+							$item['wrap'] = true;
 						}
 						$item['border'] = $border;
 						$item['datatype'] = $datatype;
