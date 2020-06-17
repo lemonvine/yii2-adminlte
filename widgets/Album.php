@@ -2,17 +2,22 @@
 namespace lemon\widgets;
 
 use Yii;
+use yii\helpers\Url;
 use yii\base\Widget;
 use lemon\web\AdminLteAsset;
-use lemon\widgets\services\GalleryService;
-use yii\base\View;
-use yii\helpers\Html;
+//use yii\base\View;
 use lemon\components\WebView;
 
 class Album extends Widget
 {
+	/**
+	 * @var integer 
+	 */
+	public $obid=0;
 	public $elid;
 	public $handlebar;
+	public $path_choice;
+	public $path_upload;
 	public function init()
 	{
 		if (is_null($this->elid)){
@@ -20,6 +25,12 @@ class Album extends Widget
 		}
 		if(is_null($this->handlebar)){
 			$this->handlebar = 'handlebar_album';
+		}
+		if(is_null($this->path_choice)){
+			$this->path_choice = Url::toRoute(['choice', 'id'=>$this->obid]);
+		}
+		if(is_null($this->path_upload)){
+			$this->path_upload = Url::toRoute(['upload', 'id'=>$this->obid]);
 		}
 	}
 	

@@ -10,39 +10,25 @@
 
 
 $(function(){
-	$(document).on('click', '.js-image-del', function(){
-		var _status = $(this).data('status');
-		var _target = $(this).parent().parent().parent();
-		if(_status=="new"){
-			var _filename = $(this).data("file");
-			
-			$.ajax({
-				url:pictureDelete,
-				type: 'POST',
-				data:{'file': _filename},
-				success: function(redata){
-				    if(typeof(redata)=="string"){
-				    	redata = eval('('+redata+')');
-				    }
-				    if(redata.status=="201"){
-						$(_target).remove();
-				    }
-				    else{
-				    	messageShow("删除失败！","");
-				    }
-				}
-			});
-		}
-		else if(_status=="saved"){
-			//var _target = $(this).parent().parent().parent();
-			$(_target).find("input[type=checkbox]").prop('checked', true);
-			$(_target).hide();
-			
-		}
-		//gallerySort($(_target).parent().prop('id'));
-	});
 	
-	$(".lemon-album").each(function(){
+	$(document).on('click', '.album-choice', function(){
 		
 	});
+	$(document).on('click', '.album-update', function(){
+		
+	});
+	$(document).on('change', '.album-file', function(){
+		
+	});
+	$(".lemon-album").each(function(){
+		var _item = $(this).data('item');
+		var _dirt = $(this).data('dirt');
+		var _hdbar = $(this).data('hdbar');
+		var _json = bolevine.str2json(_item);
+		if(_json.length>0){
+			var tmpfn = Handlebars.compile($('#'+_hdbar).html());
+			$("#"+_dirt).html(tmpfn(_json));
+		}
+	});
+	
 });
