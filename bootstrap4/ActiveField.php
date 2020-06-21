@@ -11,9 +11,6 @@ namespace lemon\bootstrap4;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use lemon\web\AdminLteAsset;
-use lemon\widgets\Album;
-use yii\helpers\Json;
-use lemon\components\WebView;
 
 /**
  * Extends the ActiveField component to handle various bootstrap4 form handle input groups.
@@ -281,26 +278,6 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 		$content.=$ul;
 		
 		$this->parts['{input}'] = $content;
-		
-		return $this;
-	}
-	
-	public function album($items=[], $options=[]){
-		$album_id = 'album_'.$this->attribute;
-		$this->template="{input}";
-		$handlebar = ArrayHelper::remove($options, 'handlebar', 'handlebar_album');
-		$hidOption =[
-			'class'=>'lemon-album',
-			'data-item'=>Json::encode($items),
-			'data-dirt'=> $album_id,
-			'data-hdbar'=> $handlebar,
-		];
-		$hidOption['data-item']=Json::encode($items);
-		$content = Html::activeHiddenInput($this->model, $this->attribute, $hidOption);
-		//$items = Html::button('', []);
-		$content .= Album::widget(['elid'=>$album_id, 'handlebar'=>$handlebar]);
-		$this->parts['{input}'] = $content;
-		$this->template = '{input}';
 		
 		return $this;
 	}

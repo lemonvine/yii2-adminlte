@@ -13,16 +13,17 @@ class Album extends Widget
 	/**
 	 * @var integer 
 	 */
+	public $form;
+	public $model;
+	public $attribute;
+	public $items=[];
 	public $obid=0;
-	public $elid;
 	public $handlebar;
 	public $path_choice;
 	public $path_upload;
+	
 	public function init()
 	{
-		if (is_null($this->elid)){
-			$this->elid = $this->getId();
-		}
 		if(is_null($this->handlebar)){
 			$this->handlebar = 'handlebar_album';
 		}
@@ -32,22 +33,13 @@ class Album extends Widget
 		if(is_null($this->path_upload)){
 			$this->path_upload = Url::toRoute(['upload', 'id'=>$this->obid]);
 		}
+		
 	}
 	
 	public function run()
 	{
 		$this->registerClientScript();
 		return $this->render('album');
-		
-		$this->buildFileTree();
-		if(in_array($this->layout, [1,3])){
-			$this->registerClientScript();
-			return $this->render('gallery');
-		}
-		else{
-			
-			return $this->render('gallery2');
-		}
 	}
 	
 	protected function registerClientScript()

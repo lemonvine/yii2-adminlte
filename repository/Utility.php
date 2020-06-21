@@ -114,7 +114,7 @@ class Utility
 		$dot_pos = strrpos($origin, '.');
 		$filename = substr($origin, 0, $dot_pos).'_'.$width.'_'.$height.''.substr($origin, $dot_pos);
 		Image::thumbnail($basepath.$origin, $width, $height)
-		->save($basepath.$filename, ['quality' => 100]);
+		->save($basepath.$filename, ['quality' => 90]);
 		return $filename;
 	}
 	
