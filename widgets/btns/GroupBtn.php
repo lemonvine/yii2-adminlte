@@ -46,6 +46,12 @@ class GroupBtn extends Widget
 		return Html::submitButton('确定', ['id' => 'btn_submit', 'class' => ($isbtn?'btn btn-':'').'success']);
 	}
 	
+	public static function SubmitButton($config=[]){
+		$params = ['title'=>'确定', 'color'=>'success', 'isbtn'=>true, ];
+		$params = array_merge($params, $config);
+		return Html::submitButton($params['title'], ['id' => 'btn_submit', 'class' => ($params['isbtn']?'btn btn-':'').$params['color']]);
+	}
+	
 	public static function CancelButton($isbtn=true){
 		return Html::Button('取消', ['class' => ($isbtn?'btn btn-':'').'default', 'onclick'=>'window.parent.bolevine.turnoff()']);
 	}

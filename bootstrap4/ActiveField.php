@@ -365,7 +365,7 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 		$hidden_id = isset($options['id'])?$options['id']:Html::getInputId($this->model, $attribute);
 		$display_id= 'dt_'.$hidden_id;
 		$value =  Html::getAttributeValue($this->model, $attribute);
-		$hidden_options = array_merge(['value'=>$value, 'id'=>$hidden_id], $options['options']??[]);
+		$hidden_options = array_merge(['value'=>$value, 'id'=>$hidden_id], $options['options']??['class'=>'form-control']);
 		$hidden = Html::activeHiddenInput($this->model, $attribute, $hidden_options);
 		$display_value = '';
 		if($options['btn']=='long' && $value==1){
