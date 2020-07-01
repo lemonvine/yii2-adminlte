@@ -24,7 +24,7 @@ $options =[
 <div class="col-12">
 	<div class="card">
 		<div class="card-header">
-			<?= $form->field($model, 'gallery')->hiddenInput($options) ?>
+			<?= $form->field($model, $attribute)->hiddenInput($options) ?>
 			<button type="button" class="btn btn-outline-info album-choice" data-dirt="<?=$album_id?>" data-url="<?=$path_choice?>">选择图片</button>
 			<button type="button" class="btn btn-outline-warning album-upload" >上传图片</button>
 			<input type="file" class="album-file" multiple data-dirt="<?=$album_id?>"
