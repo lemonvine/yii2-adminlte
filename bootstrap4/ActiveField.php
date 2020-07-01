@@ -357,6 +357,9 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 			return;
 		}
 		$as_button = false;
+		$addonOptions = [
+			'class' => "input-group-{$pos} "
+		];
 		if (!is_array($config)) {
 			$content =  $config;
 		}
@@ -365,18 +368,19 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 			$content = ArrayHelper::getValue($config, 'content', '');
 			$options = ArrayHelper::getValue($config, 'options', []);
 			$class = ArrayHelper::getValue($config, 'class', '');
+			$addonOptions['class'] .= $class;
 			
 			switch ($type){
-				case 'icon':
-					$content =  Html::tag('i', '', ['class'=>"fa fa-$content"]);
-					break;
 				case 'button':
 					$as_button=true;
 					$options['class'] = 'btn btn-info';
 					$content =  Html::button($content, $options);
 					break;
+				case 'icon':
+					$content =  Html::tag('i', '', ['class'=>"fa fa-$content"]);
 				case 'char':
 				default:
+					$addonOptions=array_merge($addonOptions, $options);
 					break;
 			}
 		}
@@ -384,7 +388,7 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 			$content = Html::tag('span', $content, ['class'=>'input-group-text']);
 		}
 		
-		$content = Html::tag('div', $content, ['class' => "input-group-{$pos} {$class}"]);
+		$content = Html::tag('div', $content, $addonOptions);
 		return $content;
 	}
 	
