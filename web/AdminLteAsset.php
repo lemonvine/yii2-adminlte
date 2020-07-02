@@ -101,6 +101,8 @@ class AdminLteAsset extends AssetBundle
 					$js[] = "bootstrap/plugins/tooltip";
 					$js[] = "bootstrap/plugins/dropdown";
 					break;
+				case 'jqueryui':
+					$js[] = "plugins/jquery-ui";
 				case 'sortable':
 					$js[] = "plugins/sortable";
 					break;

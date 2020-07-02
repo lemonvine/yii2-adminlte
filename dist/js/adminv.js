@@ -112,8 +112,16 @@ var bolevine = {
 		if(base.max) config.maxmin = true;
 		if(base.url) {
 			if(base.refer){
-				var _val = $(base.refer).val();
-				base.url = bolevine.appendurl(base.url, 'ext', _val);
+				var refer = base.refer;
+				var refers = refer.split(';');
+				var exts = [];
+				$(refers).each(function(){
+					var el = this;
+					var _val = $(el).val();
+					exts.push({c:el, v: _val});
+				});
+				var ext = bolevine.json2str(exts);
+				base.url = bolevine.appendurl(base.url, 'ext', ext);
 			}
 			config.type = 2;
 			config.content = base.url;
