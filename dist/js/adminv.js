@@ -82,7 +82,7 @@ var bolevine = {
 			}
 			else{
 				url = url + "?referer_url="+encodeURI(bolevine.referer);
-			}
+			};
 		};
 		location.href=url;
 	},
@@ -115,12 +115,12 @@ var bolevine = {
 				var refer = base.refer;
 				var refers = refer.split(';');
 				var exts = [];
-				$(refers).each(function(){
-					var el = this;
-					var _val = $(el).val();
-					exts.push({c:el, v: _val});
-				});
-				var ext = bolevine.json2str(exts);
+				for(var i=0,l=refers.length; i<l; i++){
+					var el = refers[i];
+					var val = $(el).val();
+					exts.push({c:el, v: val});
+				}
+				var ext = encodeURIComponent(bolevine.json2str(exts));
 				base.url = bolevine.appendurl(base.url, 'ext', ext);
 			}
 			config.type = 2;
