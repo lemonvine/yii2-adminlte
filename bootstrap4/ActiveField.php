@@ -301,24 +301,22 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 		$items = ArrayHelper::remove($options, 'items');
 		$url = ArrayHelper::remove($options, 'url');
 		$hidden_id = isset($options['id'])?$options['id']:Html::getInputId($this->model, $this->attribute);
-		$display_id= 'gl_'.$hidden_id;
+		$display_id= $hidden_id.'_gl';
 		$containerOptions = [
 			'id'=>$display_id,
-			'class'=>'container',
+			'class'=>'container row',
+		];
+		$inputOptions =[
+			'class'=>'form-control hidden-gallery',
 			'data-item'=>Json::encode($items),
 		];
-		//$prefix = 'prefix'=>Yii::$app->params['FILE_HTTP_PATH']
-		$input = Html::activeHiddenInput($this->model, $this->attribute, $this->inputOptions);
+		
+		$input = Html::activeHiddenInput($this->model, $this->attribute, $inputOptions);
 		$container = Html::tag('div', '图片空', $containerOptions);
-		$button = Html::button('选择图片', ['type'=>'button', 'class'=>'btn btn-outline-success modaldialog', 'data-url'=>$url]);
+		$button = Html::button('选择图片', ['type'=>'button', 'class'=>'btn btn-outline-success modaldialog', 'data-url'=>$url, 'data-refer'=>'#'.$hidden_id]);
 		$button = Html::tag('div', $button, ['class'=>'text-right']);
-		/*
-		foreach ($items as $item){
-			$content .= Html::img($item['thumb']);
-		}
-		*/
+		
 		$this->parts['{input}'] = $input.$container.$button;
-		//$this->parts['{input}'] = '';
 		return $this;
 	}
 	protected function buildTemplate(){
