@@ -260,6 +260,7 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 		
 		$this->addAriaAttributes($options);
 		$this->adjustLabelFor($options);
+		$options['autocomplete'] = 'off';
 		$options['class'] .= ' combo';
 		//var_dump($options);die;
 		
