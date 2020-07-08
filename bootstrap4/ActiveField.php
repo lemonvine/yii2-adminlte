@@ -349,7 +349,8 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 			'class'=>'form-control hidden-gallery',
 			'data-item'=>Json::encode($items),
 		];
-		
+		$fieldOptions = ArrayHelper::remove($options, 'fieldOptions', []);
+		$inputOptions = array_merge($inputOptions, $fieldOptions);
 		$input = Html::activeHiddenInput($this->model, $this->attribute, $inputOptions);
 		$container = Html::tag('div', '图片空', $containerOptions);
 		$button = Html::button('选择图片', ['type'=>'button', 'class'=>'btn btn-outline-success modaldialog', 'data-url'=>$url, 'data-refer'=>'#'.$hidden_id]);
@@ -357,6 +358,10 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 		
 		$this->parts['{input}'] = $input.$container.$button;
 		return $this;
+	}
+	
+	public function picture($options=[]){
+		
 	}
 	protected function buildTemplate(){
 		if (!empty($this->prepend) || !empty($this->append)){
