@@ -449,6 +449,13 @@ $(window).ready(function(){
 			eval(_callback);
 		}
 	});
+	$(document).on('click', ':radio',function(){
+		var pair = $(this).data('pair');
+		if(pair){
+			var txt = $(this).data('text');
+			$("#"+pair).val(txt);
+		}
+	});
 	//
 	//金额转为大写
 	$(document).on('keyup', '.rmb-chinese', function(){

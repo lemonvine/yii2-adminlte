@@ -20,9 +20,10 @@ class ActiveForm extends \yii\bootstrap4\ActiveForm
 	const INPUT_LIST = 'dropDownList';
 	const INPUT_DATE = 'DatePicker';
 	public $PJAX = false;
+	public $fieldClass = 'lemon\bootstrap4\ActiveField';
 	public function init()
 	{
-		$this->fieldClass = "lemon\bootstrap4\ActiveField";
+		//$this->fieldClass = "lemon\bootstrap4\ActiveField";
 		parent::init();
 	}
 	

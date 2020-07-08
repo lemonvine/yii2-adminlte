@@ -68,37 +68,39 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 			$encode = ArrayHelper::getValue($options, 'encode', true);
 			$itemCount = count($items) - 1;
 			$error = $this->error()->parts['{error}'];
+			if (!array_key_exists('id', $options)) {
+				$input_id = Html::getInputId($this->model, $this->attribute);
+			}else{
+				$input_id = $options['id'];
+			}
 			$options['item'] = function ($i, $label, $name, $checked, $value) use (
 				$itemOptions,
 				$encode,
 				$itemCount,
-				$error
+				$error,
+				$input_id
 			) {
-				$options = array_merge($this->checkOptions, [
-					'label' => $encode ? Html::encode($label) : $label,
-					'id' => $name.'_'.$value
+				
+				$label = $encode ? Html::encode($label) : $label;
+				$options = array_merge([
+					'id' => $input_id.'_'.$value,
+					'value' =>$value,
 				], $itemOptions);
-				$wrapperOptions = ArrayHelper::remove($options, 'wrapperOptions', ['class' => ['icheck-primary', 'd-inline']]);
-				if ($this->inline) {
-					Html::addCssClass($wrapperOptions, 'custom-control-inline');
-				}
-				$checkboxAttrs = ['id'=>$options['id'],'value'=>$value];
+				
 				if(isset($options['individuals'])){
-					$individuals = $options['individuals'];
-					
+					$individuals = ArrayHelper::remove($options, 'individuals', []);
 					if(isset($individuals[$value])){
-						$checkboxAttrs = array_merge($checkboxAttrs, $individuals[$value]);
+						$options = array_merge($options, $individuals[$value]);
 					}
 				}
-
-				$html = Html::beginTag('div', $wrapperOptions) . "\n" .
-				Html::checkbox($name,$checked, $checkboxAttrs). "\n" .
-				Html::label($options['label'],$options['id']) . "\n" ;
-				if ($itemCount === $i) {
-					$html .= $error . "\n";
+				
+				$wrapperOptions = ArrayHelper::remove($options, 'wrapperOptions', ['class' => ['icheck-primary', 'd-inline']]);
+				if ($this->inline) {
+					Html::addCssClass($wrapperOptions, 'custom-control-inline', $wrapperOptions);
 				}
-				$html .= Html::endTag('div') . "\n";
-
+				$content = Html::checkbox($name,$checked, $options). "\n" . Html::label($label, $options['id']) . "\n" .($itemCount===$i?$error:'');
+				$html = Html::tag('div', $content, $wrapperOptions);
+				
 				return $html;
 			};
 		}
@@ -106,7 +108,12 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 		\yii\widgets\ActiveField::checkboxList($items, $options);
 		return $this;
 	}
-
+	
+	/**
+	 * 单选钮组
+	 * {@inheritDoc}
+	 * @see \yii\bootstrap4\ActiveField::radioList()
+	 */
 	public function radioList($items, $options = [])
 	{
 		if (!isset($options['item'])) {
@@ -115,33 +122,64 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 			$encode = ArrayHelper::getValue($options, 'encode', true);
 			$itemCount = count($items) - 1;
 			$error = $this->error()->parts['{error}'];
+			if (!array_key_exists('id', $options)) {
+				$input_id = Html::getInputId($this->model, $this->attribute);
+			}else{
+				$input_id = $options['id'];
+			}
+			$pairId = ArrayHelper::remove($options, 'pair', '');
 			$options['item'] = function ($i, $label, $name, $checked, $value) use (
 				$itemOptions,
 				$encode,
 				$itemCount,
-				$error
+				$error,
+				$input_id,
+				$pairId
 			) {
-				$options = array_merge($this->radioOptions, [
-					'label' => $encode ? Html::encode($label) : $label,
-					'id' => $name.'_'.$value
+				$label = $encode ? Html::encode($label) : $label;
+				$options = array_merge([
+					'id' => $input_id.'_'.$value,
+					'value' =>$value,
 				], $itemOptions);
+				if(!empty($pairId)){
+					$options['data-pair'] = $pairId;
+					$options['data-text'] = $label;
+				}
 				$wrapperOptions = ArrayHelper::remove($options, 'wrapperOptions', ['class' => ['icheck-primary', 'd-inline']]);
 				if ($this->inline) {
-					Html::addCssClass($wrapperOptions, 'custom-control-inline');
+					Html::addCssClass($wrapperOptions, 'custom-control-inline', $wrapperOptions);
 				}
-				$html = Html::beginTag('div', $wrapperOptions) . "\n" .
-				Html::radio($name,$checked,['id'=>$options['id'],'value'=>$value]). "\n" .
-				Html::label($options['label'],$options['id']) . "\n" ;
-				if ($itemCount === $i) {
-					$html .= $error . "\n";
-				}
-				$html .= Html::endTag('div') . "\n";
-
+				$content = Html::radio($name,$checked, $options). "\n" . Html::label($label, $options['id']) . "\n" .($itemCount===$i?$error:'');
+				$html = Html::tag('div', $content, $wrapperOptions);
+				
 				return $html;
 			};
 		}
 
-		parent::radioList($items, $options);
+		\yii\widgets\ActiveField::radioList($items, $options);
+		return $this;
+	}
+	
+	/**
+	 * 单选钮和单选钮值组件
+	 * 对应两个attribute
+	 * @param array $items
+	 * @param array $options 含pair,值为$items的value所指的attribute，默认加_name
+	 * @return \lemon\bootstrap4\ActiveField
+	 */
+	public function radioPair($items, $options = []){
+		$pairAttribute = ArrayHelper::remove($options, 'pair', $this->attribute.'_name');
+		$input_id = Html::getInputId($this->model, $pairAttribute);
+		$pairOptions =[
+			'class'=>'form-control',
+			'id'=>$input_id,
+		];
+		$hidden = Html::activeHiddenInput($this->model, $pairAttribute, $pairOptions);
+		$options['pair'] = $input_id;
+		$this->radioList($items, $options);
+		$input = $this->parts['{input}'];
+		$options = array_merge($this->inputOptions, $options);
+		$this->parts['{input}'] = $input.$hidden;
 		return $this;
 	}
 	
