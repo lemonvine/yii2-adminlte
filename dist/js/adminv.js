@@ -82,7 +82,7 @@ var bolevine = {
 			}
 			else{
 				url = url + "?referer_url="+encodeURI(bolevine.referer);
-			}
+			};
 		};
 		location.href=url;
 	},
@@ -106,11 +106,23 @@ var bolevine = {
 	},
 	dialog:function(param){
 		var size = {xs:['420px', '280px'], sm:['600px', '450px'], md: ['800px', '600px'], lg: ['1000px', '750px']};
-		var base = {title:'信息', size: 'md', resize:false, max:false, url: '', html:'', callback:null};
+		var base = {title:'信息', size: 'md', resize:false, max:false, url: '', html:'', refer:'', callback:null};
 		$.extend(base, param);
 		var config = {type: 1, title: base.title, area:size[base.size], resize: base.resize};
 		if(base.max) config.maxmin = true;
 		if(base.url) {
+			if(base.refer){
+				var refer = base.refer;
+				var refers = refer.split(';');
+				var exts = [];
+				for(var i=0,l=refers.length; i<l; i++){
+					var el = refers[i];
+					var val = $(el).val();
+					exts.push({c:el, v: val});
+				}
+				var ext = encodeURIComponent(bolevine.json2str(exts));
+				base.url = bolevine.appendurl(base.url, 'ext', ext);
+			}
 			config.type = 2;
 			config.content = base.url;
 		}
@@ -312,9 +324,23 @@ var bolevine = {
 			var _template = Handlebars.compile($(_tp).html());
 			$("#hb_"+_id).html(_template(_v));
 		});
+	},
+	appendurl:function(url, key, value){
+		if (url.indexOf(key) > -1) {
+			var re = eval('/(' + key + '=)([^&]*)/gi');
+			url = url.replace(re, key + '=' + value);
+		}else {
+			var paraStr = key + '=' + value;
+			var idx = url.indexOf('?');
+			if (idx < 0)
+				url += '?';
+			else if (idx >= 0 && idx != url.length - 1)
+				url += '&';
+			url=url + paraStr;
+		}
+		return url;
 	}
 };
-
 $(window).ready(function(){
 	bolevine.referer = $("#referer_url").val();
 	setTimeout(function(){
@@ -328,6 +354,7 @@ $(window).ready(function(){
 		param.size=$(this).data('area');
 		param.url = $(this).data('url');
 		param.html = $(this).data('html');
+		param.refer = $(this).data('refer');
 		var _maxmin = $(this).data('maxmin');
 		if(_maxmin) param.max= true;
 		bolevine.dialog(param);

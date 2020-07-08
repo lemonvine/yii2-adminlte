@@ -171,6 +171,7 @@ class GalleryService extends Component
 					'name' => $file->name,
 					'size' => $file->size,
 					'format' => $this->extension[$extension],
+					'extension' => $extension,
 				];
 				
 			} catch (\Exception $ex) {

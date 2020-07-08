@@ -11,6 +11,7 @@ namespace lemon\bootstrap4;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use lemon\web\AdminLteAsset;
+use yii\helpers\Json;
 
 /**
  * Extends the ActiveField component to handle various bootstrap4 form handle input groups.
@@ -294,6 +295,31 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 		$this->template = '{input}';
 		return $this;
 	}
+	
+	public function gallery($options = []){
+		$init =['items'=>[], ];
+		$options = array_merge($init, $options);
+		$items = ArrayHelper::remove($options, 'items');
+		$url = ArrayHelper::remove($options, 'url');
+		$hidden_id = isset($options['id'])?$options['id']:Html::getInputId($this->model, $this->attribute);
+		$display_id= $hidden_id.'_gl';
+		$containerOptions = [
+			'id'=>$display_id,
+			'class'=>'container row',
+		];
+		$inputOptions =[
+			'class'=>'form-control hidden-gallery',
+			'data-item'=>Json::encode($items),
+		];
+		
+		$input = Html::activeHiddenInput($this->model, $this->attribute, $inputOptions);
+		$container = Html::tag('div', '图片空', $containerOptions);
+		$button = Html::button('选择图片', ['type'=>'button', 'class'=>'btn btn-outline-success modaldialog', 'data-url'=>$url, 'data-refer'=>'#'.$hidden_id]);
+		$button = Html::tag('div', $button, ['class'=>'text-right']);
+		
+		$this->parts['{input}'] = $input.$container.$button;
+		return $this;
+	}
 	protected function buildTemplate(){
 		if (!empty($this->prepend) || !empty($this->append)){
 			$content = $this->generateAddon();
@@ -330,6 +356,9 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 			return;
 		}
 		$as_button = false;
+		$addonOptions = [
+			'class' => "input-group-{$pos} "
+		];
 		if (!is_array($config)) {
 			$content =  $config;
 		}
@@ -338,18 +367,19 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 			$content = ArrayHelper::getValue($config, 'content', '');
 			$options = ArrayHelper::getValue($config, 'options', []);
 			$class = ArrayHelper::getValue($config, 'class', '');
+			$addonOptions['class'] .= $class;
 			
 			switch ($type){
-				case 'icon':
-					$content =  Html::tag('i', '', ['class'=>"fa fa-$content"]);
-					break;
 				case 'button':
 					$as_button=true;
 					$options['class'] = 'btn btn-info';
 					$content =  Html::button($content, $options);
 					break;
+				case 'icon':
+					$content =  Html::tag('i', '', ['class'=>"fa fa-$content"]);
 				case 'char':
 				default:
+					$addonOptions=array_merge($addonOptions, $options);
 					break;
 			}
 		}
@@ -357,7 +387,7 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 			$content = Html::tag('span', $content, ['class'=>'input-group-text']);
 		}
 		
-		$content = Html::tag('div', $content, ['class' => "input-group-{$pos} {$class}"]);
+		$content = Html::tag('div', $content, $addonOptions);
 		return $content;
 	}
 	
