@@ -37,6 +37,13 @@ var bolevine = {
 	suicide: function(){
 		parent.bolevine.turnoff();
 	},
+	unyii: function(form){
+		var data = $(form).data('yiiActiveForm');
+		if(data){
+			data.validated=true;
+			$(form).data('yiiActiveForm',data);
+		}
+	},
 	alert: function(param){
 		var base = {flag: 1, message: 'md', icon: 1, time: 2000, callback:null};
 		$.extend(base, param);
@@ -394,6 +401,12 @@ $(window).ready(function(){
 		param.type='get';
 		bolevine.vjax(param);
 	});
+	//change事件，调用方法
+	$(document).on('change', '.changecall',function(){
+		var callback = $(this).data('callback');
+		eval(callback);
+	});
+	//change事件显示隐藏模块
 	$(document).on('change', '.leafblinds', function(){
 		var _val=$(this).val();
 		var _mutex=""+$(this).data('mutex');

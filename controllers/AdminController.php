@@ -100,9 +100,8 @@ class AdminController extends Controller
 	 * @param string $msg
 	 * @return string
 	 */
-	public function modelTipsSuccess($msg="操作成功", $icon= 1,$callback='')
+	public function modelTipsSuccess($msg="操作成功", $icon= 1, $callback='')
 	{
-		
 		$msg = addslashes($msg);
 		$callback = $callback?"window.parent.$callback()":'';
 		return "<script type='text/javascript'>window.parent.layer.msg('{$msg}', {icon: '{$icon}',time:1000});window.parent.bolevine.turnoff();$callback;</script>";
@@ -128,6 +127,15 @@ class AdminController extends Controller
 	{
 		$msg = addslashes($msg);
 		return "<script type='text/javascript'>window.parent.bolevine.back2begin('{$msg}', '{$url}');</script>";
+	}
+	
+	public function modelCallParent($callback, $msg=""){
+		$js = "";
+		if(!empty($msg)){
+			$js = "window.parent.bolevine.alert(\{message: {$msg}\});";
+		}
+		$js .= "window.parent.".$callback.";";
+		return "<script type='text/javascript'>{$js}</script>";
 	}
 	
 	public function pjaxSuccess($msg='', $url='')

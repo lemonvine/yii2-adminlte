@@ -37,6 +37,7 @@ class ActiveForm extends \yii\bootstrap4\ActiveForm
 		if(isset($this->view->context->referer)){
 			$html .= Html::hiddenInput('referer_url',$this->view->context->referer, ['id'=>'referer_url']);
 		}
+		$html .= Html::hiddenInput('submit_type', 'submit', ['id'=>'submit_type']);
 		$html .= $content;
 		
 		if ($this->enableClientScript) {
