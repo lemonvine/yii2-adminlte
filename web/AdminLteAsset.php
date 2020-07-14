@@ -66,6 +66,7 @@ class AdminLteAsset extends AssetBundle
 					break;
 				case 'icheck':
 					$css[] = "plugins/icheck-bootstrap";
+					$js[] = "plugins/icheck-bootstrap";
 					break;
 				case 'ztree':
 					$css[] = "ztree/css/ztree/ztree";
