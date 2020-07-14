@@ -28,9 +28,9 @@ class GroupBtn extends Widget
 	
 	public function run()
 	{
-		if($this->submit_type){
-			echo Html::hiddenInput('submit_type', 'submit', ['id'=>'submit_type']);
-		}
+		//if($this->submit_type){
+			//echo Html::hiddenInput('submit_type', 'submit', ['id'=>'submit_type']);
+		//}
 		echo Html::endTag(ArrayHelper::remove($this->options, 'tag', 'div'));
 	}
 	
