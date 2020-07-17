@@ -332,8 +332,20 @@ var bolevine = {
 			$("#hb_"+_id).html(_template(_v));
 		});
 	},
+	ready:function(){
+		bolevine.handlebarReady();
+		$('.js-laydate').each(function(){
+			bolevine.initdate(this);
+		});
+		$('.combo').each(function(){
+			$(this).comboselect();
+		});
+		$(".leafblinds").each(function(){
+			$(this).change();
+		});
+	},
 	appendurl:function(url, key, value){
-		if (url.indexOf(key) > -1) {
+		if (url.indexOf(key+"=") > -1) {
 			var re = eval('/(' + key + '=)([^&]*)/gi');
 			url = url.replace(re, key + '=' + value);
 		}else {
@@ -451,7 +463,6 @@ $(window).ready(function(){
 		$("#"+_id).val(JSON.stringify(_v));
 	});
 	
-	bolevine.handlebarReady();
 	//end handlebar
 	$(document).on('click', '.btn-radio',function(){
 		var radio_type = $(this).data("radio");
@@ -496,16 +507,7 @@ $(window).ready(function(){
 			$(lists[i]).children('a').addClass('active');
 		}
 	}
-	
-	$('.js-laydate').each(function(){
-		bolevine.initdate(this);
-	});
-	$('.combo').each(function(){
-		$(this).comboselect();
-	});
-	$(".leafblinds").each(function(){
-		$(this).change();
-	});
+	bolevine.ready();
 	
 	if(typeof(MESSAGE)!="undefined" && MESSAGE){
 		bolevine.alert({message:MESSAGE, flag:MESSAGE_FLAG});
