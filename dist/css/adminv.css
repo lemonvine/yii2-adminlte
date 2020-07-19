@@ -1,3 +1,25 @@
 @charset "UTF-8";
+body,html{height:100%}
+.form-control.is-invalid, .was-validated .form-control:invalid,.form-control.is-valid, .was-validated .form-control:valid{padding-right:6px!important;background-image: none!important;}
+.flex{display: flex;align-items: center;line-height: 17px;}
+.flex>label{text-align: right;color:#555;padding: 0 8px 0 0;margin:0;width: 100px;}
+.form-group.has-success label,.form-group.has-error label{color:#555;}
+.flex>input,.flex>select,.flex>div{flex:1}
+.flex>div>input,.flex>div>select{width:100%}
+
+.btns-line{margin: 12px 11px 0 0;}
+.btns-line .btn{padding: 5px 18px; margin:0 4px;}
+
 .tab-content{padding: 8px;}
 .fixed-form-btns{bottom: 48px; position: sticky; width: 100%; margin-left: -20px; padding-left: 10px;}
+.upload-btn{position: relative;display: inline-block;overflow: hidden;text-align: center;vertical-align: center;}
+.upload-btn input{position: absolute;top:0;left: 0;opacity: 0;}
+.upload-show{width: 100px;max-height: 150px;}
+
+.form-search .form-group .flex{max-width:370px;}
+@media (min-width: 1200px) and (max-width: 1400px) {
+	.form-search .col-lg-3{flex: 0 0 33.333333%;max-width: 33.333333%;}
+}
+@media (min-width: 992px) and (max-width: 1140px) {
+	.form-search .col-md-4{flex: 0 0 50%;max-width: 50%;}
+}

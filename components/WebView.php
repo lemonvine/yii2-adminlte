@@ -28,7 +28,7 @@ class WebView extends View
 		if($flex!=9){
 			$class = $this->FLEXBOX[$flex];
 		}
-		$class .=' flex';
+		$class .=' flex mt-2';
 		return "<div class=\"{$class}\"><label>{$label}：</label><div>{$value}</div></div>";
 	}
 	

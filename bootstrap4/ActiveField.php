@@ -8,6 +8,7 @@
 
 namespace lemon\bootstrap4;
 
+use Yii;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use lemon\web\AdminLteAsset;
@@ -361,6 +362,18 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 	}
 	
 	public function picture($options=[]){
+		$options = array_merge($this->inputOptions, $options);
+		
+		$input = Html::activeFileInput($this->model, $this->attribute, $options);
+		$content = "<span>选择图片</span>";
+		$content = Html::label($content.$input, '', ['class'=>'btn btn-info upload-btn pr-1']);
+		$value =  Html::getAttributeValue($this->model, $this->attribute);
+		
+		$image = Html::img(empty($value)?'':(Yii::$app->params['FILE_HTTP_PATH'].$value), ['class'=>'upload-show']);
+		$this->parts['{input}'] = $content.$image;
+		
+		return $this;
+		
 		
 	}
 	protected function buildTemplate(){

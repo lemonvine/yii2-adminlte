@@ -2,7 +2,9 @@
 
 namespace lemon\repository;
 
+use Yii;
 use yii\i18n\Formatter;
+use yii\helpers\Html;
 
 /**
  * 
@@ -99,6 +101,13 @@ class Format extends Formatter
 	public function asInt($value){
 		return (int)$value;
 	}
-	
+	public function asImage($value, $options = []){
+		if ($value === null) {
+			return $this->nullDisplay;
+		}
+		$value = Yii::$app->params['FILE_HTTP_PATH'].$value;
+		$options['class']='img-thumbnail img-fluid';
+		return Html::img($value, $options);
+	}
 }
 

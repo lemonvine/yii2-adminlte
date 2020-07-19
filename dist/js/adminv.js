@@ -165,7 +165,7 @@ var bolevine = {
 		});
 	},
 	vjax: function(param){
-		var base = {url:'', type:'post', data:'', target: null, callback:null};
+		var base = {url:'', type:'post', data:'', target: null, callback:null, reload: true};
 		//base = bolevine.merge(base, param);
 		$.extend(base, param);
 		$.ajax({type: base.type, url: base.url, data: base.data, success: function(r) {
@@ -174,6 +174,8 @@ var bolevine = {
 					var target = base.target;
 					var data = r.data;
 					eval(base.callback+"(target, data)");
+				}else if(base.reload){
+					bolevine.reload();
 				};
 			}else{
 				bolevine.alert({message: r.message, flag: 4});
@@ -358,6 +360,17 @@ var bolevine = {
 			url=url + paraStr;
 		}
 		return url;
+	},
+	imageurl: function (file) {
+		var url = null ;
+		if(window.webkitURL!=undefined){
+			url = window.webkitURL.createObjectURL(file);
+		}else if(window.createObjectURL!=undefined){
+			url = window.createObjectURL(file);
+		}else if(window.URL!=undefined){
+			url = window.URL.createObjectURL(file);
+		}
+		return url;
 	}
 };
 $(window).ready(function(){
@@ -496,6 +509,13 @@ $(window).ready(function(){
 		var url = $(this).data('url');
 		var form = $(this).data('form');
 		bolevine.save(url, form);
+	});
+	//上传图片
+	$(document).on('change', '.upload-btn input', function(){
+		var img = bolevine.imageurl(this.files[0]);
+		if (img) {
+			$(this).parents('.upload-btn').siblings('img').attr("src", img);
+		}
 	});
 	
 	var menuid = $("#chain_menu").val();
