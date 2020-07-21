@@ -1,7 +1,8 @@
 <?php
 	$steps = $this->context->steps;
 	$current = $this->context->current;
-	$width = $current? 1 / (count($steps)) * ($current - 1) * 100 : 0;
+	$width = 1 / (count($steps)) * 100;
+	$progress_width = $current? $width * ($current - 0.5) : 0;
 ?>
 
 <style>
@@ -23,7 +24,7 @@
 
 <div class="ui-step-wrap">
 	<div class="ui-step-bg"></div>
-	<div class="ui-step-progress" style="width:<?= $width?>%"></div>
+	<div class="ui-step-progress" style="width:<?= $progress_width?>%"></div>
 	<ul class="ui-step">
 		<?php foreach ($steps as $key=>$step):?>
 			<li class="ui-step-item <?=$key <= $current?'active':'' ?> <?=$key== $current?'action':'' ?>"><div class="ui-step-item-title"><?=$step?></div><div class="ui-step-item-num"><span><?=$key?></span></div></li>
