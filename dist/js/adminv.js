@@ -517,6 +517,17 @@ $(window).ready(function(){
 			$(this).parents('.upload-btn').siblings('img').attr("src", img);
 		}
 	});
+	//tab切换
+	$(document).on('click', '.lazytab a', function () {
+		var _tab = $(this).data("load");
+		if(_tab!=""){
+			var _target = this;
+			$.ajax({ url: LAZYTAB_URLS[_tab], success: function(rd){
+				$("#"+_tab).html(rd);
+				$(_target).data("load", "");
+			}});
+		}
+	});
 	
 	var menuid = $("#chain_menu").val();
 	if(menuid !=undefined && menuid != ""){
