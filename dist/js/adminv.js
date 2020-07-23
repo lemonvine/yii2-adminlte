@@ -166,7 +166,6 @@ var bolevine = {
 	},
 	vjax: function(param){
 		var base = {url:'', type:'post', data:'', target: null, callback:null, reload: true};
-		//base = bolevine.merge(base, param);
 		$.extend(base, param);
 		$.ajax({type: base.type, url: base.url, data: base.data, success: function(r) {
 			if(r.status==202){
@@ -390,6 +389,96 @@ $(window).ready(function(){
 		var _maxmin = $(this).data('maxmin');
 		if(_maxmin) param.max= true;
 		bolevine.dialog(param);
+	});
+	//保存
+	$(document).on('click', '.preservation', function(){
+		var _form = $(this).data('form');
+		var _method = $(this).data('method');
+		$("#submit_type").val(_method);
+		var data = $(_form).data('yiiActiveForm');
+		if(data){
+			data.validated=true;
+			$(_form).data('yiiActiveForm',data);
+		}
+		try{
+			var _tabs = $(_form + " li>a.active");
+			if(_tabs.length>0){
+				var _tabid = $(_tabs[0]).attr('aria-controls');
+				var _scroll = $("#"+_tabid).scrollTop();
+				bolevine.cookie(bolevine.cookie_name.save_reappear, ""+_tabid+","+_scroll, 2);
+			}
+		}
+		catch(ex){
+		}
+		if(_method=='post'){
+			$(_form).submit();
+		}else if(_method=='ajax'){
+			layer.load();
+			var _url = decodeURI($(this).data('url'));
+			var patt = _url.match(/(?<={).*?(?=})/g);
+			if(patt){
+				for(var i=0,l=patt.length; i<l; i++){
+					var _val = $("#"+patt[i]).val();
+					var reg = new RegExp("{"+patt[i]+"}");
+					_url = _url.replace(reg, _val);
+				}
+			}
+			var data = new FormData($(_form)[0]);
+			$.ajax({
+				type: 'POST',
+				dataType: 'json',
+				processData: false,
+				contentType: false,
+				data: data,
+				url: _url,
+				success: function(r) {
+					layer.closeAll();
+					if(r.status==202){
+						layer.msg(r.data);
+					}else{
+						layer.msg(r.message);
+					}
+					$("#submit_type").val('submit');
+				},
+				error: function(xhr, textStatus, errorThrown) {
+					layer.closeAll();
+				}
+			});
+		}
+		
+	});
+	//提交
+	$(document).on('click', '.ceremonial',function(){
+		if(!bolevine.precall($(this))) return false;
+		var _form = $(this).data('form');
+		var _word = $(this).data('word');
+		layer.confirm(_word, {
+		  btn: ['提交','放弃'], skin: 'layui-layer-molv'
+		}, function(index){
+			$("#submit_type").val('submit');
+			$(_form+' .nav-tabs li').removeClass('active').eq(0).addClass('active');
+			$(_form+' .tab-content .tab-pane').removeClass('active').eq(0).addClass('active');
+			try{
+				$(_form).submit();
+				layer.close(index);
+				setTimeout(function () {
+					var error = $(".is-invalid");
+					if(error.length>0){
+						var block = $(error[0]).parents('.form-group').find(".invalid-feedback");
+						var message = $(block[0]).html();
+						bolevine.alert({flag: 4, message: message});
+					}
+				}, 500);
+			}
+			catch($er){
+				var message = '出现异常,请联系管理员';
+				bolevine.alert({message: message});
+			}
+		}, function(){
+			var message = '已放弃';
+			bolevine.alert({message: message});
+		});
+		
 	});
 	//确认框
 	$(document).on('click', '.confirmdialog',function(){

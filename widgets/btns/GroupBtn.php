@@ -34,26 +34,79 @@ class GroupBtn extends Widget
 		echo Html::endTag(ArrayHelper::remove($this->options, 'tag', 'div'));
 	}
 	
-	public function setSubmitType($is){
-		$this->submit_type = $is;
-	}
-	
 	public static function BackButton($isbtn=true){
 		return Html::Button('返回', ['class' => ($isbtn?'btn btn-':static::$btn_css).'default', 'onclick'=>'bolevine.forward()']);
 	}
 	
-	public static function OkButton($isbtn=true){
-		return Html::submitButton('确定', ['id' => 'btn_submit', 'class' => ($isbtn?'btn btn-':'').'success']);
+	public static function Preservation($config=[]){
+		$params = ['title'=>'保存', 'id'=>'btn_save', 'color'=>'success', 'isbtn'=>true, 'form'=>'#main_form', 'method'=>'post', 'url'=>'', 'display'=>true];
+		$params = array_merge($params, $config);
+		
+		$options = [
+			'id' => $params['id'],
+			'class' => ($params['isbtn']?'btn btn-':static::$btn_css).$params['color']. ' preservation',
+			'data-form' => $params['form'],
+			'data-method' => $params['method'],
+			'data-url'=>$params['url'],
+		];
+		if(!$params['display']){
+			$options['style']='display:none;';
+		}
+		
+		return Html::Button($params['title'], $options);
 	}
 	
-	public static function SubmitButton($config=[]){
+	/**
+	 * 直接提交/保存
+	 * @param array $config
+	 * @return string
+	 */
+	public static function OkButton($config=[]){
 		$params = ['title'=>'确定', 'color'=>'success', 'isbtn'=>true, ];
 		$params = array_merge($params, $config);
-		return Html::submitButton($params['title'], ['id' => 'btn_submit', 'class' => ($params['isbtn']?'btn btn-':'').$params['color']]);
+		return Html::submitButton($params['title'], [
+			'id' => 'btn_ok',
+			'class' => ($params['isbtn']?'btn btn-':static::$btn_css).$params['color'],
+		]);
 	}
 	
-	public static function CancelButton($isbtn=true){
-		return Html::Button('取消', ['class' => ($isbtn?'btn btn-':'').'default', 'onclick'=>'window.parent.bolevine.turnoff()']);
+	/**
+	 * 提交，提交前会确认
+	 * @param array $config
+	 * @return string
+	 */
+	public static function SubmitButton($config=[]){
+		$params = ['title'=>'提交', 'id'=>'btn_submit', 'color'=>'warning', 'isbtn'=>true, 'form'=>'#main_form', 'method'=>'post', 'url'=>'', 'display'=>true];
+		$params = array_merge($params, $config);
+		$options = [
+			'id' => $params['id'],
+			'class' => ($params['isbtn']?'btn btn-':static::$btn_css).$params['color']. ' ceremonial',
+			'data-form' => $params['form'],
+			'data-method' => $params['method'],
+		];
+		if(!empty($params['display'])){
+			$options['style']='display:none;';
+		}
+		if(!$params['url']){
+			$options['data-url']=$params['url'];
+		}
+		
+		return Html::Button($params['title'], $options);
+	}
+	
+	/**
+	 * 取消
+	 * @param array $config
+	 * @return string
+	 */
+	public static function CancelButton($config=[]){
+		$params = ['title'=>'取消', 'color'=>'default', 'isbtn'=>true, ];
+		$params = array_merge($params, $config);
+		return Html::Button($params['title'], [
+			'id' => 'btn_ok',
+			'class' => ($params['isbtn']?'btn btn-':static::$btn_css).$params['color'],
+			'onclick'=>'window.parent.bolevine.turnoff()',
+		]);
 	}
 	
 	public static function SearchButton($config=[]){
@@ -71,13 +124,19 @@ class GroupBtn extends Widget
 		return $content;
 	}
 	
+	public static function GoButton($config=[]){
+		$params = ['title'=>'保存', 'url'=>'', 'isbtn'=>true, 'color'=>'info', 'target'=>'_self'];
+		$params = array_merge($params, $config);
+		
+		return Html::a($params['title'],  $params['url'], ['class' => ($params['isbtn']?'btn btn-':static::$btn_css).$params['color'], 'target'=>$params['target']]);
+	}
+	
 	public static function SearchAddButton($config=[]){
 		$params = ['target'=>'model', 'title'=>'添加', 'url'=>['create'], 'back'=>false];
 		$params = array_merge($params, $config);
 		if($params['back']){
 			$button = self::BackButton();
-		}
-		else{
+		}else{
 			$button ='';
 		}
 		$button .= Html::submitButton('查询', ['class' => 'btn btn-primary']);
@@ -90,13 +149,6 @@ class GroupBtn extends Widget
 		}
 		$content = Html::tag('div', $button, ['class' => "form-group pull-right btns-line ml-auto"]);
 		return $content;
-	}
-	
-	public static function GoButton($config=[]){
-		$params = ['title'=>'保存', 'url'=>'', 'isbtn'=>true, 'color'=>'info', 'target'=>'_self'];
-		$params = array_merge($params, $config);
-		
-		return Html::a($params['title'],  $params['url'], ['class' => ($params['isbtn']?'btn btn-':static::$btn_css).$params['color'], 'target'=>$params['target']]);
 	}
 	
 	public static function DialogButton($config=[]){
@@ -169,6 +221,7 @@ class GroupBtn extends Widget
 		echo self::SearchButton(['unique'=>false, 'form_id'=>$this->form_id]);
 	}
 	
+	
 	/**
 	 * 弹出对话框
 	 * @param unknown $title
@@ -179,6 +232,10 @@ class GroupBtn extends Widget
 	public function dialog($config=[]){
 		$config['isbtn']=true;
 		echo self::DialogButton($config);
+	}
+	
+	public function preservate($config=[]){
+		echo self::Preservation($config);
 	}
 	
 	/**
