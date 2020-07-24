@@ -123,6 +123,10 @@ class AdminLteAsset extends AssetBundle
 					$js[] = "layui/layui";
 					$js[] = "layui/modules/form";
 					break;
+				case 'cropper':
+					$css[] = "plugins/cropper";
+					$js[] = "plugins/cropper";
+					break;
 				default:
 					if(substr($module,0,2)=='js'){
 						$js[] = "{$module}";
