@@ -1,14 +1,8 @@
 *.DS_Store
 *.log
 *.zip
-.idea
 .buildpath
-.sass-cache/
-/nbproject/
-/nbproject/private/
-/node_modules/
-ad.js
-TODO
-test.html
 vendor
 composer.lock
+dist/js/*.min.js
+dist/css/*.min.css

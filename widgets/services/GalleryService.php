@@ -76,7 +76,7 @@ class GalleryService extends Component
 		
 	];
 	protected $extension = [
-		'jpg'=>1, 'gif'=>1, 'png'=>1, 'jpeg'=>1, 'ico'=>1, 'bmp'=>1,
+		'jpg'=>1, 'jpeg'=>1, 'gif'=>1, 'png'=>1, 'jpeg'=>1, 'ico'=>1, 'bmp'=>1,
 		'mp3'=>2, 'amr'=>2, 'm4v'=>2, 'wav'=>2,
 		'mp4'=>3, 'mov'=>3,
 		'pdf'=>4,

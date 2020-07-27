@@ -24,12 +24,12 @@ class AdminLteAsset extends AssetBundle
 		$postfix = YII_DEBUG ? '' : '.min';
 		$version = Yii::$app->params['admin_version'];
 		
-		$this->js[] = "js/adminlte{$postfix}.js?v=v{$version}";
-		$this->js[] = "layer/layer{$postfix}.js?v=v{$version}";
+		$this->js[] = "bootstrap/adminlte{$postfix}.js?v=v{$version}";
+		$this->js[] = "layui/layer{$postfix}.js?v=v{$version}";
 		$this->js[] = "js/adminv{$postfix}.js?v=v{$version}";
 		
-		$this->css[] = "css/font-awesome{$postfix}.css?v=v{$version}";
-		$this->css[] = "css/adminlte{$postfix}.css?v=v{$version}";
+		$this->css[] = "bootstrap/font-awesome{$postfix}.css?v=v{$version}";
+		$this->css[] = "bootstrap/adminlte{$postfix}.css?v=v{$version}";
 		$this->css[] = "css/adminv{$postfix}.css?v=v{$version}";
 		
 		parent::init();
@@ -52,7 +52,7 @@ class AdminLteAsset extends AssetBundle
 		foreach ($needs as $module){
 			switch ($module){
 				case 'datepicker':
-					$js[] = "laydate/laydate";
+					$js[] = "layui/laydate";
 					break;
 				case 'handlebar':
 					$js[] = "plugins/handlebars";
@@ -116,12 +116,16 @@ class AdminLteAsset extends AssetBundle
 					$css[] = "gallery/album";
 					break;
 				case 'layer':
-					$js[] = "layer/layer";
+					$js[] = "layui/layer";
 					break;
 				case 'layui':
 					$css[] = "layui/layui";
 					$js[] = "layui/layui";
 					$js[] = "layui/modules/form";
+					break;
+				case 'cropper':
+					$css[] = "plugins/cropper";
+					$js[] = "plugins/cropper";
 					break;
 				default:
 					if(substr($module,0,2)=='js'){
