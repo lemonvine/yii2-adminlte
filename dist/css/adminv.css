@@ -17,6 +17,7 @@ body,html{height:100%}
 .upload-show{width: 100px;max-height: 150px;}
 
 .form-search .form-group .flex{max-width:370px;}
+.grid-view .img-thumbnail{max-height: 120px; max-width:200px;}
 @media (min-width: 1200px) and (max-width: 1400px) {
 	.form-search .col-lg-3{flex: 0 0 33.333333%;max-width: 33.333333%;}
 }

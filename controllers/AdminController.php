@@ -138,6 +138,11 @@ class AdminController extends Controller
 		return "<script type='text/javascript'>{$js}</script>";
 	}
 	
+	public function modelClose($msg="操作成功"){
+		$msg = addslashes($msg);
+		return "<script type='text/javascript'>window.parent.bolevine.turnoff();window.parent.bolevine.alert({message:'{$msg}'});</script>";
+	}
+	
 	public function pjaxSuccess($msg='', $url='')
 	{
 		$msg = addslashes($msg);

@@ -37,18 +37,18 @@ trait ModelTrait
 		$upload_file = UploadedFile::getInstance($model, $field);
 		if ($upload_file) {
 			$sys_path = Yii::$app->params['FILE_PHYSICAL_PATH'];
-			$doc = Utility::createRandom(20).'.'.$upload_file->extension;
-			$save_path = $this->save_path.date('Y/m');
+			$doc = date('d').strtolower(Utility::createRandom(10)).'.'.$upload_file->extension;
+			$save_path = $this->save_path.date('Y/m/');
 			if (!file_exists($sys_path.$save_path)){
 				mkdir($sys_path.$save_path, 0777, true);
 			}
-			$save_result = $upload_file ->saveAs($sys_path.$save_path.$doc);
+			$save_result = $upload_file->saveAs($sys_path.$save_path.$doc);
 			if(!$save_result){
 				throw new \Exception("文件保存失败");
 			}
 			
-			return $this->save_path.$doc;
+			return $save_path.$doc;
 		}
-		return '';
+		return $model[$field];
 	}
 }
