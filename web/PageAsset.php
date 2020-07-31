@@ -1,6 +1,7 @@
 <?php
 namespace lemon\web;
 
+use Yii;
 use yii\web\AssetBundle;
 
 /**
@@ -10,13 +11,15 @@ use yii\web\AssetBundle;
 class PageAsset extends AssetBundle
 {
 	public $sourcePath = '@vendor/lemonvine/yii2-adminlte/dist';
-	public $css = [
-		'css/font-awesome.min.css',
-		'css/adminlte.min.css',
-	];
 	
 	public function init()
 	{
+		$postfix = YII_DEBUG ? '' : '.min';
+		$version = Yii::$app->params['admin_version'];
+		
+		$this->css[] = "bootstrap/font-awesome{$postfix}.css?v=v{$version}";
+		$this->css[] = "bootstrap/adminlte{$postfix}.css?v=v{$version}";
+		
 		parent::init();
 	}
 	
