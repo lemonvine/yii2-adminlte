@@ -4,6 +4,7 @@ body,html{height:100%}
 .flex{display: flex;align-items: center;line-height: 17px;}
 .flex>label{text-align: right;color:#555;padding: 0 8px 0 0;margin:0;width: 100px;}
 .form-group.has-success label,.form-group.has-error label{color:#555;}
+.form-group.required{color: #dc3545;}
 .flex>input,.flex>select,.flex>div{flex:1}
 .flex>div>input,.flex>div>select{width:100%}
 
