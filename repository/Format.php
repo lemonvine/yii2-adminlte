@@ -56,6 +56,10 @@ class Format extends Formatter
 		return Pattern::$CODE[$s1][$value]??'';
 	}
 	
+	public function asStatus($value){
+		return Pattern::$CODE['status'][$value]??'';
+	}
+	
 	public function asFmtd($value, $format='Y-m-d'){
 		if(!empty($value)){
 			return  date($format, $value);
