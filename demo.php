@@ -8,7 +8,8 @@ Html::a('删除', 'javascript:;', ['class'=>'confirmdialog', 'title' => '删除'
 Utility::addon('万元')
 
 change显示隐藏
-$form->field($models['customer'], 'marriage_status')->dropDownList($all_choose['marriage_status'], ['prompt'=>'请选择', 'class'=>'form-control leafblinds',
+$form->field($models['customer'], 'marriage_status')->dropDownList($all_choose['marriage_status'],
+['prompt'=>'请选择', 'class'=>'form-control leafblinds',
 	'data-mutex'=>1, 'data-map'=>[2=>'#marry', 3=>'#divorce', 4=>'#bereavement']])
 <div id="divorce" class="col-12 row">
 	 $form->field($models['customer'], 'divorce_date')->datePicker()
