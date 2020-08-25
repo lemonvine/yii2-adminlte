@@ -341,7 +341,7 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 		$items = ArrayHelper::remove($options, 'items');
 		$url = ArrayHelper::remove($options, 'url');
 		$hidden_id = isset($options['id'])?$options['id']:Html::getInputId($this->model, $this->attribute);
-		$display_id= $hidden_id.'_gl';
+		$display_id= $hidden_id.'-gl';
 		$containerOptions = [
 			'id'=>$display_id,
 			'class'=>'container row',

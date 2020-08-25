@@ -2,12 +2,13 @@
 body,html{height:100%}
 .form-control.is-invalid, .was-validated .form-control:invalid,.form-control.is-valid, .was-validated .form-control:valid{padding-right:6px!important;background-image: none!important;}
 .flex{display: flex;align-items: center;line-height: 17px;}
-.flex>label{text-align: right;color:#555;padding: 0 8px 0 0;margin:0;width: 100px;}
+.flex>label,.form-group>.col-form-label{text-align: right;color:#555;padding: 0 8px 0 0;margin:0;width: 100px;}
 .form-group.has-success label,.form-group.has-error label{color:#555;}
+.form-group.required>label{color: #dc3545!important;}
 .flex>input,.flex>select,.flex>div{flex:1}
 .flex>div>input,.flex>div>select{width:100%}
 
-.btns-line{margin: 12px 11px 0 0;}
+.btns-line{margin: 8px;}
 .btns-line .btn{padding: 5px 18px; margin:0 4px;}
 
 .tab-content{padding: 8px;}
@@ -17,6 +18,7 @@ body,html{height:100%}
 .upload-show{width: 100px;max-height: 150px;}
 
 .form-search .form-group .flex{max-width:370px;}
+.grid-view .img-thumbnail{max-height: 120px; max-width:200px;}
 @media (min-width: 1200px) and (max-width: 1400px) {
 	.form-search .col-lg-3{flex: 0 0 33.333333%;max-width: 33.333333%;}
 }
