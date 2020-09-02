@@ -274,6 +274,7 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 		foreach ($attributes as $attr){
 			$content .= (empty($content)?'':$separator).Html::getAttributeValue($this->model, $attr);
 		}
+		$this->template = "{label}<div class=\"flex\">{input}</div>";
 		$this->parts['{input}'] = $content;
 		return $this;
 	}
