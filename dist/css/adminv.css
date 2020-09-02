@@ -25,3 +25,7 @@ body,html{height:100%}
 @media (min-width: 992px) and (max-width: 1140px) {
 	.form-search .col-md-4{flex: 0 0 50%;max-width: 50%;}
 }
+@media print{
+.print{display:block;}
+.noprint{display:none;}
+}
