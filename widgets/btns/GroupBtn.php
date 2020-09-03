@@ -225,7 +225,12 @@ class GroupBtn extends Widget
 		if($back){
 			$btns[] = ['target'=>'back'];
 		}
+		$extras = ArrayHelper::remove($config, 'items', []);
+		if(count($extras)>0){
+			$btns = array_merge($btns, $extras);
+		}
 		$btns[] = $add_params;
+		//var_dump($btns);die;
 		return self::SearchButtons($btns, $config);
 	}
 	
