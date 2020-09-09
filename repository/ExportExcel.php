@@ -318,9 +318,6 @@ class ExportExcel
 				$flag_row_height= true;
 				
 				foreach ($head as $c=>$column){
-					
-					
-					
 					if(empty($column['attribute'])){
 						continue;
 					}
@@ -347,7 +344,7 @@ class ExportExcel
 						}
 						else{
 							if(!empty($column['value'])){
-								call_user_func($column['value'],$row);
+								$value = call_user_func($column['value'], $row);
 							}else if(empty($format)){
 								$value = $row[$attr];
 							}else{
