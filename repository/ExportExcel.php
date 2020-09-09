@@ -316,10 +316,15 @@ class ExportExcel
 					$default= array_merge($default, $configs['style']['body']);
 				}
 				$flag_row_height= true;
+				
 				foreach ($head as $c=>$column){
+					
+					
+					
 					if(empty($column['attribute'])){
 						continue;
 					}
+					
 					$attr = $column['attribute'];
 					$format = $column['format']??'';
 					$added = $column['added'];
@@ -331,6 +336,7 @@ class ExportExcel
 					$i =$begin;
 					$merge_dealer = '';
 					$merge_begin = $begin;
+					
 					foreach ($body as $r=>$row){
 						if($flag_row_height){
 							$sheet->getRowDimension($i)->setRowHeight($body_height);
@@ -340,10 +346,11 @@ class ExportExcel
 							$value = $i-$begin+1;
 						}
 						else{
-							if(empty($format)){
+							if(!empty($column['value'])){
+								call_user_func($column['value'],$row);
+							}else if(empty($format)){
 								$value = $row[$attr];
-							}
-							else{
+							}else{
 								$value = $formatter->format($row[$attr], $format);
 							}
 							
@@ -372,6 +379,7 @@ class ExportExcel
 						$this->fillCell($sheet, $item);
 						$i++;
 					}
+					
 					if($added=='merge'){
 						if($i>($merge_begin+1)){
 							$sheet->mergeCells($col_name.$merge_begin.":".$col_name.($i-1));
