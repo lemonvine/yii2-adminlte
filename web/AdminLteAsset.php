@@ -57,12 +57,13 @@ class AdminLteAsset extends AssetBundle
 				case 'handlebar':
 					$js[] = "plugins/handlebars";
 					break;
+				case 'bundle':
+					$js[] = "bootstrap/bootstrap.bundle";
+					break;
 				case 'combo':
 					$css[] = "plugins/combo";
 					$js[] = "plugins/combo";
 					break;
-				case 'collapse':
-					$js[] = "bootstrap/plugins/collapse";
 					break;
 				case 'icheck':
 					$css[] = "plugins/icheck-bootstrap";
@@ -79,15 +80,6 @@ class AdminLteAsset extends AssetBundle
 				case 'echarts':
 					$js[] = "plugins/echarts";
 					break;
-				case 'tab':
-					$js[] = "bootstrap/plugins/util";
-					$js[] = "bootstrap/plugins/tab";
-					break;
-				case 'dropdown':
-					$js[] = "plugins/popper";
-					$js[] = "bootstrap/plugins/util";
-					$js[] = "bootstrap/plugins/dropdown";
-					break;
 				case 'bootstraptable':
 					$css[] = "plugins/bootstrap-table";
 					$js[] = "plugins/bootstrap-table";
@@ -95,12 +87,6 @@ class AdminLteAsset extends AssetBundle
 				case 'viewer':
 					$css[] = "viewer/viewer";
 					$js[] = "viewer/viewer";
-					break;
-				case 'summernote':
-					$js[] = "plugins/popper";
-					$js[] = "bootstrap/plugins/util";
-					$js[] = "bootstrap/plugins/tooltip";
-					$js[] = "bootstrap/plugins/dropdown";
 					break;
 				case 'jqueryui':
 					$js[] = "plugins/jquery-ui";

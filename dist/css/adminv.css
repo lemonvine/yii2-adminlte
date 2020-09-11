@@ -29,3 +29,33 @@ body,html{height:100%}
 .print{display:block;}
 .noprint{display:none;}
 }
+.lemon-collapse{
+}
+.lemon-collapse>label{
+	width: 20px;
+	height: 20px;
+	margin: 0 10px;
+	line-height: 20px;
+	cursor: pointer;
+	background: url(../img/dropdown.png) no-repeat center center;
+	background-size: contain;
+}
+.lemon-collapse>input{
+	display: none;
+}
+.lemon-collapse>input:checked~label:first-of-type{
+	animation: dropdownrotate .5s infinite linear;
+	-webkit-animation: dropdownrotate .5s  infinite linear;
+	animation-iteration-count:1;
+	-webkit-animation-iteration-count:1;
+	transform: rotate(180deg);
+}
+@keyframes dropdownrotate {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(180deg);
+	}
+}
+

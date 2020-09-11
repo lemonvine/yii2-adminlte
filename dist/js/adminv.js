@@ -329,6 +329,10 @@ var bolevine = {
 			
 			var _id = $(this).attr('id');
 			var _tp = $(this).data('template');
+			var _sort = $(this).data('sort');
+			if(_sort=="desc"){
+				_v = _v.reverse();
+			}
 			var _template = Handlebars.compile($(_tp).html());
 			$("#hb_"+_id).html(_template(_v));
 		});

@@ -284,8 +284,9 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 		$attribute = $this->attribute;
 		$hidden_id = isset($options['id'])?$options['id']:Html::getInputId($this->model, $attribute);
 		$display_id= 'hb_'.$hidden_id;
+		$sort = ArrayHelper::remove($options, 'sort', 'asc');
 		$value =  Html::getAttributeValue($this->model, $attribute);
-		$hidden = Html::activeHiddenInput($this->model, $attribute, ['value'=>$value, 'id'=>$hidden_id, 'class'=>'handlebar-field', 'data-template'=>$options['template']]);
+		$hidden = Html::activeHiddenInput($this->model, $attribute, ['value'=>$value, 'id'=>$hidden_id, 'class'=>'handlebar-field', 'data-template'=>$options['template'], 'data-sort'=>$sort]);
 		$handlebar = Html::tag('div', '', ['id'=>$display_id, 'class'=>'handlebar-info', 'data-hidden'=>$hidden_id]);
 		$this->parts['{input}'] = $hidden.$handlebar;
 		return $this;

@@ -40,7 +40,7 @@ class Summernote extends InputWidget
 	
 	public function init()
 	{
-		AdminLteAsset::loadModule($this->getView(), 'summernote');
+		AdminLteAsset::loadModule($this->getView(), ['bundle']);
 
 		$this->options = array_merge($this->defaultOptions, $this->options);
 		$this->clientOptions = array_merge($this->defaultClientOptions, $this->clientOptions);
