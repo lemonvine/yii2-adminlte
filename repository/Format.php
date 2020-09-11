@@ -69,6 +69,10 @@ class Format extends Formatter
 			return  date($format, $value);
 		}
 	}
+	
+	public function asMoney($value){
+		return preg_replace('/(?<=[0-9])(?=(?:[0-9]{3})+(?![0-9]))/', ',', $value);
+	}
 	public function friendly($value)
 	{
 		$limit = time() - $value;
