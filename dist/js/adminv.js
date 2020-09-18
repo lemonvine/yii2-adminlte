@@ -396,9 +396,11 @@ $(window).ready(function(){
 	});
 	//保存
 	$(document).on('click', '.preservation', function(){
-		var _form = $(this).data('form');
-		var _method = $(this).data('method');
-		$("#submit_type").val(_method);
+		var _form = $(this).data('f');
+		var _method = $(this).data('m');
+		var _submit = $(this).data('s');
+		var _callback = $(this).data('c');
+		$("#submit_type").val(_submit);
 		var data = $(_form).data('yiiActiveForm');
 		if(data){
 			data.validated=true;
@@ -418,7 +420,7 @@ $(window).ready(function(){
 			$(_form).submit();
 		}else if(_method=='ajax'){
 			layer.load();
-			var _url = decodeURI($(this).data('url'));
+			var _url = decodeURI($(this).data('u'));
 			var patt = _url.match(/(?<={).*?(?=})/g);
 			if(patt){
 				for(var i=0,l=patt.length; i<l; i++){
@@ -438,11 +440,18 @@ $(window).ready(function(){
 				success: function(r) {
 					layer.closeAll();
 					if(r.status==202){
-						layer.msg(r.data);
+						if(_callback!=""){
+							var _data=r.data;
+							eval(_callback+"(_data)");
+						}else if(r.data != ""){
+							layer.msg(r.data);
+						}else{
+							layer.msg('保存成功');
+						}
+						
 					}else{
 						layer.msg(r.message);
 					}
-					$("#submit_type").val('submit');
 				},
 				error: function(xhr, textStatus, errorThrown) {
 					layer.closeAll();
@@ -526,7 +535,14 @@ $(window).ready(function(){
 	});
 	//change事件显示隐藏模块
 	$(document).on('change', '.leafblinds', function(){
-		var _val=$(this).val();
+		var _tag = this.tagName;
+		var _val;
+		if(_tag=='DIV'){
+			_val=$(this).find('input:radio:checked').val();
+		}else{
+			_val=$(this).val();
+		}
+		
 		var _mutex=""+$(this).data('mutex');
 		var _map=bolevine.str2json($(this).data('map'));
 		var _land=$(this).data('land');
@@ -544,6 +560,10 @@ $(window).ready(function(){
 			$(_map[_val]).show();
 		}else if(_land!=""){
 			$(_land).show();
+		}
+		var _callback = $(this).data('callback');
+		if(_callback != undefined && _callback != ""){
+			eval("("+_callback+"(_val))");
 		}
 	});
 	//begin handlebar

@@ -33,6 +33,28 @@ class GroupBtn extends Widget
 		echo Html::endTag(ArrayHelper::remove($this->options, 'tag', 'div'));
 	}
 	
+	public static function Button($config){
+		$params = ['title'=>'确定', 'color'=>'primary', 'isbtn'=>true, 'class'=>'', 'id'=>'', 'data'=>[]];
+		$params = array_merge($params, $config);
+		$class = ($params['isbtn']?'btn btn-':static::$btn_css).$params['color'];
+		if(!empty($params['class'])){
+			$class .= ' '.$params['class'];
+		}
+		$options = [
+			'class'=>$class,
+		];
+		if(!empty($params['id'])){
+			$options['id'] = $params['id'];
+		}
+		if(count($params['data'])>0){
+			foreach ($params['data'] as $key=>$data){
+				$options['data-'.$key] = $data;
+			}
+		}
+		
+		return Html::Button($params['title'], $options);
+	}
+	
 	/**
 	 * 后退
 	 * @param array $config
@@ -268,15 +290,17 @@ class GroupBtn extends Widget
 	}
 	
 	public static function Preservation($config=[]){
-		$params = ['title'=>'保存', 'id'=>'btn_save', 'color'=>'success', 'isbtn'=>true, 'form'=>'#main_form', 'method'=>'post', 'url'=>'', 'display'=>true];
+		$params = ['title'=>'保存', 'id'=>'btn_save', 'isbtn'=>true, 'color'=>'success', 'url'=>'', 'callback'=>'', 'form'=>'#main_form', 'method'=>'post', 'submit'=>'save', 'display'=>true];
 		$params = array_merge($params, $config);
 		
 		$options = [
 			'id' => $params['id'],
 			'class' => ($params['isbtn']?'btn btn-':static::$btn_css).$params['color']. ' preservation',
-			'data-form' => $params['form'],
-			'data-method' => $params['method'],
-			'data-url'=>$params['url'],
+			'data-f' => $params['form'],
+			'data-m' => $params['method'],
+			'data-s' => $params['submit'],
+			'data-c' => $params['callback'],
+			'data-u'=>$params['url'],
 		];
 		if(!$params['display']){
 			$options['style']='display:none;';
@@ -307,6 +331,9 @@ class GroupBtn extends Widget
 		}
 		return Html::a($params['title'], 'javascript:;', ['class'=>($params['isbtn']?'btn btn-':static::$btn_css).$params['color'].' asynchtrace', 'data-type'=>$params['type'], 'data-data'=>$data,
 			'data-url'=>$params['url'], 'data-callback'=>$params['callback']]);
+	}
+	public function btn($config=[]){
+		echo self::Button($config);
 	}
 	
 	public function back(){
