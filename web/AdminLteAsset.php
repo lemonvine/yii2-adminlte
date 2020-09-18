@@ -57,6 +57,10 @@ class AdminLteAsset extends AssetBundle
 				case 'handlebar':
 					$js[] = "plugins/handlebars";
 					break;
+				case 'table':
+					$css[] = "plugins/table";
+					$js[] = "plugins/table";
+					break;
 				case 'bundle':
 					$js[] = "bootstrap/bootstrap.bundle";
 					break;
