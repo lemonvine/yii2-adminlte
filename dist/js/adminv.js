@@ -329,7 +329,8 @@ var bolevine = {
 			
 			var _id = $(this).attr('id');
 			var _tp = $(this).data('template');
-			var _sort = $(this).data('sort');
+			var _sort = $(this).parents('.form-group').data('sort');
+			console.log(_sort);
 			if(_sort=="desc"){
 				_v = _v.reverse();
 			}
