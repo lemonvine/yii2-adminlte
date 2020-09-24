@@ -6,6 +6,7 @@ var bolevine = {
 	referer: '',
 	opening: null,
 	cookie_name: {save_reappear: "j2u8i3"},
+	loadimg: '<div class="loading"></div>',
 	str2json: function(data){
 		if(typeof(data)=="string"){
 			try{
@@ -375,6 +376,21 @@ var bolevine = {
 			url = window.URL.createObjectURL(file);
 		}
 		return url;
+	},
+	rctt: function(url, callback){
+		$("#content").html(bolevine.loadimg);
+		$.ajax({
+			url: url,
+			success: function(result){
+				$("#content").html(result);
+				if(callback){
+					eval("("+callback+"())");
+				}
+			},
+			error: function(jqXHR, textStatus, errorThrown){
+				$("#content").html("数据出错了，请联系管理员");
+			}
+		});
 	}
 };
 $(window).ready(function(){
@@ -589,8 +605,51 @@ $(window).ready(function(){
 
 		$("#"+_id).val(JSON.stringify(_v));
 	});
-	
 	//end handlebar
+	//begin list load
+	$(document).on('click', '.cursor-item', function(){
+		var _id = $(this).data('id');
+		var _url = $(this).data('url');
+		var _callback = $(this).data('callback');
+		if(!_url){
+			_url = "";
+		}
+		_url = eval('RECONTURL'+_url);
+		var _url = bolevine.appendurl(_url, 'id', _id);
+		bolevine.rctt(_url, _callback);
+	});
+	//load content
+	$(document).on('click', '.loadpage', function(){
+		var _id = $(this).data('k');
+		var _url = $(this).data('url');
+		var _target = $(this).data('target');
+		var _type = $(this).data('type');
+		var _callback = $(this).data('callback');
+		var that=this;
+		if(_id){
+			_url = bolevine.appendurl(_url, 'key', _id);
+		}
+		if(!_type){
+			_type = 'replace';
+		}
+		$.ajax({type: 'get', url: _url, success: function(r){
+				if(_type=='replace'){
+					$(_target).html(r);
+				}else if(_type=='append'){
+					$(_target).append(r);
+				}
+				if(_id){
+					_id = parseInt(_id)+1;
+					$(that).data('k', _id).attr('data-k', _id);
+				}
+				if(_callback){
+					eval(_callback+"(_target)");
+				}
+			}, error: function(e){
+				bolevine.alert({message: "错误："+e.responseText, flag: 4});
+			}
+		});
+	});
 	$(document).on('click', '.btn-radio',function(){
 		var radio_type = $(this).data("radio");
 		$(".btn-radio[data-radio="+radio_type+"]").removeClass('btn-info');

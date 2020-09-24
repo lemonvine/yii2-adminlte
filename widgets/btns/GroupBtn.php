@@ -129,9 +129,16 @@ class GroupBtn extends Widget
 		if(!empty($params['badge'])){
 			$badge = '<span class="badge badge-pill badge-danger">'.$params['badge'].'</span>';
 		}
-		return Html::a($params['title'].$badge, 'javascript:;',
-				['class'=>$params['class'].($params['isbtn']?'btn btn-':static::$btn_css).$params['color'].' modaldialog', 'data-title' => $params['title'],
-					'data-area' => $params['size'], 'data-url' => $params['url']]);
+		$options = [
+			'class'=>$params['class'].($params['isbtn']?'btn btn-':static::$btn_css).$params['color'].' modaldialog',
+			'data-title' => $params['title'],
+			'data-area' => $params['size'],
+			'data-url' => $params['url'],
+		];
+		if(isset($config['id'])){
+			$options['id']=$config['id'];
+		}
+		return Html::a($params['title'].$badge, 'javascript:;', $options);
 	}
 	
 	/**

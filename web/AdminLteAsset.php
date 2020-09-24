@@ -108,6 +108,9 @@ class AdminLteAsset extends AssetBundle
 				case 'layer':
 					$js[] = "layui/layer";
 					break;
+				case 'sticky':
+					$js[] = "plugins/jquery.sticky";
+					break;
 				case 'layui':
 					$css[] = "layui/layui";
 					$js[] = "layui/layui";

@@ -1,5 +1,6 @@
 @charset "UTF-8";
 body,html{height:100%}
+.loading{width: 25px; height:25px; background: #fff url(../img/loading.gif) no-repeat center;}
 .form-control.is-invalid, .was-validated .form-control:invalid,.form-control.is-valid, .was-validated .form-control:valid{padding-right:6px!important;background-image: none!important;}
 .flex{display: flex;align-items: center;line-height: 17px;}
 .flex>label,.form-group>.col-form-label{text-align: right;color:#555;padding: 0 8px 0 0;margin:0;width: 100px;}
@@ -30,32 +31,50 @@ body,html{height:100%}
 .noprint{display:none;}
 }
 .lemon-collapse{
+	width: 100%;
+	position: absolute;
+	top: 0px;
+	right: 0px;
 }
 .lemon-collapse>label{
-	width: 20px;
+	width: 99%;
 	height: 20px;
 	margin: 0 10px;
 	line-height: 20px;
 	cursor: pointer;
-	background: url(../img/dropdown.png) no-repeat center center;
-	background-size: contain;
+	text-align: right;
+}
+.lemon-collapse>label>i{
+	margin-right: 8px;
+	animation: collapseclose .5s infinite linear;
+	-webkit-animation: collapseclose .5s infinite linear;
+	animation-iteration-count:1;
+	-webkit-animation-iteration-count:1;
+	transform: rotate(0deg);
 }
 .lemon-collapse>input{
 	display: none;
 }
-.lemon-collapse>input:checked~label:first-of-type{
-	animation: dropdownrotate .5s infinite linear;
-	-webkit-animation: dropdownrotate .5s  infinite linear;
+.lemon-collapse>input:checked~label:first-of-type>i{
+	animation: collapseopen .5s infinite linear;
+	-webkit-animation: collapseopen .5s infinite linear;
 	animation-iteration-count:1;
 	-webkit-animation-iteration-count:1;
-	transform: rotate(180deg);
+	transform: rotate(90deg);
 }
-@keyframes dropdownrotate {
+@keyframes collapseopen {
 	from {
 		transform: rotate(0deg);
 	}
 	to {
-		transform: rotate(180deg);
+		transform: rotate(90deg);
 	}
 }
-
+@keyframes collapseclose {
+	from {
+		transform: rotate(90deg);
+	}
+	to {
+		transform: rotate(0deg);
+	}
+}
