@@ -376,7 +376,30 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 		
 		return $this;
 		
-		
+	}
+	
+	public function miniFrom($options=[]){
+		$inputOptions = ['class' => 'lineinput'];
+		$addon = ArrayHelper::remove($options, 'addon', '');
+		$class = ArrayHelper::remove($options, 'class', '');
+		if(!empty($class)){
+			$inputOptions['class'] .= ' '. $class;
+		}
+		if(isset($options['label'])){
+			$label = ArrayHelper::remove($options, 'label', '');
+		}else{
+			$label = Html::encode($this->model->getAttributeLabel($this->attribute));
+		}
+		if(isset($options['width'])){
+			$width = ArrayHelper::remove($options, 'width', 100);
+			$options['style']='width: '.$width.'px';
+		}
+		$options = array_merge($inputOptions, $options);
+		$this->parts['{label}'] = $label;
+		$this->parts['{input}'] = Html::activeInput('text', $this->model, $this->attribute, $options);
+		$this->parts['{addon}'] = $addon;
+		$this->template = '{label}{input}{addon}';
+		return $this;
 	}
 	protected function buildTemplate(){
 		if (!empty($this->prepend) || !empty($this->append)){

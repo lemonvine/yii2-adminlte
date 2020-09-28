@@ -319,19 +319,20 @@ var bolevine = {
 			return null;
 		};
 	},
-	handlebarReady:function(){
-		var hbs = $(".handlebar-field");
+	handlebarReady:function(bound){
+		if(!bound){
+			bound = document;
+		}
+		var hbs = $(bound).find(".handlebar-field");
 		$(hbs).each(function(){
 			var _v = $(this).val();
 			if(!_v){
 				_v = '{}';
 			};
 			_v = eval("("+_v+")");
-			
 			var _id = $(this).attr('id');
 			var _tp = $(this).data('template');
 			var _sort = $(this).parents('.form-group').data('sort');
-			console.log(_sort);
 			if(_sort=="desc"){
 				_v = _v.reverse();
 			}
@@ -339,15 +340,18 @@ var bolevine = {
 			$("#hb_"+_id).html(_template(_v));
 		});
 	},
-	ready:function(){
-		bolevine.handlebarReady();
-		$('.js-laydate').each(function(){
+	ready:function(bound){
+		if(!bound){
+			bound = document;
+		}
+		bolevine.handlebarReady(bound);
+		$(bound).find('.js-laydate').each(function(){
 			bolevine.initdate(this);
 		});
-		$('.combo').each(function(){
+		$(bound).find('.combo').each(function(){
 			$(this).comboselect();
 		});
-		$(".leafblinds").each(function(){
+		$(bound).find(".leafblinds").each(function(){
 			$(this).change();
 		});
 	},
@@ -417,7 +421,7 @@ $(window).ready(function(){
 		var _method = $(this).data('m');
 		var _submit = $(this).data('s');
 		var _callback = $(this).data('c');
-		$("#submit_type").val(_submit);
+		$(_form).find("#submit_type").val(_submit);
 		var data = $(_form).data('yiiActiveForm');
 		if(data){
 			data.validated=true;
@@ -627,23 +631,27 @@ $(window).ready(function(){
 		var _callback = $(this).data('callback');
 		var that=this;
 		if(_id){
+			_id = parseInt(_id)+1;
 			_url = bolevine.appendurl(_url, 'key', _id);
 		}
 		if(!_type){
 			_type = 'replace';
 		}
 		$.ajax({type: 'get', url: _url, success: function(r){
+				$(_target).find(".empty-state").empty();
 				if(_type=='replace'){
 					$(_target).html(r);
+					bolevine.ready(_target);
 				}else if(_type=='append'){
 					$(_target).append(r);
+					bolevine.ready(_target+">:last");
 				}
 				if(_id){
-					_id = parseInt(_id)+1;
 					$(that).data('k', _id).attr('data-k', _id);
 				}
+				
 				if(_callback){
-					eval(_callback+"(_target)");
+					eval(_callback+"(that, _target)");
 				}
 			}, error: function(e){
 				bolevine.alert({message: "错误："+e.responseText, flag: 4});
