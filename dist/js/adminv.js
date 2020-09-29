@@ -693,10 +693,80 @@ $(window).ready(function(){
 	});
 	//上传图片
 	$(document).on('change', '.upload-btn input', function(){
-		var img = bolevine.imageurl(this.files[0]);
-		if (img) {
-			$(this).parents('.upload-btn').siblings('img').attr("src", img);
+		var files = this.files;
+		var multi = $(this).attr('multiple');
+		var beforehand = $(this).data('bh');
+		var gallery = $(this).parents('.upload-btn').siblings('.upload-gallery');
+		var uploadfail = function(pm, pf, po){
+			if(pm){
+				$("#"+pf).remove();
+			}else{
+				var img = $(gallery).find('img');
+				if(img.length>0){
+					if(po!=''){
+						$(img[0]).attr('src', po);
+					}else{
+						$(img[0]).remove();
+					}
+				}
+				
+			}
+			layer.msg('上传失败');
+		} 
+		
+		var random = Math.floor((Math.random()*1000)+1);
+		var original = '';
+		for(var i=0,l=files.length; i<l; i++){
+			var file = this.files[i];
+			var imgsrc = bolevine.imageurl(file);
+			var id="img"+random+"_"+i;
+			file.iid = id;
+
+			if(imgsrc){
+				if(multi){
+					$(gallery).append($("<img class='img-thumbnail upload-show'>").attr('src', imgsrc).attr('id', id));
+				}else{
+					var img = $(gallery).find('img');
+					if(img.length>0){
+						original = $(img[0]).attr('src');
+						$(img[0]).attr('src', imgsrc);
+					}else{
+						$(gallery).append($("<img class='img-thumbnail upload-show'>").attr('src', imgsrc));
+					}
+				}
+				if(beforehand){
+					var formData = new FormData();
+					formData.append('uploadfile', file);
+					formData.append('path', '');
+					formData.append('fid', id);
+					$.ajax({
+						url: URL_UPLOAD,
+						type:"post",
+						data: formData,
+						contentType: false,
+						processData: false,
+						success: function(data) {
+							if (data.status == 202) {
+								var result = data.data;
+								$(result).each(function(i){
+									if(this.result==0){
+										uploadfail(multi, this.fid, original);
+									}
+								});
+							} else {
+								douploaded(multi, id, original);
+							}
+						},
+						error:function(data) {
+							douploaded(multi, id, original);
+						}
+					});
+				}
+			}else{
+				layer.msg('图片异常');
+			}
 		}
+		
 	});
 	//tab切换
 	$(document).on('click', '.lazytab a', function () {

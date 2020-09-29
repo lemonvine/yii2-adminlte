@@ -364,15 +364,30 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 	}
 	
 	public function picture($options=[]){
-		$options = array_merge($this->inputOptions, $options);
+		$initOptions = ['title'=>'选择图片', 'multi'=>FALSE, 'beforehand'=>FALSE, 'accept'=>'', 'isbtn'=>TRUE];
+		$options = array_merge($initOptions, $options);
 		
-		$input = Html::activeFileInput($this->model, $this->attribute, $options);
-		$content = "<span>选择图片</span>";
-		$content = Html::label($content.$input, '', ['class'=>'btn btn-info upload-btn pr-1']);
+		$fileOptions= [];
+		$title = ArrayHelper::remove($options, 'title');
+		$multi = ArrayHelper::remove($options, 'multi', FALSE);
+		$isbtn = ArrayHelper::remove($options, 'isbtn', TRUE);
+		if($multi){
+			$fileOptions['multiple'] = 'multiple';
+		}
+		if(ArrayHelper::remove($options, 'beforehand', FALSE)){
+			$fileOptions['data-bh'] = 1;
+		}
+		$input = Html::activeFileInput($this->model, $this->attribute, $fileOptions);
+		$content = "<span>$title</span>";
+		$content = Html::label($content.$input, '', ['class'=>'btn btn-'.($isbtn?'':'outline-').'info upload-btn mr-1']);
 		$value =  Html::getAttributeValue($this->model, $this->attribute);
-		
-		$image = Html::img(empty($value)?'':(Yii::$app->params['FILE_HTTP_PATH'].$value), ['class'=>'upload-show']);
-		$this->parts['{input}'] = $content.$image;
+		if($multi){
+			
+		}
+		//$image = Html::img(empty($value)?'':(Yii::$app->params['FILE_HTTP_PATH'].$value), ['class'=>'upload-show']);
+		$gallery = Html::tag('div', '', ['class'=>'upload-gallery m-1']);
+		//$this->parts['{input}'] = $content.Html::tag('div', $image, ['class'=>'m-1']);
+		$this->parts['{input}'] = $content. $gallery;
 		
 		return $this;
 		
@@ -388,7 +403,8 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 		if(isset($options['label'])){
 			$label = ArrayHelper::remove($options, 'label', '');
 		}else{
-			$label = Html::encode($this->model->getAttributeLabel($this->attribute));
+			$attribute = Html::getAttributeName($this->attribute);
+			$label = Html::encode($this->model->getAttributeLabel($attribute));
 		}
 		if(isset($options['width'])){
 			$width = ArrayHelper::remove($options, 'width', 100);
