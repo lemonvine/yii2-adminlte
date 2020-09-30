@@ -37,7 +37,8 @@ body,html{height:100%}
 .fixed-form-btns{bottom: 48px; position: sticky; width: 100%; margin-left: -20px; padding-left: 10px;}
 .upload-btn{position: relative;display: inline-block;overflow: hidden;text-align: center;vertical-align: center;}
 .upload-btn input{position: absolute;top:0;left: 0;opacity: 0;}
-.upload-show{height: 100px;max-width: 200px; margin: 2px;}
+.upload-show{height: 100px;max-width: 200px; margin: 2px; cursor: pointer;}
+.upload-gallery{position: relative;}
 
 .form-search .form-group .flex{max-width:370px;}
 .grid-view .img-thumbnail{max-height: 120px; max-width:200px;}

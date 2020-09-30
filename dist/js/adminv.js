@@ -696,6 +696,7 @@ $(window).ready(function(){
 		var files = this.files;
 		var multi = $(this).attr('multiple');
 		var beforehand = $(this).data('bh');
+		var folder = $(this).data('f');
 		var gallery = $(this).parents('.upload-btn').siblings('.upload-gallery');
 		var uploadfail = function(pm, pf, po){
 			if(pm){
@@ -709,10 +710,9 @@ $(window).ready(function(){
 						$(img[0]).remove();
 					}
 				}
-				
 			}
 			layer.msg('上传失败');
-		} 
+		}
 		
 		var random = Math.floor((Math.random()*1000)+1);
 		var original = '';
@@ -720,7 +720,6 @@ $(window).ready(function(){
 			var file = this.files[i];
 			var imgsrc = bolevine.imageurl(file);
 			var id="img"+random+"_"+i;
-			file.iid = id;
 
 			if(imgsrc){
 				if(multi){
@@ -737,7 +736,7 @@ $(window).ready(function(){
 				if(beforehand){
 					var formData = new FormData();
 					formData.append('uploadfile', file);
-					formData.append('path', '');
+					formData.append('path', folder);
 					formData.append('fid', id);
 					$.ajax({
 						url: URL_UPLOAD,

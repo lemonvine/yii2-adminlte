@@ -364,28 +364,41 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 	}
 	
 	public function picture($options=[]){
-		$initOptions = ['title'=>'选择图片', 'multi'=>FALSE, 'beforehand'=>FALSE, 'accept'=>'', 'isbtn'=>TRUE];
+		$initOptions = ['title'=>'选择图片', 'multi'=>FALSE, 'beforehand'=>FALSE, 'accept'=>'', 'isbtn'=>FALSE, 'folder'=>''];
 		$options = array_merge($initOptions, $options);
 		
-		$fileOptions= [];
 		$title = ArrayHelper::remove($options, 'title');
 		$multi = ArrayHelper::remove($options, 'multi', FALSE);
 		$isbtn = ArrayHelper::remove($options, 'isbtn', TRUE);
+		$hidden_id = isset($options['id'])?$options['id']:Html::getInputId($this->model, $this->attribute);
+		$value =  Html::getAttributeValue($this->model, $this->attribute);
+		$inputOptions =[];
+		$fileOptions= [
+			'data-f'=>$options['folder'],
+		];
+		
 		if($multi){
 			$fileOptions['multiple'] = 'multiple';
 		}
 		if(ArrayHelper::remove($options, 'beforehand', FALSE)){
+			$inputOptions['id'] = $hidden_id;
+			$inputOptions['value'] = $value;
 			$fileOptions['data-bh'] = 1;
+			$input = Html::activeHiddenInput($this->model, $this->attribute, $inputOptions);
+			$input .= Html::fileInput('upload', '', $fileOptions);
+		}else{
+			$fileOptions['id'] = $hidden_id;
+			$input = Html::activeFileInput($this->model, $this->attribute, $fileOptions);
 		}
-		$input = Html::activeFileInput($this->model, $this->attribute, $fileOptions);
+		
 		$content = "<span>$title</span>";
 		$content = Html::label($content.$input, '', ['class'=>'btn btn-'.($isbtn?'':'outline-').'info upload-btn mr-1']);
-		$value =  Html::getAttributeValue($this->model, $this->attribute);
+		
 		if($multi){
 			
 		}
 		//$image = Html::img(empty($value)?'':(Yii::$app->params['FILE_HTTP_PATH'].$value), ['class'=>'upload-show']);
-		$gallery = Html::tag('div', '', ['class'=>'upload-gallery m-1']);
+		$gallery = Html::tag('div', '', ['class'=>'upload-gallery m-1', 'id'=>'gy_'.$hidden_id]);
 		//$this->parts['{input}'] = $content.Html::tag('div', $image, ['class'=>'m-1']);
 		$this->parts['{input}'] = $content. $gallery;
 		
