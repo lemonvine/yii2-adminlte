@@ -35,13 +35,24 @@ body,html{height:100%}
 
 .tab-content{padding: 8px;}
 .fixed-form-btns{bottom: 48px; position: sticky; width: 100%; margin-left: -20px; padding-left: 10px;}
+
+.upload-gallery{position: relative;}
 .upload-btn{position: relative;display: inline-block;overflow: hidden;text-align: center;vertical-align: center;}
 .upload-btn input{position: absolute;top:0;left: 0;opacity: 0;}
-.upload-show{height: 100px;max-width: 200px; margin: 2px; cursor: pointer;}
-.upload-gallery{position: relative;}
+.upload-show{cursor: pointer; float: left; padding-right: 10px;}
+.upload-show img{height: 100px;max-width: 200px; margin: 2px; object-fit:cover}
+.upload-tools {display: flex; text-align: center; border: 1px solid #ccc; border-top: none; background: #f2f2f2;}
+.upload-tools a{flex:1;padding:6px}
+.upload-show .audio{background:url(/images/file_audio.png) no-repeat center;}
+.upload-show .other{background:url(/images/file.png) no-repeat center 44%;}
 
 .form-search .form-group .flex{max-width:370px;}
 .grid-view .img-thumbnail{max-height: 120px; max-width:200px;}
+
+ol.static{margin-top: 8px; border-top: solid 1px #ddd; padding-left: 0px; margin-left: 40px;}
+ol.static>li{border-left: solid 1px #ddd; border-right: solid 1px #ddd; border-bottom: solid 1px #ddd; padding: 8px 16px;}
+
+
 @media (min-width: 1200px) and (max-width: 1400px) {
 	.form-search .col-lg-3{flex: 0 0 33.333333%;max-width: 33.333333%;}
 }

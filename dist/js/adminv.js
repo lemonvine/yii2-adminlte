@@ -381,6 +381,20 @@ var bolevine = {
 		}
 		return url;
 	},
+	gallery: function(obj){
+		var _for = $(obj).data('for');
+		if(_for){
+			var _images = $(obj).find(".media");
+			var _result = [];
+			$(_images).each(function(){
+				var _file = $(this).data('f');
+				if(_file){
+					_result.push(_file);
+				}
+			});
+			$("#"+_for).val(bolevine.json2str(_result));
+		}
+	},
 	rctt: function(url, callback){
 		$("#content").html(bolevine.loadimg);
 		$.ajax({
@@ -645,6 +659,9 @@ $(window).ready(function(){
 				}else if(_type=='append'){
 					$(_target).append(r);
 					bolevine.ready(_target+">:last");
+				}else if(_type=='prepend'){
+					$(_target).prepend(r);
+					bolevine.ready(_target+">:last");
 				}
 				if(_id){
 					$(that).data('k', _id).attr('data-k', _id);
@@ -712,6 +729,12 @@ $(window).ready(function(){
 				}
 			}
 			layer.msg('上传失败');
+		};
+		var lookhref = function(obj, url){
+			var _look = $(obj).parents('li.upload-show').find('.look');
+			if(_look && _look[0]){
+				$(_look[0]).attr('href', url);
+			}
 		}
 		
 		var random = Math.floor((Math.random()*1000)+1);
@@ -722,15 +745,17 @@ $(window).ready(function(){
 			var id="img"+random+"_"+i;
 
 			if(imgsrc){
+				var _title = '<div class="upload-tools"><a href="javascript:;" class="delete text-danger">删除</a><a href="javascript:;" class="look" target="_blank">查看</a></div>';
 				if(multi){
-					$(gallery).append($("<img class='img-thumbnail upload-show'>").attr('src', imgsrc).attr('id', id));
+					$('<li class="upload-show"></li>').append($('<img class="media img-thumbnail">').attr('src', imgsrc).attr('id', id))
+					.append(_title).appendTo($(gallery));
 				}else{
-					var img = $(gallery).find('img');
+					var img = $(gallery).find('.media');
 					if(img.length>0){
 						original = $(img[0]).attr('src');
 						$(img[0]).attr('src', imgsrc);
 					}else{
-						$(gallery).append($("<img class='img-thumbnail upload-show'>").attr('src', imgsrc));
+						$('<li class="upload-show"></li>').append($("<img class='media img-thumbnail'>").attr('src', imgsrc)).append(_title).appendTo($(gallery));
 					}
 				}
 				if(beforehand){
@@ -748,22 +773,50 @@ $(window).ready(function(){
 							if (data.status == 202) {
 								var result = data.data;
 								$(result).each(function(i){
+									var _fid = this.fid;
 									if(this.result==0){
-										uploadfail(multi, this.fid, original);
+										uploadfail(multi, _fid, original);
+									}else if(multi){
+										$("#"+_fid).data('f', this.file);
+										$("#"+_fid).data('h', this.http);
+										lookhref($("#"+_fid), this.http+this.file);
+									}else{
+										var img = $(gallery).find('.media');
+										$(img[0]).data('f', this.file);
+										$(img[0]).data('h', this.http);
+										lookhref($(img[0]), this.http+this.file);
 									}
 								});
+								bolevine.gallery(gallery);
 							} else {
-								douploaded(multi, id, original);
+								uploadfail(multi, id, original);
 							}
 						},
 						error:function(data) {
-							douploaded(multi, id, original);
+							uploadfail(multi, id, original);
 						}
 					});
 				}
 			}else{
 				layer.msg('图片异常');
 			}
+		}
+		
+	});
+	//上传图片view
+	$(document).on('click', '.upload-show', function() {
+		var _pid = $(this).parent().attr("id");
+		layer.photos({
+			photos: '#'+_pid
+			,anim: 5
+		}); 
+	});
+	//上传图片-删除
+	$(document).on('click', '.upload-tools>.delete', function() {
+		var _gallery = $(this).parents('ul.upload-gallery');
+		$(this).parents('li.upload-show').remove();
+		if(_gallery && _gallery[0]){
+			bolevine.gallery(_gallery[0]);
 		}
 		
 	});

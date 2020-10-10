@@ -370,22 +370,28 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 		$title = ArrayHelper::remove($options, 'title');
 		$multi = ArrayHelper::remove($options, 'multi', FALSE);
 		$isbtn = ArrayHelper::remove($options, 'isbtn', TRUE);
+		$beforehand = ArrayHelper::remove($options, 'beforehand', FALSE);
 		$hidden_id = isset($options['id'])?$options['id']:Html::getInputId($this->model, $this->attribute);
 		$value =  Html::getAttributeValue($this->model, $this->attribute);
 		$inputOptions =[];
 		$fileOptions= [
 			'data-f'=>$options['folder'],
 		];
+		$ulOptions = [
+			'class'=>'list-inline upload-gallery m-1',
+			'id'=>'gy_'.$hidden_id
+		];
 		
 		if($multi){
 			$fileOptions['multiple'] = 'multiple';
 		}
-		if(ArrayHelper::remove($options, 'beforehand', FALSE)){
+		if($beforehand){
 			$inputOptions['id'] = $hidden_id;
 			$inputOptions['value'] = $value;
 			$fileOptions['data-bh'] = 1;
 			$input = Html::activeHiddenInput($this->model, $this->attribute, $inputOptions);
 			$input .= Html::fileInput('upload', '', $fileOptions);
+			$ulOptions['data-for'] = $hidden_id;
 		}else{
 			$fileOptions['id'] = $hidden_id;
 			$input = Html::activeFileInput($this->model, $this->attribute, $fileOptions);
@@ -398,7 +404,7 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 			
 		}
 		//$image = Html::img(empty($value)?'':(Yii::$app->params['FILE_HTTP_PATH'].$value), ['class'=>'upload-show']);
-		$gallery = Html::tag('div', '', ['class'=>'upload-gallery m-1', 'id'=>'gy_'.$hidden_id]);
+		$gallery = Html::tag('ul', '', $ulOptions);
 		//$this->parts['{input}'] = $content.Html::tag('div', $image, ['class'=>'m-1']);
 		$this->parts['{input}'] = $content. $gallery;
 		
@@ -535,7 +541,7 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 					break;
 			}
 		}
-		else{
+		elseif($value!="0"){
 			$display_value= $value;
 		}
 		$display = Html::input('text', '', $display_value, ['class'=>'form-control js-laydate '.$options['class'], 'id'=>$display_id, 'data-type'=>$options['type'], 'data-save'=>$options['save'],
