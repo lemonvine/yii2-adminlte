@@ -842,6 +842,15 @@ $(window).ready(function(){
 		}
 	}
 	bolevine.ready();
+
+	$(document).on('collapsed.lte.cardwidget', '.card', function (){
+		$(this).find(".card-tools .loadpage").hide();
+		$(this).find(".card-tools button[data-card-widget=collapse]>i").removeClass('fa-angle-down').addClass('fa-angle-right');
+	});
+	$(document).on('expanded.lte.cardwidget', '.card', function (){
+		$(this).find(".card-tools .loadpage").show();
+		$(this).find(".card-tools button[data-card-widget=collapse]>i").removeClass('fa-angle-right').addClass('fa-angle-down');
+	});
 	
 	if(typeof(MESSAGE)!="undefined" && MESSAGE){
 		bolevine.alert({message:MESSAGE, flag:MESSAGE_FLAG});
