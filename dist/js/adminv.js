@@ -273,27 +273,28 @@ var bolevine = {
 			};
 			
 			params.done=function(date){
-				if(save == 'string'){
-					if(date){
-						$("#"+hidden).val(date);
+				if(hidden!=''){
+					if(save == 'string'){
+						if(date){
+							$("#"+hidden).val(date);
+						}else{
+							$("#"+hidden).val('');
+						}
 					}else{
-						$("#"+hidden).val('');
-					}
-				}else{
-					var newTimestamp;
-					if(btn=='long' && date=='2099-12-31'){
-						newTimestamp=1;
-					}
-					else{
-						newTimestamp = Date.parse(new Date(date.replace('-','/')))/1000;
-					}
-					if(newTimestamp){
-						$("#"+hidden).val(newTimestamp);
-					}else{
-						$("#"+hidden).val('');
-					}
-				};
-				
+						var newTimestamp;
+						if(btn=='long' && date=='2099-12-31'){
+							newTimestamp=1;
+						}
+						else{
+							newTimestamp = Date.parse(new Date(date.replace('-','/')))/1000;
+						}
+						if(newTimestamp){
+							$("#"+hidden).val(newTimestamp);
+						}else{
+							$("#"+hidden).val('');
+						}
+					};
+				}
 				if(callback){
 					eval(callback+"(target)");
 				};

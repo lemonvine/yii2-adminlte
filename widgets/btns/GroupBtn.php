@@ -61,10 +61,10 @@ class GroupBtn extends Widget
 	 * @return string
 	 */
 	public static function BackButton($config=[]){
-		$params = ['title'=>'返回', 'id'=>'btn_submit', 'color'=>'default', 'isbtn'=>true];
+		$params = ['title'=>'返回', 'id'=>'btn_back', 'color'=>'default', 'isbtn'=>true];
 		$params = array_merge($params, $config);
 		$class = ($params['isbtn']?'btn btn-':static::$btn_css).$params['color'];
-		return Html::Button($params['title'], ['class' => $class, 'onclick'=>'bolevine.forward()']);
+		return Html::Button($params['title'], ['class' => $class, 'id'=>$params['id'], 'onclick'=>'bolevine.forward()']);
 	}
 	
 	/**

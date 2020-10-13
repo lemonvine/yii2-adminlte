@@ -412,6 +412,18 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 		
 	}
 	
+	/**
+	 * 下划线输入框
+	 * options事例如下:
+	 * ['label'=>'文字', 'addon'=>'㎡、', 'width'=>50, 'class'=>'auto-area', 'date'=>[]]
+	 * label 前缀文字
+	 * addon 后缀文字
+	 * width 宽度
+	 * class 类样式
+	 * date 控件为日期
+	 * @param array $options
+	 * @return \lemon\bootstrap4\ActiveField
+	 */
 	public function miniFrom($options=[]){
 		$inputOptions = ['class' => 'lineinput'];
 		$addon = ArrayHelper::remove($options, 'addon', '');
@@ -425,13 +437,24 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 			$attribute = Html::getAttributeName($this->attribute);
 			$label = Html::encode($this->model->getAttributeLabel($attribute));
 		}
+		
 		if(isset($options['width'])){
 			$width = ArrayHelper::remove($options, 'width', 100);
-			$options['style']='width: '.$width.'px';
+			$inputOptions['style']='width: '.$width.'px';
 		}
-		$options = array_merge($inputOptions, $options);
+		
+		if(isset($options['date'])){
+			$inputOptions['class'] .= ' js-laydate';
+			$inputOptions['data-save'] = 'string';
+			$inputOptions['data-hidden'] = '';
+			$inputOptions['data-type'] = '';
+			$inputOptions['data-format'] = '';
+		}
+		
+		$input = Html::activeInput('text', $this->model, $this->attribute, $inputOptions);
+		
 		$this->parts['{label}'] = $label;
-		$this->parts['{input}'] = Html::activeInput('text', $this->model, $this->attribute, $options);
+		$this->parts['{input}'] = $input;
 		$this->parts['{addon}'] = $addon;
 		$this->template = '{label}{input}{addon}';
 		return $this;
