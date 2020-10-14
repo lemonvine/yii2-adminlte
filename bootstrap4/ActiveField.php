@@ -400,11 +400,30 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 		$content = "<span>$title</span>";
 		$content = Html::label($content.$input, '', ['class'=>'btn btn-'.($isbtn?'':'outline-').'info upload-btn mr-1']);
 		
-		if($multi){
-			
+		$html = '';
+		if(!empty($value)){
+			$http_path = Yii::$app->params['FILE_HTTP_PATH'];
+			$medias = Json::decode($value, true);
+			foreach ($medias as $media){
+				if(is_array($media)){
+					$media_type = $media[0];
+					$media_src = $media[1];
+					if($media_type=='image'){
+						$media_html = '<img class="media" src="'.$http_path.$media.'" data-f="'.$media.'" data-h="'.$http_path.'" data-p="image">';
+					}elseif($media_type=='audio'){
+						$media_html = '<audio class="media" controls="controls" preload="meta" src="'.$http_path.$media_src.'" data-f="'.$media_src.'" data-h="'.$http_path.'" data-p="audio"></audio>';
+					}if($media_type=='video'){
+						$media_html = '<video class="media" controls="controls" preload="meta" src="'.$http_path.$media_src.'" data-f="'.$media_src.'" data-h="'.$http_path.'" data-p="video"></video>';
+					}
+				}else{
+					$media_html = '<img class="media" src="'.$http_path.$media.'" data-f="'.$media.'" data-h="'.$http_path.'" data-p="image">';
+				}
+				$html .= '<li class="upload-show img-thumbnail">'.$media_html.'<div class="upload-tools"><a href="javascript:;" class="delete text-danger">删除</a><a href="http://localhost/pic/general/2020/10/141602639970.jpg" class="look" target="_blank">查看</a></div></li>';
+			}
 		}
+		
 		//$image = Html::img(empty($value)?'':(Yii::$app->params['FILE_HTTP_PATH'].$value), ['class'=>'upload-show']);
-		$gallery = Html::tag('ul', '', $ulOptions);
+		$gallery = Html::tag('ul', $html, $ulOptions);
 		//$this->parts['{input}'] = $content.Html::tag('div', $image, ['class'=>'m-1']);
 		$this->parts['{input}'] = $content. $gallery;
 		

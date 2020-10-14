@@ -389,8 +389,13 @@ var bolevine = {
 			var _result = [];
 			$(_images).each(function(){
 				var _file = $(this).data('f');
+				var _type = $(this).data('p');
 				if(_file){
-					_result.push(_file);
+					if(_type=='image'){
+						_result.push(_file);
+					}else{
+						_result.push([_type, _file]);
+					}
 				}
 			});
 			$("#"+_for).val(bolevine.json2str(_result));
@@ -718,14 +723,14 @@ $(window).ready(function(){
 		var gallery = $(this).parents('.upload-btn').siblings('.upload-gallery');
 		var uploadfail = function(pm, pf, po){
 			if(pm){
-				$("#"+pf).remove();
+				$("#"+pf).closest('li').remove();
 			}else{
-				var img = $(gallery).find('img');
+				var img = $(gallery).find('.media');
 				if(img.length>0){
 					if(po!=''){
 						$(img[0]).attr('src', po);
 					}else{
-						$(img[0]).remove();
+						$(img[0]).closest('li').remove();
 					}
 				}
 			}
@@ -744,19 +749,29 @@ $(window).ready(function(){
 			var file = this.files[i];
 			var imgsrc = bolevine.imageurl(file);
 			var id="img"+random+"_"+i;
+			var type= file.type.substring(0, file.type.indexOf('/'));
 
 			if(imgsrc){
 				var _title = '<div class="upload-tools"><a href="javascript:;" class="delete text-danger">删除</a><a href="javascript:;" class="look" target="_blank">查看</a></div>';
+				var _media = '';
+				if(type=="image"){
+					_media = $('<img class="media">');
+				}else if(type=="video"){
+					_media = $('<video class="media" controls="controls"></video>');
+				}else if(type=="audio"){
+					_media = $('<audio class="media" controls="controls"></audio>');
+				}
+				_media.attr('id', id).attr('src', imgsrc).data('p', type);
+				
 				if(multi){
-					$('<li class="upload-show"></li>').append($('<img class="media img-thumbnail">').attr('src', imgsrc).attr('id', id))
-					.append(_title).appendTo($(gallery));
+					$('<li class="upload-show img-thumbnail"></li>').append(_media).append(_title).appendTo($(gallery));
 				}else{
 					var img = $(gallery).find('.media');
 					if(img.length>0){
 						original = $(img[0]).attr('src');
 						$(img[0]).attr('src', imgsrc);
 					}else{
-						$('<li class="upload-show"></li>').append($("<img class='media img-thumbnail'>").attr('src', imgsrc)).append(_title).appendTo($(gallery));
+						$('<li class="upload-show img-thumbnail"></li>').append(_media).append(_title).appendTo($(gallery));
 					}
 				}
 				if(beforehand){
