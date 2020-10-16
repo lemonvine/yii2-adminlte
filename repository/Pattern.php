@@ -20,4 +20,17 @@ class Pattern{
 		'audit' =>[8=>'通过', 4=>'不通过'], //审核结果
 	];
 	
+	/**
+	 * Regular转换编码为文字
+	 * @param object $data
+	 * @param string $type
+	 * @return string
+	 */
+	public static function format($data, $type){
+		if($data){
+			return self::$CODE[$type][$data]??'';
+		}
+		return '';
+	}
+	
 } 

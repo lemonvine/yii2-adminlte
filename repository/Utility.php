@@ -3,6 +3,7 @@ namespace lemon\repository;
 
 use Yii;
 use yii\imagine\Image;
+use yii\helpers\Json;
 
 class Utility
 {
@@ -161,5 +162,31 @@ class Utility
 		$encoded_str = urlencode($str);
 		$encoded_str= str_replace("+", "%20", $encoded_str);
 		return $encoded_str;
+	}
+	
+	public static function buildGallery($strfile){
+		$http_path = Yii::$app->params['FILE_HTTP_PATH'];
+		$files = Json::decode($strfile, true);
+		$gallery = '<ul class="list-inline upload-gallery m-1">';
+		foreach ($files as $media){
+			$gallery .= '<li class="gallery-show img-thumbnail">';
+			if(is_array($media)){
+				$media_type = $media[0];
+				$media_src = $media[1];
+			}else{
+				$media_type = 'image';
+				$media_src = $media;
+			}
+			if($media_type=='image'){
+				$gallery .= '<a href="'.$http_path.$media.'" target="view"><img class="media" src="'.$http_path.$media.'"></a>';
+			}elseif($media_type=='audio'){
+				$gallery .= '<audio class="media" controls="controls" preload="meta" src="'.$http_path.$media_src.'"></audio>';
+			}if($media_type=='video'){
+				$gallery .= '<video class="media" controls="controls" preload="meta" src="'.$http_path.$media_src.'"></video>';
+			}
+			$gallery .= '</li>';
+		}
+		$gallery .= "</ul>";
+		return $gallery;
 	}
 }
