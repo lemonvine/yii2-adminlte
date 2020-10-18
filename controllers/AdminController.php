@@ -94,7 +94,7 @@ class AdminController extends Controller
 	{
 		$this->layout = "@vendor/lemonvine/yii2-adminlte/views/layouts/pure_html";
 	}
-
+	
 	/**
 	 * 关闭弹出层，无刷新
 	 * @param string $msg
@@ -103,7 +103,13 @@ class AdminController extends Controller
 	public function modelTipsSuccess($msg="操作成功", $icon= 1, $callback='')
 	{
 		$msg = addslashes($msg);
-		$callback = $callback?"window.parent.$callback()":'';
+		if(!empty($callback)){
+			if(!strpos($callback,'(') !==false){
+				$callback = $callback.'()';
+			}
+			$callback = "window.parent.$callback";
+		}
+		
 		return "<script type='text/javascript'>window.parent.layer.msg('{$msg}', {icon: '{$icon}',time:1000});window.parent.bolevine.turnoff();$callback;</script>";
 	}
 	

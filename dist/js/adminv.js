@@ -168,7 +168,8 @@ var bolevine = {
 	vjax: function(param){
 		var base = {url:'', type:'post', data:'', target: null, callback:null, reload: true};
 		$.extend(base, param);
-		$.ajax({type: base.type, url: base.url, data: base.data, success: function(r) {
+		var data = bolevine.str2json(base.data);
+		$.ajax({type: base.type, url: base.url, data: data, success: function(r) {
 			if(r.status==202){
 				if(base.callback){
 					var target = base.target;
