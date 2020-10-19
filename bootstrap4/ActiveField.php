@@ -461,7 +461,11 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 			$width = ArrayHelper::remove($options, 'width', 100);
 			$inputOptions['style']='width: '.$width.'px';
 		}
-		
+		if(isset($options['data'])){
+			foreach ($options['data'] as $key=>$val){
+				$inputOptions['data-'.$key] = $val;
+			}
+		}
 		if(isset($options['date'])){
 			$inputOptions['class'] .= ' js-laydate';
 			$inputOptions['data-save'] = 'string';

@@ -40,8 +40,8 @@ body,html{height:100%}
 .upload-gallery{position: relative;}
 .upload-btn{position: relative;display: inline-block;overflow: hidden;text-align: center;vertical-align: center;}
 .upload-btn input{position: absolute;top:0;left: 0;opacity: 0;}
-.upload-show{cursor: pointer; float: left; margin-right: 10px;}
-.upload-show .media{height: 100px;max-width: 200px; object-fit:cover; border: 1px solid #ccc;}
+.upload-show,.gallery-show{cursor: pointer; margin-right: 10px;display: inline-block;}
+.upload-show .media,.gallery-show .media{height: 100px; max-width: 200px; object-fit:cover; border: 1px solid #ccc;}
 .upload-tools {display: flex; text-align: center; border: 1px solid #ccc; border-top: none; background: #f2f2f2;}
 .upload-tools a{flex:1;padding:6px}
 .upload-show .audio{background:url(/images/file_audio.png) no-repeat center;}
@@ -50,9 +50,10 @@ body,html{height:100%}
 .form-search .form-group .flex{max-width:370px;}
 .grid-view .img-thumbnail{max-height: 120px; max-width:200px;}
 
-ol.static{margin-top: 8px; border-top: solid 1px #ddd; padding-left: 0px; margin-left: 40px;}
-ol.static>li{border-left: solid 1px #ddd; border-right: solid 1px #ddd; border-bottom: solid 1px #ddd; padding: 8px 16px;}
-
+ol.dynamiclist{margin-top: 8px; border-top: solid 1px #ddd; padding-left: 0px; margin-left: 40px;}
+ol.dynamiclist>li{border-left: solid 1px #ddd; border-right: solid 1px #ddd; border-bottom: solid 1px #ddd; padding: 8px 16px;}
+.empty-state{border: solid 1px #ddd; border-top: none; line-height: 30px; padding: 8px;}
+.dynamiclist p{padding-top: 8px; line-height: 28px;}
 
 @media (min-width: 1200px) and (max-width: 1400px) {
 	.form-search .col-lg-3{flex: 0 0 33.333333%;max-width: 33.333333%;}

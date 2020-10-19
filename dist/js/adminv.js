@@ -168,7 +168,8 @@ var bolevine = {
 	vjax: function(param){
 		var base = {url:'', type:'post', data:'', target: null, callback:null, reload: true};
 		$.extend(base, param);
-		$.ajax({type: base.type, url: base.url, data: base.data, success: function(r) {
+		var data = bolevine.str2json(base.data);
+		$.ajax({type: base.type, url: base.url, data: data, success: function(r) {
 			if(r.status==202){
 				if(base.callback){
 					var target = base.target;
@@ -658,7 +659,7 @@ $(window).ready(function(){
 			_type = 'replace';
 		}
 		$.ajax({type: 'get', url: _url, success: function(r){
-				$(_target).find(".empty-state").empty();
+				$(_target).find(".empty-state").remove();
 				if(_type=='replace'){
 					$(_target).html(r);
 					bolevine.ready(_target);
@@ -667,7 +668,7 @@ $(window).ready(function(){
 					bolevine.ready(_target+">:last");
 				}else if(_type=='prepend'){
 					$(_target).prepend(r);
-					bolevine.ready(_target+">:last");
+					bolevine.ready(_target+">:first");
 				}
 				if(_id){
 					$(that).data('k', _id).attr('data-k', _id);
