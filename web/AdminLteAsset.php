@@ -61,6 +61,10 @@ class AdminLteAsset extends AssetBundle
 					$css[] = "plugins/table";
 					$js[] = "plugins/table";
 					break;
+				case 'select':
+					$css[] = "plugins/select2";
+					$js[] = "plugins/select2";
+					break;
 				case 'bundle':
 					$js[] = "bootstrap/bootstrap.bundle";
 					break;
