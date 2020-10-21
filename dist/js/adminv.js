@@ -84,12 +84,12 @@ var bolevine = {
 	},
 	reload: function(is_chain){
 		var url = location.href;
-		if(!url.includes('referer_url')){
+		if(!url.includes('ref')){
 			if(url.includes('?')){
-				url = url + "&referer_url="+encodeURI(bolevine.referer);
+				url = url + "&ref="+encodeURI(bolevine.referer);
 			}
 			else{
-				url = url + "?referer_url="+encodeURI(bolevine.referer);
+				url = url + "?ref="+encodeURI(bolevine.referer);
 			};
 		};
 		location.href=url;
@@ -174,7 +174,12 @@ var bolevine = {
 				if(base.callback){
 					var target = base.target;
 					var data = r.data;
-					eval(base.callback+"(target, data)");
+					var reg=new RegExp("\\(*\\)");
+					if(reg.test(base.callback)){
+						eval(base.callback);
+					}else{
+						eval(base.callback+"(target, data)");
+					}
 				}else if(base.reload){
 					bolevine.reload();
 				};

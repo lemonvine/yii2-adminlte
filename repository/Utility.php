@@ -60,12 +60,12 @@ class Utility
 		if (Yii::$app->request->isPost) {
 			$params = Yii::$app->request->post();
 		}
-		if (isset($params['referer_url'])) {
-			$referer = $params['referer_url'];
+		if (isset($params['ref'])) {
+			$referer = $params['ref'];
 		}else{
 			$params = Yii::$app->request->queryParams;
-			if (isset($params['referer_url'])) {
-				$referer = $params['referer_url'];
+			if (isset($params['ref'])) {
+				$referer = $params['ref'];
 			} else {
 				$referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null;
 			}
