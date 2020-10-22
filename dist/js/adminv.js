@@ -646,6 +646,8 @@ $(window).ready(function(){
 		}
 		_url = eval('RECONTURL'+_url);
 		var _url = bolevine.appendurl(_url, 'id', _id);
+		$(this).closest('ul').find('li.active').removeClass('active');
+		$(this).closest('li').addClass('active');
 		bolevine.rctt(_url, _callback);
 	});
 	//load content

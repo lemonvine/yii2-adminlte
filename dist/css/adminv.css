@@ -55,6 +55,8 @@ ol.dynamiclist>li{border-left: solid 1px #ddd; border-right: solid 1px #ddd; bor
 .empty-state{border: solid 1px #ddd; border-top: none; line-height: 30px; padding: 8px;}
 .dynamiclist p{padding-top: 8px; line-height: 28px;}
 
+.cursor-item{cursor:pointer;}
+.products-list li.active {background: #dddddd;}
 @media (min-width: 1200px) and (max-width: 1400px) {
 	.form-search .col-lg-3{flex: 0 0 33.333333%;max-width: 33.333333%;}
 }
