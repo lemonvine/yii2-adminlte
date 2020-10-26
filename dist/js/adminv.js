@@ -749,7 +749,7 @@ $(window).ready(function(){
 			if(_look && _look[0]){
 				$(_look[0]).attr('href', url);
 			}
-		}
+		};
 		
 		var random = Math.floor((Math.random()*1000)+1);
 		var original = '';
