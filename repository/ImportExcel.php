@@ -51,7 +51,8 @@ class ImportExcel{
 			/**从第A列开始输出*/
 			$ifhasZero = false;
 			for ($currentColumn = 0; $currentColumn <= $allColumnIndex; $currentColumn++) {
-				$val = $sheet->getCellByColumnAndRow($currentColumn, $currentRow)->getValue();
+				//$val = $sheet->getCellByColumnAndRow($currentColumn, $currentRow)->getValue();
+				$val = $sheet->getCellByColumnAndRow($currentColumn, $currentRow)->getFormattedValue();//如果是公式，直接取值不取公式
 				if($val == '0') $ifhasZero = true;
 				$arr[$currentRow][] = trim($val);
 			}

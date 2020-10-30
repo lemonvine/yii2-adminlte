@@ -11,7 +11,7 @@ class Undefinitive {
 	 *
 	 * 获取后台用户的菜单列表
 	 */
-	public static function adminMenus($refresh=true){
+	public static function adminMenus($refresh=FALSE){
 		$uid = Yii::$app->user->identity->id;
 		$cache_name = 'DYZC_MENU_F6DiVB3Hf'.$uid;
 		$cache_menu = Utility::getCache($cache_name);
@@ -34,12 +34,17 @@ class Undefinitive {
 		if(count($data)>0){
 			foreach($data as $k=>$t){
 				if($t['parent_id']!=0){
-					$t['url'] = [$t['url'], 'm'=>$t['name']];
 					$parent = $t['parent_id'];
-					unset($t['parent_id']);
-					unset($t['id']);
-					$data[$parent]['items'][]=$t;
+					if(isset($data[$t['parent_id']])){
+						$t['url'] = [$t['url'], 'm'=>$t['name']];
+						
+						unset($t['parent_id']);
+						unset($t['id']);
+						$data[$parent]['items'][]=$t;
+						
+					}
 					unset($data[$k]);
+					
 				}
 				else{
 					$data[$k]['url'] = 'javascript:;';
