@@ -34,6 +34,7 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 	public $addon = [];
 	public $prepend = [];
 	public $append = [];
+	public $exclass='';
 	
 	public $dateOptions = ['save'=>'timestamp', 'format'=>'', 'type'=>'', 'readonly'=>false, 'callback'=>'', 'class' => '', 'btn'=>''];
 	
@@ -489,6 +490,9 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 			Html::addCssClass($group, 'input-group');
 			$content = Html::tag('div', $content, $group);
 			$this->template = strtr($this->template, ['{input}'=>$content]);
+		}
+		if(!empty($this->exclass)){
+			$this->options['class'] .= ' '.$this->exclass;
 		}
 	}
 	
