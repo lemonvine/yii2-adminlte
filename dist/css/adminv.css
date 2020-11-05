@@ -1,6 +1,6 @@
 @charset "UTF-8";
 body,html{height:100%}
-.readonly * {color: #bbb!important;}
+.readonly,.readonly * {color: #bbb!important;}
 .loading{width: 25px; height:25px; background: #fff url(../img/loading.gif) no-repeat center;}
 .form-control.is-invalid, .was-validated .form-control:invalid,.form-control.is-valid, .was-validated .form-control:valid{padding-right:6px!important;background-image: none!important;}
 .flex{display: flex;align-items: center;line-height: 17px;}
