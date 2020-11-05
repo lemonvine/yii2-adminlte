@@ -419,7 +419,7 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 				}else{
 					$media_html = '<img class="media" src="'.$http_path.$media.'" data-f="'.$media.'" data-h="'.$http_path.'" data-p="image">';
 				}
-				$html .= '<li class="upload-show img-thumbnail">'.$media_html.'<div class="upload-tools"><a href="javascript:;" class="delete text-danger">删除</a><a href="http://localhost/pic/general/2020/10/141602639970.jpg" class="look" target="_blank">查看</a></div></li>';
+				$html .= '<li class="upload-show img-thumbnail">'.$media_html.'<div class="upload-tools"><a href="javascript:;" class="delete text-danger">删除</a><a href="'.$http_path.$media.'" class="look" target="_blank">查看</a></div></li>';
 			}
 		}
 		
