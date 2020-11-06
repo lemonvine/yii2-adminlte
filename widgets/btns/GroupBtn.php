@@ -11,8 +11,9 @@ class GroupBtn extends Widget
 	public $options = [];
 	public $fixed = true;
 	public $right = false;
-	public $form_id = 'main_form';
 	public $key_id = 0;
+	
+	public static $form_id = 'main_form';
 	
 	public static $btn_css ='';
 	public static $edit_params = ['target'=>'dialog', 'title'=>'编辑', 'color'=>'primary', 'size'=>'md', 'url'=>'', 'isbtn'=>false];
@@ -151,7 +152,17 @@ class GroupBtn extends Widget
 		$params = array_merge($params, $config);
 		
 		$class = ($params['isbtn']?'btn btn-':static::$btn_css).$params['color'];
-		return Html::a($params['title'],  $params['url'], ['class' => $class, 'target'=>$params['target']]);
+		return Html::a($params['title'],  $params['url']??'javascript:;', ['class' => $class, 'target'=>$params['target']]);
+	}
+	
+	/**
+	 * 导出
+	 * @param array $config
+	 */
+	public static function ExportButton($config=[]){
+		$params = ['title'=>'导出', 'form_id'=>self::$form_id, 'color'=>'secondary'];
+		$params = array_merge($params, $config);
+		return Html::button($params['title'], ['class' => 'btn btn-'.$params['color'], 'onclick'=>"bolevine.export('#".$params['form_id']."')" ]);
 	}
 	
 	/**
@@ -182,6 +193,8 @@ class GroupBtn extends Widget
 				$content .= $params['raw'];
 			}elseif($params['target']=='back'){
 				$content .= self::BackButton($params);
+			}elseif($params['target']=='export'){
+				$content .= self::ExportButton($params);
 			}else{
 				$content .= self::GoButton($params);
 			}
@@ -260,6 +273,28 @@ class GroupBtn extends Widget
 		}
 		$btns[] = $add_params;
 		//var_dump($btns);die;
+		return self::SearchButtons($btns, $config);
+	}
+	
+	/**
+	 * 查询和导出按钮组合
+	 * @param array $config
+	 * @return string
+	 */
+	public static function SearchExportButton($config=[]){
+		$export = ArrayHelper::remove($config, 'export', []);
+		$export['target'] = 'export';
+		$back= ArrayHelper::remove($config, 'back', false);
+		
+		$btns = [];
+		if($back){
+			$btns[] = ['target'=>'back'];
+		}
+		$extras = ArrayHelper::remove($config, 'items', []);
+		if(count($extras)>0){
+			$btns = array_merge($btns, $extras);
+		}
+		$btns[] = $export;
 		return self::SearchButtons($btns, $config);
 	}
 	
@@ -360,8 +395,12 @@ class GroupBtn extends Widget
 		echo self::GoButton($config);
 	}
 	
+	public function export($config=[]){
+		echo self::ExportButton($config);
+	}
+	
 	public function search(){
-		echo self::SearchButton(['unique'=>false, 'form_id'=>$this->form_id]);
+		echo self::SearchButton(['unique'=>false, 'form_id'=>self::$form_id]);
 	}
 	
 	
@@ -395,23 +434,16 @@ class GroupBtn extends Widget
 	
 	public function save($config=[]){
 		$this->submit_type = true;
-		$params = ['btn_name'=>'保存', 'form_id'=>$this->form_id];
+		$params = ['btn_name'=>'保存', 'form_id'=>self::$form_id];
 		$params = array_merge($params, $config);
 		echo $this->render($this->view_dir.'save', $params);
 	}
 	
 	public function submit($config=[]){
 		$this->submit_type = true;
-		$params = ['btn_name'=>'提交', 'form_id'=>$this->form_id, 'confirm'=>'您确定要提交吗？', 'class'=>''];
+		$params = ['btn_name'=>'提交', 'form_id'=>self::$form_id, 'confirm'=>'您确定要提交吗？', 'class'=>''];
 		$params = array_merge($params, $config);
 		echo $this->render($this->view_dir.'submit', $params);
-	}
-	
-	public function export($config=[]){
-		$this->submit_type = true;
-		$params = ['title'=>'导出', 'form_id'=>$this->form_id, 'color'=>'secondary'];
-		$params = array_merge($params, $config);
-		echo Html::button($params['title'], ['class' => 'btn btn-'.$params['color'], 'onclick'=>"bolevine.export('#".$params['form_id']."')" ]);
 	}
 	
 	private function getClass(){
