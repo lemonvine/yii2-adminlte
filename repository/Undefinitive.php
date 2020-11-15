@@ -47,7 +47,12 @@ class Undefinitive {
 					
 				}
 				else{
-					$data[$k]['url'] = 'javascript:;';
+					if(empty($t['url'])){
+						$url = "javascript:;";
+					}else{
+						$url = [$t['url'], 'm'=>$t['name']];
+					}
+					$data[$k]['url'] = $url;
 					unset($data[$k]['parent_id']);
 					unset($data[$k]['id']);
 				}
