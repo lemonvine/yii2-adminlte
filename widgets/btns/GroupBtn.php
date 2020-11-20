@@ -332,7 +332,7 @@ class GroupBtn extends Widget
 	}
 	
 	public static function Preservation($config=[]){
-		$params = ['title'=>'保存', 'id'=>'btn_save', 'isbtn'=>true, 'color'=>'success', 'url'=>'', 'callback'=>'', 'form'=>'#main_form', 'method'=>'post', 'submit'=>'save', 'display'=>true];
+		$params = ['title'=>'保存', 'id'=>'btn_save', 'isbtn'=>true, 'color'=>'success', 'url'=>'', 'ready'=>'', 'callback'=>'', 'form'=>'#main_form', 'method'=>'post', 'submit'=>'save', 'display'=>true];
 		$params = array_merge($params, $config);
 		
 		$options = [
@@ -342,7 +342,8 @@ class GroupBtn extends Widget
 			'data-m' => $params['method'],
 			'data-s' => $params['submit'],
 			'data-c' => $params['callback'],
-			'data-u'=>$params['url'],
+			'data-u' => $params['url'],
+			'data-r' => $params['ready'],
 		];
 		if(!$params['display']){
 			$options['style']='display:none;';

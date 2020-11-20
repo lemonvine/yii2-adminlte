@@ -414,13 +414,24 @@ var bolevine = {
 			success: function(result){
 				$("#content").html(result);
 				if(callback){
-					eval("("+callback+"())");
+					if(!bolevine.cbisf(callback)){
+						callback += "()";
+					}
+					eval("("+callback+")");
 				}
 			},
 			error: function(jqXHR, textStatus, errorThrown){
 				$("#content").html("数据出错了，请联系管理员");
 			}
 		});
+	},
+	cbisf: function(cb){
+		var reg=new RegExp("\\(*\\)");
+		if(reg.test(cb)){
+			return true;
+		}else{
+			return false;
+		}
 	}
 };
 $(window).ready(function(){
@@ -447,7 +458,15 @@ $(window).ready(function(){
 		var _method = $(this).data('m');
 		var _submit = $(this).data('s');
 		var _callback = $(this).data('c');
+		var _ready = $(this).data('r');
 		$(_form).find("#submit_type").val(_submit);
+		
+		if(typeof(_ready)!="undefined" && _ready!=""){
+			if(!bolevine.cbisf(_ready)){
+				_ready += "()";
+			}
+			eval("("+_ready+")");
+		}
 		var data = $(_form).data('yiiActiveForm');
 		if(data){
 			data.validated=true;
