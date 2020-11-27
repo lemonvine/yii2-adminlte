@@ -84,11 +84,10 @@ var bolevine = {
 	},
 	reload: function(is_chain){
 		var url = location.href;
-		if(!url.includes('ref')){
+		if(!url.includes('ref') && is_chain){
 			if(url.includes('?')){
 				url = url + "&ref="+encodeURI(bolevine.referer);
-			}
-			else{
+			}else{
 				url = url + "?ref="+encodeURI(bolevine.referer);
 			};
 		};
@@ -266,20 +265,20 @@ var bolevine = {
 			var btn = $(target).data('btn')||'';
 			var params = {};
 			params.elem = '#'+id;
-			if(type!=''){
+			if(typeof(type)!="undefined" && type!=''){
 				params.type=type;
 			};
-			if(format!=''){
+			if(typeof(format)!="undefined" && format!=''){
 				params.format=format;
 			};
 			params.trigger='click';
 			
-			if(btn!=''){
+			if(typeof(btn)!="undefined" && btn!=''){
 				params.btns= ['clear', btn, 'confirm'];
 			};
 			
 			params.done=function(date){
-				if(hidden!=''){
+				if(typeof(hidden)!="undefined" && hidden!=''){
 					if(save == 'string'){
 						if(date){
 							$("#"+hidden).val(date);
