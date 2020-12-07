@@ -24,10 +24,29 @@
 
 <div class="ui-step-wrap">
 	<div class="ui-step-bg"></div>
-	<div class="ui-step-progress" style="width:<?= $progress_width?>%"></div>
-	<ul class="ui-step">
+	<div id="ui-step-progress" class="ui-step-progress" style="width:<?= $progress_width?>%"></div>
+	<ul id="ui-step" class="ui-step">
 		<?php foreach ($steps as $key=>$step):?>
-			<li class="ui-step-item <?=$key <= $current?'active':'' ?> <?=$key== $current?'action':'' ?>"><div class="ui-step-item-title"><?=$step?></div><div class="ui-step-item-num"><span><?=$key?></span></div></li>
+			<li id="progress_<?=$key ?>" class="ui-step-item <?=$key <= $current?'active':'' ?> <?=$key== $current?'action':'' ?>"><div class="ui-step-item-title"><?=$step?></div><div class="ui-step-item-num"><span><?=$key?></span></div></li>
 		<?php endforeach;?>
 	</ul>
 </div>
+<script>
+var progressMove = function(num){
+	var _list = $("#ui-step>li");
+	$(_list).removeClass('active').removeClass('action');
+	var _left = $("#ui-step-progress").offset().left;
+	var _pos = $("#progress_"+num+" span").offset().left;
+	$("#ui-step-progress").css('width', _pos-_left+5);
+	for(var i=1, l=_list.length+1; i<l; i++ ){
+		if(i<num){
+			$("#progress_"+i).addClass('active');
+		}else if(i==num){
+			
+			$("#progress_"+i).addClass('active action');
+		}else{
+			break;
+		}
+	}
+}
+</script>

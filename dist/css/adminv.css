@@ -46,6 +46,11 @@ ol.dynamiclist>li{border-left: solid 1px #ddd; border-right: solid 1px #ddd; bor
 .accordion-toggle{cursor:pointer;}
 .collapsed .toggle-icon{transform: rotate(-90deg);}
 
+.form-caption{color: #595959; background-color: #D8D8D8; text-align: center; padding: 15px; margin: 8px 0px; border-left: solid 5px #3388FE; font-size: 26px;}
+.form-caption img{width: 26px; height: 26px;}
+.form-title{color:#4c90ff;font-size: 16px;font-weight: normal; line-height: 20px;position: relative;padding-left: 15px;margin:15px 0;width: 100%;}
+.form-title:before{content: '';width:4px;height:20px;position: absolute;top: 0;left: 0;background: #4c90ff;}
+
 @media (min-width: 1200px) and (max-width: 1400px) {
 	.form-search .col-lg-3{flex: 0 0 33.333333%;max-width: 33.333333%;}
 }

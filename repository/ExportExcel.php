@@ -346,7 +346,7 @@ class ExportExcel
 							if(!empty($column['value'])){
 								$value = call_user_func($column['value'], $row);
 							}else if(empty($format)){
-								$value = $row[$attr];
+								$value = $row[$attr]??'';
 							}else{
 								$value = $formatter->format($row[$attr], $format);
 							}

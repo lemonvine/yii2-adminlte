@@ -165,6 +165,9 @@ class Utility
 	}
 	
 	public static function buildGallery($strfile){
+		if(empty($strfile)){
+			return "";
+		}
 		$http_path = Yii::$app->params['FILE_HTTP_PATH'];
 		$files = Json::decode($strfile, true);
 		$gallery = '<ul class="list-inline upload-gallery m-1">';

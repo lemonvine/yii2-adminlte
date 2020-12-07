@@ -118,10 +118,10 @@ class AdminController extends Controller
 	 * @param string $msg
 	 * @return string
 	 */
-	public function modelSaveSuccess($msg="保存成功", $url='')
+	public function modelSaveSuccess($msg="保存成功", $url='', $chain=TRUE)
 	{
 		$msg = addslashes($msg);
-		return "<script type='text/javascript'>window.parent.bolevine.dialogok('{$msg}', '{$url}');</script>";
+		return "<script type='text/javascript'>window.parent.bolevine.dialogok('{$msg}', '{$url}', '{$chain}');</script>";
 	}
 	
 	/**
