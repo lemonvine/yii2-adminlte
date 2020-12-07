@@ -18,6 +18,8 @@ body,html{height:100%}
 
 .tab-content{padding: 8px;}
 .fixed-form-btns{bottom: 48px; position: sticky; width: 100%; margin-left: -20px; padding-left: 10px;}
+.form-btns{position: fixed;bottom:0;background: #f5f5f5;width: 100%;padding: 7px;border:1px solid #ddd;z-index: 99;font-size: 0;}
+.form-btns .btn{display: inline-block;margin:0 2px;}
 
 .upload-gallery{position: relative;}
 .upload-btn{position: relative;display: inline-block;overflow: hidden;text-align: center;vertical-align: center;}
