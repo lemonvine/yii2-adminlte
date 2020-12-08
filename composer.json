@@ -16,11 +16,11 @@
 		"issues" : "https://github.com/lemonvine/yii2-adminlte/issues"
 	},
 	"require" : {
-		"yiisoft/yii2" : "2.*",
-		"yiisoft/yii2-bootstrap4" : "~2.0.6",
-		"npm-asset/bootstrap" : "^4.3",
-		"npm-asset/codemirror" : "5.*@stable",
-		"npm-asset/summernote" : "0.*@stable"
+		"yiisoft/yii2" : "~2.0.35",
+		"yiisoft/yii2-bootstrap4" : "2.0.8",
+		"npm-asset/bootstrap" : "4.5.0",
+		"npm-asset/codemirror" : "5.53.2",
+		"npm-asset/summernote" : "0.8.16"
 	},
 	"autoload" : {
 		"psr-4" : {
