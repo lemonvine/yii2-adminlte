@@ -395,7 +395,7 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 			$ulOptions['data-for'] = $hidden_id;
 		}else{
 			$fileOptions['id'] = $hidden_id;
-			$input = Html::activeFileInput($this->model, $this->attribute, $fileOptions);
+			$input = Html::activeInput('file', $this->model, $this->attribute, $fileOptions);
 		}
 		
 		$content = "<span>$title</span>";

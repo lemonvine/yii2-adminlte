@@ -786,6 +786,8 @@ $(window).ready(function(){
 					_media = $('<video class="media" controls="controls"></video>');
 				}else if(type=="audio"){
 					_media = $('<audio class="media" controls="controls"></audio>');
+				}else{
+					_media = $('<div class="media">'+file.name+'</div>');
 				}
 				_media.attr('id', id).attr('src', imgsrc).data('p', type);
 				
