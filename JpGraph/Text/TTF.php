@@ -307,8 +307,7 @@ class TTF
         if (!is_array($ff)) {
             $ff = [$ff];
         }
-
-        $jpgraph_font_dir = dirname(dirname(__FILE__)) . '/fonts/';
+        $jpgraph_font_dir = \Yii::getAlias("@backend").'/assets/fonts/';
 
         foreach ($ff as $font_file) {
             // All font families are guaranteed to have the normal style
@@ -321,14 +320,16 @@ class TTF
                 Util\JpGraphError::RaiseL(25048, $fam); //("Unknown font style specification [$fam].");
             }
 
+            if ($font_candidate = self::getFullPathIfExists($font_file, $jpgraph_font_dir)) {
+                $font_file = $font_candidate;
+                break;
+            }
             if ($font_candidate = self::getFullPathIfExists($font_file, $font_path)) {
                 $font_file = $font_candidate;
-
                 break;
             }
             if ($font_candidate = self::getFullPathIfExists($font_file, self::$FONT_BASEPATH)) {
                 $font_file = $font_candidate;
-
                 break;
             }
 
