@@ -2,8 +2,8 @@
 /*
 pRadar - class to draw radar charts
 
-Version     : 2.4.0-dev
-Made by     : Jean-Damien POGOLOTTI
+Version	 : 2.4.0-dev
+Made by	 : Jean-Damien POGOLOTTI
 Maintainedby: Momchil Bozhinov
 Last Update : 17/10/2019
 

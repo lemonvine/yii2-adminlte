@@ -2,8 +2,8 @@
 /*
 pPie - class to draw pie charts
 
-Version     : 2.4.0-dev
-Made by     : Jean-Damien POGOLOTTI
+Version	 : 2.4.0-dev
+Made by	 : Jean-Damien POGOLOTTI
 Maintainedby: Momchil Bozhinov
 Last Update : 01/09/2019
 
@@ -234,7 +234,7 @@ class pPie
 
 			foreach($Values as $Value) {
 				$EndAngle = ($Value * $ScaleFactor) + $Offset;
-			    ((int)$EndAngle > 360) AND $EndAngle = 0;
+				((int)$EndAngle > 360) AND $EndAngle = 0;
 				$Angle = ($EndAngle - $Offset) / 2 + $Offset;
 				$Xc = cos(deg2rad($Angle - 90)) * $Radius + $X;
 				$Yc = sin(deg2rad($Angle - 90)) * $Radius + $Y;

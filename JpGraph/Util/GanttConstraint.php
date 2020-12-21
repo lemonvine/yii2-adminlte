@@ -12,27 +12,27 @@ namespace lemon\JpGraph\Util;
  */
 class GanttConstraint
 {
-    public $iConstrainRow;
-    public $iConstrainType;
-    public $iConstrainColor;
-    public $iConstrainArrowSize;
-    public $iConstrainArrowType;
+	public $iConstrainRow;
+	public $iConstrainType;
+	public $iConstrainColor;
+	public $iConstrainArrowSize;
+	public $iConstrainArrowType;
 
-    /**
-     * CONSTRUCTOR.
-     *
-     * @param mixed $aRow
-     * @param mixed $aType
-     * @param mixed $aColor
-     * @param mixed $aArrowSize
-     * @param mixed $aArrowType
-     */
-    public function __construct($aRow, $aType, $aColor, $aArrowSize, $aArrowType)
-    {
-        $this->iConstrainType      = $aType;
-        $this->iConstrainRow       = $aRow;
-        $this->iConstrainColor     = $aColor;
-        $this->iConstrainArrowSize = $aArrowSize;
-        $this->iConstrainArrowType = $aArrowType;
-    }
+	/**
+	 * CONSTRUCTOR.
+	 *
+	 * @param mixed $aRow
+	 * @param mixed $aType
+	 * @param mixed $aColor
+	 * @param mixed $aArrowSize
+	 * @param mixed $aArrowType
+	 */
+	public function __construct($aRow, $aType, $aColor, $aArrowSize, $aArrowType)
+	{
+		$this->iConstrainType	  = $aType;
+		$this->iConstrainRow	   = $aRow;
+		$this->iConstrainColor	 = $aColor;
+		$this->iConstrainArrowSize = $aArrowSize;
+		$this->iConstrainArrowType = $aArrowType;
+	}
 }

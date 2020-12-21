@@ -5,32 +5,32 @@
  */
 
 /**
- * // File:        config.inc.php
+ * // File:		config.inc.php
  * // Description: Configuration constants and settings for JpGraph library
- * // Created:     2004-03-27
- * // Ver:         $Id: jpg-config.inc.php 1871 2009-09-29 05:56:39Z ljp $
+ * // Created:	 2004-03-27
+ * // Ver:		 $Id: jpg-config.inc.php 1871 2009-09-29 05:56:39Z ljp $
  * //
  * // Copyright (c) Asial Corporation. All rights reserved.
  */
 
 // check if jpgraph is the root folder
 if (file_exists(dirname(__DIR__) . '/vendor/autoload.php')) {
-    defined('ROOT_PATH') || define('ROOT_PATH', dirname(__DIR__));
+	defined('ROOT_PATH') || define('ROOT_PATH', dirname(__DIR__));
 } elseif (file_exists(dirname(dirname(dirname(dirname(__DIR__)))) . '/vendor/autoload.php')) {
-    // otherwise, jpgraph was required as a composer dependency
-    defined('ROOT_PATH') || define('ROOT_PATH', dirname(dirname(dirname(dirname(__DIR__)))));
+	// otherwise, jpgraph was required as a composer dependency
+	defined('ROOT_PATH') || define('ROOT_PATH', dirname(dirname(dirname(dirname(__DIR__)))));
 }
 //require_once ROOT_PATH . '/vendor/autoload.php';
 
 use lemon\JpGraph\Util\ErrMsgText;
 
 if (is_readable(ROOT_PATH . '/.env') && class_exists('\Symfony\Component\Dotenv\Dotenv')) {
-    $dotenv = new \Symfony\Component\Dotenv\Dotenv();
-    $dotenv->load(ROOT_PATH . '/.env');
+	$dotenv = new \Symfony\Component\Dotenv\Dotenv();
+	$dotenv->load(ROOT_PATH . '/.env');
 }
 
 if (getenv('JPGRAPH_DEBUGMODE') && !defined('DEBUGMODE')) {
-    define('DEBUGMODE', getenv('JPGRAPH_DEBUGMODE'));
+	define('DEBUGMODE', getenv('JPGRAPH_DEBUGMODE'));
 }
 // Sets DEBUGMODE for the app. Set this to true to enable debugging outputs
 defined('DEBUGMODE') || define('DEBUGMODE', false);
@@ -38,7 +38,7 @@ defined('DEBUGMODE') || define('DEBUGMODE', false);
 ini_set('display_errors', (int) DEBUGMODE);
 ini_set('display_startup_errors', (int) DEBUGMODE);
 if (DEBUGMODE) {
-    error_reporting(E_ALL);
+	error_reporting(E_ALL);
 }
 
 /*
@@ -76,13 +76,13 @@ if (DEBUGMODE) {
 //
 // Or read them from environment variables
 if (getenv('JPGRAPH_CACHE_DIR')) {
-    define('CACHE_DIR', getenv('JPGRAPH_CACHE_DIR'));
+	define('CACHE_DIR', getenv('JPGRAPH_CACHE_DIR'));
 }
 if (getenv('JPGRAPH_TTF_DIR')) {
-    define('TTF_DIR', getenv('JPGRAPH_TTF_DIR'));
+	define('TTF_DIR', getenv('JPGRAPH_TTF_DIR'));
 }
 if (getenv('JPGRAPH_MBTTF_DIR')) {
-    define('MBTTF_DIR', getenv('JPGRAPH_MBTTF_DIR'));
+	define('MBTTF_DIR', getenv('JPGRAPH_MBTTF_DIR'));
 }
 
 /*
@@ -121,7 +121,7 @@ define('DEFAULT_GFORMAT', 'auto');
 // just not use it. By setting USE_CACHE=false no files will even
 // be generated in the cache directory.
 if (!defined('USE_CACHE')) {
-    define('USE_CACHE', getenv('JPGRAPH_USE_CACHE') ? getenv('JPGRAPH_USE_CACHE') : false);
+	define('USE_CACHE', getenv('JPGRAPH_USE_CACHE') ? getenv('JPGRAPH_USE_CACHE') : false);
 }
 
 // Should we try to find an image in the cache before generating it?
@@ -130,7 +130,7 @@ if (!defined('USE_CACHE')) {
 // disabled the cached will still be updated with the newly generated
 // image. Set also 'USE_CACHE' below.
 if (!defined('READ_CACHE')) {
-    define('READ_CACHE', true);
+	define('READ_CACHE', true);
 }
 
 // Determine if the error handler should be image based or purely
@@ -331,7 +331,7 @@ define('LINESTYLE_LONGDASH', 4);
 // PNG, JPG or GIF depending on what is installed on the target system
 // in that order.
 if (!defined('DEFAULT_GFORMAT')) {
-    define('DEFAULT_GFORMAT', 'auto');
+	define('DEFAULT_GFORMAT', 'auto');
 }
 
 // Styles for gradient color fill
@@ -496,75 +496,75 @@ define('_FORCE_IMGDIR', '/tmp/jpgimg/');
 // if they have not been previously specified
 //
 if (strstr(PHP_OS, 'WIN')) {
-    define('SYSTEMROOT', getenv('SystemRoot'));
+	define('SYSTEMROOT', getenv('SystemRoot'));
 }
 if (USE_CACHE) {
-    if (!defined('CACHE_DIR')) {
-        if (strstr(PHP_OS, 'WIN')) {
-            if (empty($_SERVER['TEMP'])) {
-                $t   = new ErrMsgText();
-                $msg = $t->Get(11, $file, $lineno);
-                die($msg);
-            }
-            define('CACHE_DIR', $_SERVER['TEMP'] . '/');
-        } else {
-            define('CACHE_DIR', '/tmp/jpgraph_cache/');
-        }
-    }
+	if (!defined('CACHE_DIR')) {
+		if (strstr(PHP_OS, 'WIN')) {
+			if (empty($_SERVER['TEMP'])) {
+				$t   = new ErrMsgText();
+				$msg = $t->Get(11, $file, $lineno);
+				die($msg);
+			}
+			define('CACHE_DIR', $_SERVER['TEMP'] . '/');
+		} else {
+			define('CACHE_DIR', '/tmp/jpgraph_cache/');
+		}
+	}
 } elseif (!defined('CACHE_DIR')) {
-    define('CACHE_DIR', '');
+	define('CACHE_DIR', '');
 }
 
 //
 // Setup path for western/latin TTF fonts
 //
 if (!defined('TTF_DIR')) {
-    if (strstr(PHP_OS, 'WIN')) {
-        if (empty(SYSTEMROOT)) {
-            $t   = new ErrMsgText();
-            $msg = $t->Get(12, $file, $lineno);
-            die($msg);
-        }
-        define('TTF_DIR', SYSTEMROOT . '/fonts/');
-    } else {
-        define('TTF_DIR', '/usr/share/fonts/truetype/');
-    }
+	if (strstr(PHP_OS, 'WIN')) {
+		if (empty(SYSTEMROOT)) {
+			$t   = new ErrMsgText();
+			$msg = $t->Get(12, $file, $lineno);
+			die($msg);
+		}
+		define('TTF_DIR', SYSTEMROOT . '/fonts/');
+	} else {
+		define('TTF_DIR', '/usr/share/fonts/truetype/');
+	}
 }
 
 //
 // Setup path for MultiByte TTF fonts (japanese, chinese etc.)
 //
 if (!defined('MBTTF_DIR')) {
-    if (strstr(PHP_OS, 'WIN')) {
-        if (empty(SYSTEMROOT)) {
-            $t   = new ErrMsgText();
-            $msg = $t->Get(12, $file, $lineno);
-            die($msg);
-        }
-        define('MBTTF_DIR', SYSTEMROOT . '/fonts/');
-    } else {
-        define('MBTTF_DIR', '/usr/share/fonts/truetype/');
-    }
+	if (strstr(PHP_OS, 'WIN')) {
+		if (empty(SYSTEMROOT)) {
+			$t   = new ErrMsgText();
+			$msg = $t->Get(12, $file, $lineno);
+			die($msg);
+		}
+		define('MBTTF_DIR', SYSTEMROOT . '/fonts/');
+	} else {
+		define('MBTTF_DIR', '/usr/share/fonts/truetype/');
+	}
 }
 
 //
 // Make sure PHP version is high enough
 //
 if (version_compare(PHP_VERSION, MIN_PHPVERSION) < 0) {
-    Amenadiel\JpGraph\Util\JpGraphError::RaiseL(13, PHP_VERSION, MIN_PHPVERSION);
-    die();
+	Amenadiel\JpGraph\Util\JpGraphError::RaiseL(13, PHP_VERSION, MIN_PHPVERSION);
+	die();
 }
 
 //
 // Make GD sanity check
 //
 if (!function_exists('imagetypes') || !function_exists('imagecreatefromstring')) {
-    Amenadiel\JpGraph\Util\JpGraphError::RaiseL(25001);
-    //("This PHP installation is not configured with the GD library. Please recompile PHP with GD support to run JpGraph. (Neither function imagetypes() nor imagecreatefromstring() does exist)");
+	Amenadiel\JpGraph\Util\JpGraphError::RaiseL(25001);
+	//("This PHP installation is not configured with the GD library. Please recompile PHP with GD support to run JpGraph. (Neither function imagetypes() nor imagecreatefromstring() does exist)");
 }
 
 if (INSTALL_PHP_ERR_HANDLER) {
-    set_error_handler('\Amenadiel\JpGraph\Util\Helper::phpErrorHandler');
+	set_error_handler('\Amenadiel\JpGraph\Util\Helper::phpErrorHandler');
 }
 
 //
@@ -573,7 +573,7 @@ if (INSTALL_PHP_ERR_HANDLER) {
 // debugging difficult. This is controlled by the user setting CATCH_PHPERRMSG
 //
 if (isset($GLOBALS['php_errormsg']) && CATCH_PHPERRMSG && !preg_match('/|Deprecated|/i', $GLOBALS['php_errormsg'])) {
-    Amenadiel\JpGraph\Util\JpGraphError::RaiseL(25004, $GLOBALS['php_errormsg']);
+	Amenadiel\JpGraph\Util\JpGraphError::RaiseL(25004, $GLOBALS['php_errormsg']);
 }
 
 // Constants for types of static bands in plot area
@@ -742,31 +742,31 @@ define('GICON_FOLDER', 11);
 define('GICON_TEXTIMPORTANT', 12);
 
 if (!class_exists('\Kint')) {
-    /**
-     * Class that mocks Kint
-     * (will use this when dev dependencies are not installed).
-     */
-    class Kint
-    {
-        public static $enabled_mode = true;
+	/**
+	 * Class that mocks Kint
+	 * (will use this when dev dependencies are not installed).
+	 */
+	class Kint
+	{
+		public static $enabled_mode = true;
 
-        public static function dump()
-        {
-        }
-    }
+		public static function dump()
+		{
+		}
+	}
 }
 
 if (property_exists('\Kint', 'enabled_mode')) {
-    \Kint::$enabled_mode = DEBUGMODE;
+	\Kint::$enabled_mode = DEBUGMODE;
 } elseif (method_exists('\Kint', 'enabled')) {
-    \Kint::enabled(DEBUGMODE);
+	\Kint::enabled(DEBUGMODE);
 }
 
 if (!function_exists('is_countable')) {
-    function is_countable($c)
-    {
-        return is_array($c) || $c instanceof Countable;
-    }
+	function is_countable($c)
+	{
+		return is_array($c) || $c instanceof Countable;
+	}
 }
 
 /**
@@ -776,30 +776,30 @@ if (!function_exists('is_countable')) {
  */
 function safe_count($var)
 {
-    if (is_countable($var)) {
-        return count($var);
-    }
+	if (is_countable($var)) {
+		return count($var);
+	}
 
-    return 0;
+	return 0;
 }
 
 if (!class_exists('\PhpConsole\Handler')) {
-    /**
-     * Class that mocks PHP-Console debug feature.
-     */
-    class PC
-    {
-        public static function debug()
-        {
-        }
-    }
+	/**
+	 * Class that mocks PHP-Console debug feature.
+	 */
+	class PC
+	{
+		public static function debug()
+		{
+		}
+	}
 } elseif (
-    getenv('JPGRAPH_USE_PHPCONSOLE') &&
-    isset($_SERVER['HTTP_USER_AGENT']) &&
-    strpos($_SERVER['HTTP_USER_AGENT'], 'Chrome') !== false
+	getenv('JPGRAPH_USE_PHPCONSOLE') &&
+	isset($_SERVER['HTTP_USER_AGENT']) &&
+	strpos($_SERVER['HTTP_USER_AGENT'], 'Chrome') !== false
 ) {
-    $handler = \PhpConsole\Handler::getInstance();
-    \PhpConsole\Helper::register();
-    $handler->start();
-    \PC::debug('Started');
+	$handler = \PhpConsole\Handler::getInstance();
+	\PhpConsole\Helper::register();
+	$handler->start();
+	\PC::debug('Started');
 }

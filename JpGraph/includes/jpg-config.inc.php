@@ -5,10 +5,10 @@
  */
 
 /**
- * // File:        JPG-CONFIG.INC
+ * // File:		JPG-CONFIG.INC
  * // Description: Configuration file for JpGraph library
- * // Created:     2004-03-27
- * // Ver:         $Id: jpg-config.inc.php 1871 2009-09-29 05:56:39Z ljp $
+ * // Created:	 2004-03-27
+ * // Ver:		 $Id: jpg-config.inc.php 1871 2009-09-29 05:56:39Z ljp $
  * //
  * // Copyright (c) Asial Corporation. All rights reserved.
  */

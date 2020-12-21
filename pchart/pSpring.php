@@ -2,8 +2,8 @@
 /*
 pSpring - class to draw spring graphs
 
-Version     : 2.4.0-dev
-Made by     : Jean-Damien POGOLOTTI
+Version	 : 2.4.0-dev
+Made by	 : Jean-Damien POGOLOTTI
 Maintainedby: Momchil Bozhinov
 Last Update : 01/09/2019
 

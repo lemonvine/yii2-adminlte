@@ -2,8 +2,8 @@
 /*
 pDraw - class to manipulate data arrays
 
-Version     : 2.4.0-dev
-Made by     : Jean-Damien POGOLOTTI
+Version	 : 2.4.0-dev
+Made by	 : Jean-Damien POGOLOTTI
 Maintainedby: Momchil Bozhinov
 Last Update : 01/09/2019
 
@@ -142,7 +142,7 @@ class pData
 			throw pException::InvalidInput("Invalid serie name");
 		}
 
-		(isset($Props["Picture"]))    	AND $this->Data["Series"][$Serie]["Picture"]     = strval($Props["Picture"]);
+		(isset($Props["Picture"]))		AND $this->Data["Series"][$Serie]["Picture"]	 = strval($Props["Picture"]);
 		(isset($Props["Description"])) 	AND $this->Data["Series"][$Serie]["Description"] = strval($Props["Description"]);
 		(isset($Props["Shape"]))  	AND $this->Data["Series"][$Serie]["Shape"]  	 = intval($Props["Shape"]);
 		(isset($Props["isDrawable"]))   AND $this->Data["Series"][$Serie]["isDrawable"]  = boolval($Props["isDrawable"]);
@@ -167,11 +167,11 @@ class pData
 			$this->Data["Abscissa"] = $Serie;
 
 			if (!empty($Props)){
-				(isset($Props["Name"]))    AND $this->Data["AbscissaProperties"]["Name"]    = strval($Props["Name"]);
+				(isset($Props["Name"]))	AND $this->Data["AbscissaProperties"]["Name"]	= strval($Props["Name"]);
 				(isset($Props["Display"])) AND $this->Data["AbscissaProperties"]["Display"] = intval($Props["Display"]);
 				(isset($Props["Format"]))  AND $this->Data["AbscissaProperties"]["Format"]  = $Props["Format"];
-				(isset($Props["Unit"]))    AND $this->Data["AbscissaProperties"]["Unit"]    = strval($Props["Unit"]);
-				(isset($Props["Name"]))    AND $this->Data["AbscissaProperties"]["Name"]    = strval($Props["Name"]);
+				(isset($Props["Unit"]))	AND $this->Data["AbscissaProperties"]["Unit"]	= strval($Props["Unit"]);
+				(isset($Props["Name"]))	AND $this->Data["AbscissaProperties"]["Name"]	= strval($Props["Name"]);
 				(isset($Props["Position"])) AND $this->Data["AbscissaProperties"]["Position"] = intval($Props["Position"]);
 			}
 		} else {
@@ -222,12 +222,12 @@ class pData
 	{
 		if (isset($this->Data["ScatterSeries"][$Id])) {
 
-			(isset($Props["Shape"]))	AND $this->Data["ScatterSeries"][$Id]["Shape"]	     = intval($Props["Shape"]);
+			(isset($Props["Shape"]))	AND $this->Data["ScatterSeries"][$Id]["Shape"]		 = intval($Props["Shape"]);
 			(isset($Props["Description"]))	AND $this->Data["ScatterSeries"][$Id]["Description"] = strval($Props["Description"]);
-			(isset($Props["Picture"]))	AND $this->Data["ScatterSeries"][$Id]["Picture"]     = strval($Props["Picture"]);
+			(isset($Props["Picture"]))	AND $this->Data["ScatterSeries"][$Id]["Picture"]	 = strval($Props["Picture"]);
 			(isset($Props["isDrawable"]))	AND $this->Data["ScatterSeries"][$Id]["isDrawable"]  = boolval($Props["isDrawable"]);
-			(isset($Props["Ticks"]))	AND $this->Data["ScatterSeries"][$Id]["Ticks"]	     = intval($Props["Ticks"]);
-			(isset($Props["Weight"]))	AND $this->Data["ScatterSeries"][$Id]["Weight"]	     = intval($Props["Weight"]);
+			(isset($Props["Ticks"]))	AND $this->Data["ScatterSeries"][$Id]["Ticks"]		 = intval($Props["Ticks"]);
+			(isset($Props["Weight"]))	AND $this->Data["ScatterSeries"][$Id]["Weight"]		 = intval($Props["Weight"]);
 			if (isset($Props["Color"])) {
 				if ($Props["Color"] instanceof pColor){
 					$this->Data["ScatterSeries"][$Id]["Color"] = $Props["Color"];
@@ -314,8 +314,8 @@ class pData
 	{
 		if (isset($this->Data["Axis"][$AxisID])) {
 
-			(isset($Props["Unit"]))     AND $this->Data["Axis"][$AxisID]["Unit"] 	 = strval($Props["Unit"]);
-			(isset($Props["Name"]))     AND $this->Data["Axis"][$AxisID]["Name"] 	 = strval($Props["Name"]);
+			(isset($Props["Unit"]))	 AND $this->Data["Axis"][$AxisID]["Unit"] 	 = strval($Props["Unit"]);
+			(isset($Props["Name"]))	 AND $this->Data["Axis"][$AxisID]["Name"] 	 = strval($Props["Name"]);
 			(isset($Props["Display"]))  AND $this->Data["Axis"][$AxisID]["Display"]  = intval($Props["Display"]);
 			(isset($Props["Format"]))   AND $this->Data["Axis"][$AxisID]["Format"] 	 = $Props["Format"];
 			(isset($Props["Position"])) AND $this->Data["Axis"][$AxisID]["Position"] = intval($Props["Position"]);
