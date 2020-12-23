@@ -212,27 +212,27 @@ class ImportExcel{
 	
 	* @param array $options  操作选项，例如：
 	
-	*             bool print   设置打印格式
+	*			 bool print   设置打印格式
 	
-	*             string freezePane 锁定行数，例如表头为第一行，则锁定表头输入A2
+	*			 string freezePane 锁定行数，例如表头为第一行，则锁定表头输入A2
 	
-	*             array setARGB  设置背景色，例如['A1', 'C1']
+	*			 array setARGB  设置背景色，例如['A1', 'C1']
 	
-	*             array setWidth  设置宽度，例如['A' => 30, 'C' => 20]
+	*			 array setWidth  设置宽度，例如['A' => 30, 'C' => 20]
 	
-	*             bool setBorder 设置单元格边框
+	*			 bool setBorder 设置单元格边框
 	
-	*             array mergeCells 设置合并单元格，例如['A1:J1' => 'A1:J1']
+	*			 array mergeCells 设置合并单元格，例如['A1:J1' => 'A1:J1']
 	
-	*             array formula  设置公式，例如['F2' => '=IF(D2>0,E42/D2,0)']
+	*			 array formula  设置公式，例如['F2' => '=IF(D2>0,E42/D2,0)']
 	
-	*             array format   设置格式，整列设置，例如['A' => 'General']
+	*			 array format   设置格式，整列设置，例如['A' => 'General']
 	
-	*             array alignCenter 设置居中样式，例如['A1', 'A2']
+	*			 array alignCenter 设置居中样式，例如['A1', 'A2']
 	
-	*             array bold    设置加粗样式，例如['A1', 'A2']
+	*			 array bold	设置加粗样式，例如['A1', 'A2']
 	
-	*             string savePath  保存路径，设置后则文件保存到服务器，不通过浏览器下载
+	*			 string savePath  保存路径，设置后则文件保存到服务器，不通过浏览器下载
 	
 	*/
 	

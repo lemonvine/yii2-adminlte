@@ -3,8 +3,8 @@
 /*
 pCharts - class with charts
 
-Version     : 2.4.0-dev
-Made by     : Forked by Momchil Bozhinov from the original pDraw class from Jean-Damien POGOLOTTI
+Version	 : 2.4.0-dev
+Made by	 : Forked by Momchil Bozhinov from the original pDraw class from Jean-Damien POGOLOTTI
 Last Update : 01/09/2019
 
 Contains functions:

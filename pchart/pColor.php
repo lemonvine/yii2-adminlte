@@ -2,8 +2,8 @@
 /*
 pColor - Data structure for colors
 
-Version     : 2.4.0-dev
-Made by     : Momchil Bozhinov
+Version	 : 2.4.0-dev
+Made by	 : Momchil Bozhinov
 Last Update : 14/10/2019
 
 */
