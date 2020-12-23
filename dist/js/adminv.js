@@ -586,12 +586,20 @@ $(window).ready(function(){
 	$(document).on('change', '.implicate',function(){
 		if(!bolevine.precall($(this))) return false;
 		var param = {};
-		param.url=$(this).data("url");
+		param.id = $(this).val();
+		var _url=$(this).data("url");
+		var _target = $(this).data('target');
+		var _replace = $(this).data('replace');
 		param.data={id: $(this).val()};
-		param.callback = 'bolevine.linkage';
-		param.target = $(this).data('target');
-		param.type='get';
-		bolevine.vjax(param);
+		var _data = bolevine.str2json(param);
+		$.ajax({type: 'get', url: _url, data: _data, success: function(r) {
+			if(_replace=='replace'){
+				$(_target).replaceWith(r);
+			}else{
+				$(_target).html(r);
+			}
+		}, error : function(e){bolevine.alert({message: "错误："+e.responseText, flag: 4});}
+		});
 	});
 	//change事件，调用方法
 	$(document).on('change', '.changecall',function(){
