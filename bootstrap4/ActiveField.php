@@ -365,12 +365,13 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 	}
 	
 	public function upload($options=[]){
-		$initOptions = ['title'=>'选择文件', 'multi'=>FALSE, 'beforehand'=>FALSE, 'accept'=>'', 'isbtn'=>FALSE, 'folder'=>''];
+		$initOptions = ['title'=>'选择文件', 'multi'=>FALSE, 'beforehand'=>FALSE, 'accept'=>'', 'isjson'=>TRUE, 'isbtn'=>FALSE, 'folder'=>''];
 		$options = array_merge($initOptions, $options);
 		
 		$title = ArrayHelper::remove($options, 'title');
 		$multi = ArrayHelper::remove($options, 'multi', FALSE);
 		$isbtn = ArrayHelper::remove($options, 'isbtn', TRUE);
+		$isjson = ArrayHelper::remove($options, 'isjson', TRUE);
 		$beforehand = ArrayHelper::remove($options, 'beforehand', FALSE);
 		$hidden_id = isset($options['id'])?$options['id']:Html::getInputId($this->model, $this->attribute);
 		$value =  Html::getAttributeValue($this->model, $this->attribute);
@@ -404,7 +405,12 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 		$html = '';
 		if(!empty($value)){
 			$http_path = Yii::$app->params['FILE_HTTP_PATH'];
-			$medias = Json::decode($value, true);
+			if($isjson){
+				$medias = Json::decode($value, true);
+			}else{
+				$medias = [$value];
+			}
+			
 			foreach ($medias as $media){
 				if(is_array($media)){
 					$media_type = $media[0];
