@@ -100,12 +100,12 @@ class Image
 		}
 		$this->ttf	  = new TTF();
 		$this->langconv = new LanguageConv();
-
-		$this->ff_font0	  = imageloadfont(dirname(dirname(__FILE__)) . '/fonts/FF_FONT0.gdf');
-		$this->ff_font1	  = imageloadfont(dirname(dirname(__FILE__)) . '/fonts/FF_FONT1.gdf');
-		$this->ff_font2	  = imageloadfont(dirname(dirname(__FILE__)) . '/fonts/FF_FONT2.gdf');
-		$this->ff_font1_bold = imageloadfont(dirname(dirname(__FILE__)) . '/fonts/FF_FONT1-Bold.gdf');
-		$this->ff_font2_bold = imageloadfont(dirname(dirname(__FILE__)) . '/fonts/FF_FONT2-Bold.gdf');
+		$font_path = \Yii::getAlias("@backend").'/assets/fonts/';
+		$this->ff_font0	  = imageloadfont($font_path . 'FF_FONT0.gdf');
+		$this->ff_font1	  = imageloadfont($font_path . 'FF_FONT1.gdf');
+		$this->ff_font2	  = imageloadfont($font_path . 'FF_FONT2.gdf');
+		$this->ff_font1_bold = imageloadfont($font_path . 'FF_FONT1-Bold.gdf');
+		$this->ff_font2_bold = imageloadfont($font_path . 'FF_FONT2-Bold.gdf');
 	}
 
 	// Enable interlacing in images
