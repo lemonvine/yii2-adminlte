@@ -148,10 +148,13 @@ class GroupBtn extends Widget
 	 * @return string
 	 */
 	public static function GoButton($config=[]){
-		$params = ['title'=>'保存', 'url'=>'', 'isbtn'=>true, 'color'=>'info', 'target'=>'_self'];
+		$params = ['title'=>'保存', 'url'=>'', 'isbtn'=>true, 'color'=>'info', 'target'=>'_self', 'class'=>''];
 		$params = array_merge($params, $config);
 		
 		$class = ($params['isbtn']?'btn btn-':static::$btn_css).$params['color'];
+		if(!empty($params['class'])){
+			$class .= ' '.$params['class'];
+		}
 		return Html::a($params['title'],  $params['url']??'javascript:;', ['class' => $class, 'target'=>$params['target']]);
 	}
 	
@@ -322,6 +325,13 @@ class GroupBtn extends Widget
 	/**
 	 * 删除按钮
 	 * @param array $config
+	 * 'title'=>'删除',
+	 * 'words'=>'您确定要删除此项吗？',
+	 * 'isbtn'=>false,
+	 * 'color'=>'danger',
+	 * 'data'=>[],
+	 * 'callback'=>'',
+	 * way ajax page, dialog
 	 * @return string
 	 */
 	public static function DeleteButton($config=[]){
@@ -446,6 +456,11 @@ class GroupBtn extends Widget
 		$params = array_merge($params, $config);
 		echo $this->render($this->view_dir.'submit', $params);
 	}
+	
+	public function delete($config=[]){
+		echo self::DeleteButton($config);
+	}
+	
 	
 	private function getClass(){
 		$class = $this->fixed?'form-btns':'form-group btns-line';

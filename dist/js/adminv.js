@@ -674,6 +674,11 @@ $(window).ready(function(){
 		var _url = bolevine.appendurl(_url, 'id', _id);
 		$(this).closest('ul').find('li.active').removeClass('active');
 		$(this).closest('li').addClass('active');
+		var _cursor_top = $("#cursor_top");
+		if(_cursor_top.length>0){
+			var _top = $(_cursor_top).offset().top-60;
+			$("html,body").animate({scrollTop:_top}, 100);
+		}
 		bolevine.rctt(_url, _callback);
 	});
 	//load content

@@ -429,7 +429,7 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 			}
 		}
 		$gallery = Html::tag('ul', $html, $ulOptions);
-		$this->parts['{input}'] = $content. $gallery;
+		$this->parts['{input}'] = '<div>'.$content.'<br />'. $gallery.'</div>';
 		
 		return $this;
 		
