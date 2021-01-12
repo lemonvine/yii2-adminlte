@@ -784,8 +784,15 @@ $(window).ready(function(){
 		
 		var random = Math.floor((Math.random()*1000)+1);
 		var original = '';
-		for(var i=0,l=files.length; i<l; i++){
-			var file = this.files[i];
+
+		var l=files.length;
+		var i=-1;
+		var doUpload = function(){
+			i++;
+			if(i>=l){
+				return;
+			}
+			var file = files[i];
 			var imgsrc = bolevine.imageurl(file);
 			var id="img"+random+"_"+i;
 			var type= file.type.substring(0, file.type.indexOf('/'));
@@ -820,6 +827,7 @@ $(window).ready(function(){
 					formData.append('uploadfile', file);
 					formData.append('path', folder);
 					formData.append('fid', id);
+					formData.append('index', i);
 					$.ajax({
 						url: URL_UPLOAD,
 						type:"post",
@@ -848,17 +856,22 @@ $(window).ready(function(){
 							} else {
 								uploadfail(multi, id, original);
 							}
+							doUpload();
 						},
 						error:function(data) {
 							uploadfail(multi, id, original);
+							doUpload();
 						}
 					});
+				}else{
+					doUpload();
 				}
 			}else{
 				layer.msg('图片异常');
+				doUpload();
 			}
 		}
-		
+		doUpload();
 	});
 	//上传图片view
 	$(document).on('click', '.upload-show', function() {
