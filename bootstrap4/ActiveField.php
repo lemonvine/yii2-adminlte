@@ -11,7 +11,7 @@ namespace lemon\bootstrap4;
 use Yii;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
-use lemon\web\AdminLteAsset;
+use lemon\assets\AdminLteAsset;
 use yii\helpers\Json;
 
 /**
@@ -338,6 +338,11 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 		return $this;
 	}
 	
+	/**
+	 * 图片集
+	 * @param array $options
+	 * @return \lemon\bootstrap4\ActiveField
+	 */
 	public function gallery($options = []){
 		$init =['items'=>[], ];
 		$options = array_merge($init, $options);
@@ -364,8 +369,20 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 		return $this;
 	}
 	
+	/**
+	 * 上传文件,参数以json形式
+	 * @param array $options Json，默认空
+	 * @param string title 上传按钮文字，默认"选择文件"
+	 * @param boolean multi 是否为多图，默认"FALSE"
+	 * @param boolean isjson 内容是否保存成json形式，当multi为false时有效，默认"TRUE"
+	 * @param boolean beforehand 是否选择后立即上传，默认"FALSE"
+	 * @param string accept 上传文件的类型，默认空
+	 * @param boolean isbtn 上传按钮是否采用按钮样式，默认"FALSE"
+	 * @param boolean folder 上传文件保存的目录，默认"upload"
+	 * @return \lemon\bootstrap4\ActiveField
+	 */
 	public function upload($options=[]){
-		$initOptions = ['title'=>'选择文件', 'multi'=>FALSE, 'beforehand'=>FALSE, 'accept'=>'', 'isjson'=>TRUE, 'isbtn'=>FALSE, 'folder'=>''];
+		$initOptions = ['title'=>'选择文件', 'multi'=>FALSE, 'isjson'=>TRUE, 'beforehand'=>FALSE, 'accept'=>'', 'isbtn'=>FALSE, 'folder'=>'upload'];
 		$options = array_merge($initOptions, $options);
 		
 		$title = ArrayHelper::remove($options, 'title');
@@ -410,95 +427,29 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 			}else{
 				$medias = [$value];
 			}
-			
 			foreach ($medias as $media){
 				if(is_array($media)){
 					$media_type = $media[0];
 					$media_src = $media[1];
 					if($media_type=='image'){
-						$media_html = '<img class="media" src="'.$http_path.$media.'" data-f="'.$media.'" data-h="'.$http_path.'" data-p="image">';
+						$media_html = '<img class="media" src="'.$http_path.$media.'" data-f="'.$media.'" data-h="'.$http_path.'" data-p="image" target="image">';
 					}elseif($media_type=='audio'){
 						$media_html = '<audio class="media" controls="controls" preload="meta" src="'.$http_path.$media_src.'" data-f="'.$media_src.'" data-h="'.$http_path.'" data-p="audio"></audio>';
 					}if($media_type=='video'){
 						$media_html = '<video class="media" controls="controls" preload="meta" src="'.$http_path.$media_src.'" data-f="'.$media_src.'" data-h="'.$http_path.'" data-p="video"></video>';
+					}else{
+						$extension = substr(strrchr($media_src, '.'), 1);
+						$media_html = '<div class="media">'.$extension.'文件</div>';
 					}
 				}else{
+					$media_src = $media;
 					$media_html = '<img class="media" src="'.$http_path.$media.'" data-f="'.$media.'" data-h="'.$http_path.'" data-p="image">';
 				}
-				$html .= '<li class="upload-show img-thumbnail">'.$media_html.'<div class="upload-tools"><a href="javascript:;" class="delete text-danger">删除</a><a href="'.$http_path.$media.'" class="look" target="_blank">查看</a></div></li>';
+				$html .= '<li class="upload-show img-thumbnail">'.$media_html.'<div class="upload-tools"><a href="javascript:;" class="delete text-danger">删除</a><a href="'.$http_path.$media_src.'" class="look" target="_blank">查看</a></div></li>';
 			}
 		}
 		$gallery = Html::tag('ul', $html, $ulOptions);
 		$this->parts['{input}'] = '<div>'.$content.'<br />'. $gallery.'</div>';
-		
-		return $this;
-		
-	}
-	
-	
-	public function picture($options=[]){
-		$initOptions = ['title'=>'选择图片', 'multi'=>FALSE, 'beforehand'=>FALSE, 'accept'=>'', 'isbtn'=>FALSE, 'folder'=>''];
-		$options = array_merge($initOptions, $options);
-		
-		$title = ArrayHelper::remove($options, 'title');
-		$multi = ArrayHelper::remove($options, 'multi', FALSE);
-		$isbtn = ArrayHelper::remove($options, 'isbtn', TRUE);
-		$beforehand = ArrayHelper::remove($options, 'beforehand', FALSE);
-		$hidden_id = isset($options['id'])?$options['id']:Html::getInputId($this->model, $this->attribute);
-		$value =  Html::getAttributeValue($this->model, $this->attribute);
-		$inputOptions =[];
-		$fileOptions= [
-			'data-f'=>$options['folder'],
-		];
-		$ulOptions = [
-			'class'=>'list-inline upload-gallery m-1',
-			'id'=>'gy_'.$hidden_id
-		];
-		
-		if($multi){
-			$fileOptions['multiple'] = 'multiple';
-		}
-		if($beforehand){
-			$inputOptions['id'] = $hidden_id;
-			$inputOptions['value'] = $value;
-			$fileOptions['data-bh'] = 1;
-			$input = Html::activeHiddenInput($this->model, $this->attribute, $inputOptions);
-			$input .= Html::fileInput('upload', '', $fileOptions);
-			$ulOptions['data-for'] = $hidden_id;
-		}else{
-			$fileOptions['id'] = $hidden_id;
-			$input = Html::activeFileInput($this->model, $this->attribute, $fileOptions);
-		}
-		
-		$content = "<span>$title</span>";
-		$content = Html::label($content.$input, '', ['class'=>'btn btn-'.($isbtn?'':'outline-').'info upload-btn mr-1']);
-		
-		$html = '';
-		if(!empty($value)){
-			$http_path = Yii::$app->params['FILE_HTTP_PATH'];
-			$medias = Json::decode($value, true);
-			foreach ($medias as $media){
-				if(is_array($media)){
-					$media_type = $media[0];
-					$media_src = $media[1];
-					if($media_type=='image'){
-						$media_html = '<img class="media" src="'.$http_path.$media.'" data-f="'.$media.'" data-h="'.$http_path.'" data-p="image">';
-					}elseif($media_type=='audio'){
-						$media_html = '<audio class="media" controls="controls" preload="meta" src="'.$http_path.$media_src.'" data-f="'.$media_src.'" data-h="'.$http_path.'" data-p="audio"></audio>';
-					}if($media_type=='video'){
-						$media_html = '<video class="media" controls="controls" preload="meta" src="'.$http_path.$media_src.'" data-f="'.$media_src.'" data-h="'.$http_path.'" data-p="video"></video>';
-					}
-				}else{
-					$media_html = '<img class="media" src="'.$http_path.$media.'" data-f="'.$media.'" data-h="'.$http_path.'" data-p="image">';
-				}
-				$html .= '<li class="upload-show img-thumbnail">'.$media_html.'<div class="upload-tools"><a href="javascript:;" class="delete text-danger">删除</a><a href="'.$http_path.$media.'" class="look" target="_blank">查看</a></div></li>';
-			}
-		}
-		
-		//$image = Html::img(empty($value)?'':(Yii::$app->params['FILE_HTTP_PATH'].$value), ['class'=>'upload-show']);
-		$gallery = Html::tag('ul', $html, $ulOptions);
-		//$this->parts['{input}'] = $content.Html::tag('div', $image, ['class'=>'m-1']);
-		$this->parts['{input}'] = $content. $gallery;
 		
 		return $this;
 		

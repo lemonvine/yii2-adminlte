@@ -6,10 +6,10 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\widgets\InputWidget;
-use lemon\web\CodemirrorAsset;
-use lemon\web\SummernoteAsset;
-use lemon\web\SummernoteLanguageAsset;
-use lemon\web\AdminLteAsset;
+use lemon\assets\CodemirrorAsset;
+use lemon\assets\SummernoteAsset;
+use lemon\assets\SummernoteLanguageAsset;
+use lemon\assets\AdminLteAsset;
 
 class Summernote extends InputWidget
 {

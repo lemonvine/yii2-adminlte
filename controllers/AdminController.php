@@ -12,7 +12,7 @@ use yii\helpers\Url;
  */
 class AdminController extends Controller
 {
-	public $layout='@vendor/lemonvine/yii2-adminlte/views/layouts/adminlte-main';
+	public $layout='@vendor/lemonvine/yii2-adminlte/layouts/adminlte-main';
 	public $u;
 	public $m='';
 	public $user_id=0;
@@ -87,12 +87,12 @@ class AdminController extends Controller
 	 */
 	public function turnToDialog ()
 	{
-		$this->layout = "@vendor/lemonvine/yii2-adminlte/views/layouts/adminlte-model";
+		$this->layout = "@vendor/lemonvine/yii2-adminlte/layouts/adminlte-model";
 	}
 	
 	public function partHtml()
 	{
-		$this->layout = "@vendor/lemonvine/yii2-adminlte/views/layouts/pure_html";
+		$this->layout = "@vendor/lemonvine/yii2-adminlte/layouts/pure_html";
 	}
 	
 	/**

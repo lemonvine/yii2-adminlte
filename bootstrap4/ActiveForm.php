@@ -24,7 +24,6 @@ class ActiveForm extends \yii\bootstrap4\ActiveForm
 	public $submitType = 'submit';
 	public function init()
 	{
-		//$this->fieldClass = "lemon\bootstrap4\ActiveField";
 		parent::init();
 	}
 	

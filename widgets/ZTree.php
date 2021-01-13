@@ -3,7 +3,7 @@
 namespace lemon\widgets;
 
 use yii\base\Widget;
-use lemon\web\AdminLteAsset;
+use lemon\assets\AdminLteAsset;
 
 class ZTree extends Widget
 {
