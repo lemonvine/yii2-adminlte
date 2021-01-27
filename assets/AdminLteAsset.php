@@ -89,7 +89,9 @@ class AdminLteAsset extends AssetBundle
 					$js[] = "viewer/viewer";
 					break;
 				case 'jqueryui':
+					$css[] = "plugins/jquery-ui";
 					$js[] = "plugins/jquery-ui";
+					break;
 				case 'sortable':
 					$js[] = "plugins/sortable";
 					break;

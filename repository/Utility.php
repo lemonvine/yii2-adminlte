@@ -4,6 +4,7 @@ namespace lemon\repository;
 use Yii;
 use yii\imagine\Image;
 use yii\helpers\Json;
+use yii\helpers\Html;
 
 class Utility
 {
@@ -164,32 +165,92 @@ class Utility
 		return $encoded_str;
 	}
 	
-	public static function buildGallery($strfile){
-		if(empty($strfile)){
-			return "";
+	public static function buildGallery($strfile, $isjson=TRUE, $editable=FALSE, $options =[]){
+		$html = '';
+		$ulOptions = ['class'=>'list-inline upload-gallery m-1'];
+		if(!empty($options)){
+			$ulOptions = array_merge($ulOptions, $options);
+		}
+		if(!empty($strfile)){
+			if($isjson){
+				$medias = Json::decode($strfile, true);
+			}else{
+				$medias = [$strfile];
+			}
+			foreach ($medias as $media){
+				$view_text = '查看';
+				if(is_array($media)){
+					if(key_exists('l', $media)){
+						$media_src = $media['l'];
+						$media_type = $media['t']??'image';
+						$media_name = $media['n']??'';
+					}else{
+						$media_type = $media[0];
+						$media_src = $media[1];
+						$media_name = $media[2]??'';
+					}
+					$media_http = self::dehttpPath($media_src);
+					
+					if($media_type=='image'){
+						//$media_html = '<img class="media" src="'.$media_http.'" data-f="'.$media_src.'" data-h="'.$http_path.'" data-p="image" target="image">';
+						$media_html = '<img class="media" src="'.$media_http.'" data-f="'.$media_src.'" data-p="image" target="image">';
+					}elseif($media_type=='audio'){
+						$media_html = '<audio class="media" controls="controls" preload="meta" src="'.$media_http.'" data-f="'.$media_src.'" data-p="audio"></audio>';
+					}if($media_type=='video'){
+						$media_html = '<video class="media" controls="controls" preload="meta" src="'.$media_http.'" data-f="'.$media_src.'" data-p="video"></video>';
+					}else{
+						$view_text = '下载';
+						if(empty($media_name)){
+							$media_name = substr(strrchr($media_src, '.'), 1).'文件';
+						}
+						$media_html = '<div class="media">'.$media_name.'</div>';
+					}
+				}else{
+					$media_http = self::dehttpPath($media);
+					$media_html = '<img class="media" src="'.$media_http.'" data-f="'.$media.'" data-p="image">';
+				}
+				$media_html .= '<div class="upload-tools">';
+				if($editable){
+					$media_html .= '<a href="javascript:;" class="delete text-danger">删除</a>';
+				}
+				$media_html .= '<a href="'.$media_http.'" class="look" target="_blank">'.$view_text.'</a></div>';
+				
+				$html .= '<li class="upload-show img-thumbnail">'.$media_html.'</li>';
+			}
+		}
+		$gallery = Html::tag('ul', $html, $ulOptions);
+		return $gallery;
+	}
+	
+	public static function enhttpPath(){
+		
+	}
+	
+	/**
+	 * 解析文件路径，
+	 * 文件路径有以下两种形式：
+	 * 相对路径			/xxx/xxx/xxx.png
+	 * 存储空间：相对路径		yun:/xxx/xxx/xxx.docx
+	 * 全局参数FILE_HTTP_PATH可为数组或字符串
+	 * @param unknown $path
+	 * @return string
+	 */
+	public static function dehttpPath($path){
+		$prefix = '';
+		if(strpos($path, ':')>0){
+			$exps = explode(':', $path);
+			$store = $exps[0];
+			$dir = $exps[1];
+		}else{
+			$store = 'local';
+			$dir = $path;
 		}
 		$http_path = Yii::$app->params['FILE_HTTP_PATH'];
-		$files = Json::decode($strfile, true);
-		$gallery = '<ul class="list-inline upload-gallery m-1">';
-		foreach ($files as $media){
-			$gallery .= '<li class="gallery-show img-thumbnail">';
-			if(is_array($media)){
-				$media_type = $media[0];
-				$media_src = $media[1];
-			}else{
-				$media_type = 'image';
-				$media_src = $media;
-			}
-			if($media_type=='image'){
-				$gallery .= '<a href="'.$http_path.$media.'" target="view"><img class="media" src="'.$http_path.$media.'"></a>';
-			}elseif($media_type=='audio'){
-				$gallery .= '<audio class="media" controls="controls" preload="meta" src="'.$http_path.$media_src.'"></audio>';
-			}if($media_type=='video'){
-				$gallery .= '<video class="media" controls="controls" preload="meta" src="'.$http_path.$media_src.'"></video>';
-			}
-			$gallery .= '</li>';
+		if(is_array($http_path)){
+			$prefix = $http_path[$store]??'';
+		}else{
+			$prefix = $http_path;
 		}
-		$gallery .= "</ul>";
-		return $gallery;
+		return $prefix.$dir;
 	}
 }

@@ -20,6 +20,24 @@ use PhpOffice\PhpSpreadsheet\Style\Border;
  * 序号：attribute的值为#serial#
  * cell的值为####，表示该单元格不处理，跳过，主要针对head部分
  * 在foot中，如果要用到当前行的行号，在label中用#this#表示，如果要用到数据的最后一行行号，用#data#表示
+	'export_type' => 1,
+	'labels' => $this->attributeLabels(),
+	'title' => [
+		['cell'=>'A1', 'merge'=>'Z1',  'label'=>'周报报表', 'center'=>true, 'fontsize'=>22, 'height'=>28],
+		['cell'=>'Z2', 'label'=>'2021-01-01', 'center'=>true],
+	],
+	'head'=>[
+		['attribute' => '#serial#', 'label'=>'序号', 'width'=>10],
+		['attribute' => 'user_name'],
+		['attribute' => 'joinin_date', 'format'=>'fmtd'],
+		['attribute' => 'rate', 'format' => ['append', '%'], 'label'=>'比率'],
+	],
+	'body'=>[...],
+	'style'=>[
+		'head'=>['height'=>40, 'fontsize'=> 8, 'border'=>'000000'],
+		'body'=>['height'=>50],
+	],
+	'extra'=>['freeze'=>'E8'],
  *
  */
 class ExportExcel

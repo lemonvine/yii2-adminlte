@@ -13,6 +13,7 @@ use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use lemon\assets\AdminLteAsset;
 use yii\helpers\Json;
+use lemon\repository\Utility;
 
 /**
  * Extends the ActiveField component to handle various bootstrap4 form handle input groups.
@@ -382,13 +383,14 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 	 * @return \lemon\bootstrap4\ActiveField
 	 */
 	public function upload($options=[]){
-		$initOptions = ['title'=>'选择文件', 'multi'=>FALSE, 'isjson'=>TRUE, 'beforehand'=>FALSE, 'accept'=>'', 'isbtn'=>FALSE, 'folder'=>'upload'];
+		$initOptions = ['title'=>'选择文件', 'multi'=>FALSE, 'isjson'=>TRUE, 'beforehand'=>FALSE, 'accept'=>'', 'isbtn'=>FALSE, 'folder'=>'upload', 'editable'=>FALSE];
 		$options = array_merge($initOptions, $options);
 		
 		$title = ArrayHelper::remove($options, 'title');
 		$multi = ArrayHelper::remove($options, 'multi', FALSE);
 		$isbtn = ArrayHelper::remove($options, 'isbtn', TRUE);
 		$isjson = ArrayHelper::remove($options, 'isjson', TRUE);
+		$editable = ArrayHelper::remove($options, 'editable', TRUE);
 		$beforehand = ArrayHelper::remove($options, 'beforehand', FALSE);
 		$hidden_id = isset($options['id'])?$options['id']:Html::getInputId($this->model, $this->attribute);
 		$value =  Html::getAttributeValue($this->model, $this->attribute);
@@ -396,60 +398,32 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 		$fileOptions= [
 			'data-f'=>$options['folder'],
 		];
-		$ulOptions = [
-			'class'=>'list-inline upload-gallery m-1',
-			'id'=>'gy_'.$hidden_id
-		];
+		$ulOptions = ['id'=>'gy_'.$hidden_id];
 		
 		if($multi){
 			$fileOptions['multiple'] = 'multiple';
 		}
-		if($beforehand){
-			$inputOptions['id'] = $hidden_id;
-			$inputOptions['value'] = $value;
-			$fileOptions['data-bh'] = 1;
-			$input = Html::activeHiddenInput($this->model, $this->attribute, $inputOptions);
-			$input .= Html::fileInput('upload', '', $fileOptions);
-			$ulOptions['data-for'] = $hidden_id;
-		}else{
-			$fileOptions['id'] = $hidden_id;
-			$input = Html::activeInput('file', $this->model, $this->attribute, $fileOptions);
-		}
-		
-		$content = "<span>$title</span>";
-		$content = Html::label($content.$input, '', ['class'=>'btn btn-'.($isbtn?'':'outline-').'info upload-btn mr-1']);
-		
-		$html = '';
-		if(!empty($value)){
-			$http_path = Yii::$app->params['FILE_HTTP_PATH'];
-			if($isjson){
-				$medias = Json::decode($value, true);
+		$input = '';
+		$content = '';
+		if($editable){
+			if($beforehand){
+				$inputOptions['id'] = $hidden_id;
+				$inputOptions['value'] = $value;
+				$fileOptions['data-bh'] = 1;
+				$input = Html::activeHiddenInput($this->model, $this->attribute, $inputOptions);
+				$input .= Html::fileInput('upload', '', $fileOptions);
+				$ulOptions['data-for'] = $hidden_id;
 			}else{
-				$medias = [$value];
+				$fileOptions['id'] = $hidden_id;
+				$input = Html::activeInput('file', $this->model, $this->attribute, $fileOptions);
 			}
-			foreach ($medias as $media){
-				if(is_array($media)){
-					$media_type = $media[0];
-					$media_src = $media[1];
-					if($media_type=='image'){
-						$media_html = '<img class="media" src="'.$http_path.$media.'" data-f="'.$media.'" data-h="'.$http_path.'" data-p="image" target="image">';
-					}elseif($media_type=='audio'){
-						$media_html = '<audio class="media" controls="controls" preload="meta" src="'.$http_path.$media_src.'" data-f="'.$media_src.'" data-h="'.$http_path.'" data-p="audio"></audio>';
-					}if($media_type=='video'){
-						$media_html = '<video class="media" controls="controls" preload="meta" src="'.$http_path.$media_src.'" data-f="'.$media_src.'" data-h="'.$http_path.'" data-p="video"></video>';
-					}else{
-						$extension = substr(strrchr($media_src, '.'), 1);
-						$media_html = '<div class="media">'.$extension.'文件</div>';
-					}
-				}else{
-					$media_src = $media;
-					$media_html = '<img class="media" src="'.$http_path.$media.'" data-f="'.$media.'" data-h="'.$http_path.'" data-p="image">';
-				}
-				$html .= '<li class="upload-show img-thumbnail">'.$media_html.'<div class="upload-tools"><a href="javascript:;" class="delete text-danger">删除</a><a href="'.$http_path.$media_src.'" class="look" target="_blank">查看</a></div></li>';
-			}
+			$content = "<span>$title</span>";
+			$content = Html::label($content.$input, '', ['class'=>'btn btn-'.($isbtn?'':'outline-').'info upload-btn mr-1']);
+			$content .= $content.'<br />';
 		}
-		$gallery = Html::tag('ul', $html, $ulOptions);
-		$this->parts['{input}'] = '<div>'.$content.'<br />'. $gallery.'</div>';
+		
+		$gallery = Utility::buildGallery($value, $isjson, $editable, $ulOptions);
+		$this->parts['{input}'] = '<div>' . $content . $gallery . '</div>';
 		
 		return $this;
 		
