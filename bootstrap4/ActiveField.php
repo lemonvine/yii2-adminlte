@@ -383,7 +383,7 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 	 * @return \lemon\bootstrap4\ActiveField
 	 */
 	public function upload($options=[]){
-		$initOptions = ['title'=>'选择文件', 'multi'=>FALSE, 'isjson'=>TRUE, 'beforehand'=>FALSE, 'accept'=>'', 'isbtn'=>FALSE, 'folder'=>'upload', 'editable'=>FALSE];
+		$initOptions = ['title'=>'选择文件', 'multi'=>FALSE, 'isjson'=>TRUE, 'beforehand'=>FALSE, 'accept'=>'', 'isbtn'=>FALSE, 'folder'=>'upload', 'editable'=>TRUE];
 		$options = array_merge($initOptions, $options);
 		
 		$title = ArrayHelper::remove($options, 'title');
@@ -419,7 +419,7 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 			}
 			$content = "<span>$title</span>";
 			$content = Html::label($content.$input, '', ['class'=>'btn btn-'.($isbtn?'':'outline-').'info upload-btn mr-1']);
-			$content .= $content.'<br />';
+			$content .= '<br />';
 		}
 		
 		$gallery = Utility::buildGallery($value, $isjson, $editable, $ulOptions);

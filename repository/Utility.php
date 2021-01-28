@@ -213,7 +213,7 @@ class Utility
 				if($editable){
 					$media_html .= '<a href="javascript:;" class="delete text-danger">删除</a>';
 				}
-				$media_html .= '<a href="'.$media_http.'" class="look" target="_blank">'.$view_text.'</a></div>';
+				$media_html .= '<a href="'.$media_http.'" class="look" target="download" download="'.$media_name.'">'.$view_text.'</a></div>';
 				
 				$html .= '<li class="upload-show img-thumbnail">'.$media_html.'</li>';
 			}
