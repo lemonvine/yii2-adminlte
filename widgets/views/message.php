@@ -12,4 +12,5 @@ if(!empty($message)){
 	var MESSAGE = "<?=$message?>";
 	var MESSAGE_FLAG = "<?=$flag?>";
 	var URL_UPLOAD = "<?=Url::toRoute(['/config/pictures/upload']) ?>";
+	var FILE_UPLOAD_URL = "<?= Yii::$app->params['FILE_UPLOAD_URL'] ?>";
 </script>

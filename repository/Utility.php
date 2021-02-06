@@ -207,8 +207,14 @@ class Utility
 					}
 				}else{
 					$media_http = self::dehttpPath($media);
+					
 					$media_html = '<img class="media" src="'.$media_http.'" data-f="'.$media.'" data-p="image">';
+
+					if(empty($media_name)){
+						$media_name = substr(strrchr($media, '.'), 1).'文件';
+					}
 				}
+				
 				$media_html .= '<div class="upload-tools">';
 				if($editable){
 					$media_html .= '<a href="javascript:;" class="delete text-danger">删除</a>';

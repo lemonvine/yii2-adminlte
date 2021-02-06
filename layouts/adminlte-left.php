@@ -1,5 +1,6 @@
 <?php
 //use Yii;
+use lemon\repository\Utility;
 use lemon\repository\Undefinitive;
 
 if(empty($this->context->u->avatar)){
@@ -8,7 +9,7 @@ if(empty($this->context->u->avatar)){
 	$avator = $default_avator;
 }
 else{
-	$avator = Yii::$app->params['FILE_HTTP_PATH'].$this->context->u->avatar;
+	$avator = Utility::dehttpPath($this->context->u->avatar);
 }
 $user_name = $this->context->u->realname??'';
 

@@ -824,14 +824,18 @@ $(window).ready(function(){
 				}
 				if(beforehand){
 					var formData = new FormData();
-					formData.append('uploadfile', file);
-					formData.append('path', folder);
-					formData.append('fid', id);
+					formData.append('fileName', 'UploadFiles');
+					formData.append('UploadFiles', file);
+					formData.append('type', 'upload');
+					formData.append('dir', folder);
+					formData.append('key', id);
 					formData.append('index', i);
+					var url = FILE_UPLOAD_URL == 'local'?URL_UPLOAD:FILE_UPLOAD_URL;
 					$.ajax({
-						url: URL_UPLOAD,
+						url: url,
 						type:"post",
 						data: formData,
+						dataType : 'json',
 						contentType: false,
 						processData: false,
 						success: function(data) {
