@@ -22,6 +22,7 @@ class AdminController extends Controller
 	public $referer=''; //跳转源，用于返回按钮
 	public $deliver=[];
 	public $submit_type='';
+	public $upload_url='';
 
 	/**
 	 * 初始化信息
@@ -46,6 +47,17 @@ class AdminController extends Controller
 		$post = Yii::$app->request->post();
 		if(isset($post['submit_type'])){
 			$this->submit_type=$post['submit_type'];
+		}
+		$params = Yii::$app->params;
+		if(isset($params['FILE_UPLOAD_URL'])){
+			$upload_url = $params['FILE_UPLOAD_URL'];
+			if(is_array($upload_url)){
+				$this->upload_url = $upload_url[$params['FILE_UPLOAD_WHERE']];
+			}else{
+				$this->upload_url = $upload_url;
+			}
+		}else{
+			$this->upload_url = Url::toRoute(['/config/pictures/upload']);
 		}
 	}
 	

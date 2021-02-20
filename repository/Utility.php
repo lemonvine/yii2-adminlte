@@ -227,9 +227,47 @@ class Utility
 		$gallery = Html::tag('ul', $html, $ulOptions);
 		return $gallery;
 	}
-	
-	public static function enhttpPath(){
-		
+	public static function fileExtension($file){
+		if(strpos($file, '.')>0){
+			$exps = explode('.', $file);
+			$ext = strtolower(end($exps));
+			if(in_array($ext, ['jpg', 'png', 'gif', '', '', '', '', ''])){
+				return 'image';
+			}elseif(in_array($ext, ['doc', 'docx', 'gif', '', '', '', '', ''])){
+				return 'word';
+			}elseif(in_array($ext, ['doc', 'docx', 'gif', '', '', '', '', ''])){
+				return 'excel';
+			}else{
+				return 'doc';
+			}
+		}else{
+			return 'doc';
+		}
+	}
+	public static function defile($document, $isjson=TRUE){
+		$docs = [];
+		$result = [];
+		if($isjson){
+			try{
+				$docs = Json::decode($document, true);
+			}catch (\Exception $ex){
+				$docs[]=$document;
+			}
+		}else{
+			$docs[]=$document;
+		}
+		foreach ($docs as $doc){
+			if(is_array($doc)){
+				if(key_exists('l', $doc)){
+					$result[] = ['src'=>$doc['l'], 'type'=>($doc['t']??(self::fileExtension($doc['l']))), 'name'=>($doc['n']??'')];
+				}else{
+					$result[] = ['src'=>$doc[1], 'type'=>$doc[0], 'name'=>($doc[2]??'')];
+				}
+			}else{
+				$result[] = ['src'=>$doc, 'type'=>($doc??(self::fileExtension($doc))), 'name'=>''];
+			}
+		}
+		return $result;
 	}
 	
 	/**

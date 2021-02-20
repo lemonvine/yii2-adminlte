@@ -185,10 +185,13 @@ class Buttons extends Widget
 		$items[] = $search_params;
 		foreach ($items as $btn){
 			$params = array_merge($btn_params, $btn);
-			if($params['target']=='dialog'){
-				$content .= self::DialogButton($params);
-			}elseif($params['target']=='submit'){
+			if($params['target']=='submit'){
 				$content .= self::OkButton($params);
+			}elseif($params['target']=='search'){
+				$class = ($params['isbtn']?'btn btn-':static::$btn_css).$params['color'];
+				$content .= Html::Button($params['title'], ['class' => $class, 'value'=>$params['btnval'], 'onclick'=>$params['click']]);
+			}elseif($params['target']=='dialog'){
+				$content .= self::DialogButton($params);
 			}elseif($params['target']=='func'){
 				$params = array_merge($default_params, $params);
 				$class = ($params['isbtn']?'btn btn-':static::$btn_css).$params['color'];
@@ -297,6 +300,7 @@ class Buttons extends Widget
 		if(count($extras)>0){
 			$btns = array_merge($btns, $extras);
 		}
+		$config['target']='search';
 		$btns[] = $export;
 		return self::SearchButtons($btns, $config);
 	}

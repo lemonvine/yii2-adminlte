@@ -1,6 +1,5 @@
 <?php
 use yii\helpers\Html;
-use lemon\widgets\Message;
 
 /* @var $this \yii\web\View */
 /* @var $content string */
@@ -17,6 +16,7 @@ $this->registerAssetBundle(Yii::$app->params['classname_asset']);
 		<?= Html::csrfMetaTags() ?>
 		<title><?= Html::encode($this->title) ?></title>
 		<?php $this->head() ?>
+		<?=$this->render('_script.php')?>
 	</head>
 	<body class="hold-transition layout-fixed text-sm">
 		<div class="wrapper">
@@ -26,7 +26,6 @@ $this->registerAssetBundle(Yii::$app->params['classname_asset']);
 			</section >
 			<?php $this->endBody() ?>
 		</div>
-		<?=Message::widget(['message'=>$this->context->message, 'operate'=>$this->context->operate])?>
 	</body>
 </html>
 <?php $this->endPage() ?>
