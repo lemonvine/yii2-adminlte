@@ -19,6 +19,7 @@ $this->registerAssetBundle(Yii::$app->params['classname_asset']);
 		<title><?= Html::encode($this->title) ?></title>
 		<link rel="icon" type="image/x-icon" class="js-site-favicon" href="/favicon.ico">
 		<?php $this->head() ?>
+		<?=$this->render('_script.php')?>
 	</head>
 	<body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed text-sm">
 		<input type="hidden" id="chain_menu" value="<?=$this->context->m ?>" />
@@ -29,7 +30,6 @@ $this->registerAssetBundle(Yii::$app->params['classname_asset']);
 			<?=$this->render('adminlte-content.php', ['content' => $content])?>
 		<?php $this->endBody() ?>
 		</div>
-		<?=Message::widget(['message'=>$this->context->message, 'operate'=>$this->context->operate])?>
 	</body>
 </html>
 <?php $this->endPage() ?>

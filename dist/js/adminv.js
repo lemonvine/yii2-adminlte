@@ -830,9 +830,8 @@ $(window).ready(function(){
 					formData.append('dir', folder);
 					formData.append('key', id);
 					formData.append('index', i);
-					var url = FILE_UPLOAD_URL == 'local'?URL_UPLOAD:FILE_UPLOAD_URL;
 					$.ajax({
-						url: url,
+						url: FILEUPLOADURL,
 						type:"post",
 						data: formData,
 						dataType : 'json',
