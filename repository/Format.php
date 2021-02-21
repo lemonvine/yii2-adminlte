@@ -121,5 +121,31 @@ class Format extends Formatter
 		$options['class']='img-thumbnail img-fluid';
 		return Html::img($value, $options);
 	}
+	public function asFold($value, $num=10){
+		$len = mb_strlen($value);
+		if($len > ($num+1)){
+			$substr = $this->markup($value, $num);
+			$len = mb_strlen($substr);
+			return '<div class="ffold">'.$substr.'<span class="d-none">'.mb_substr($value, $num).'</span> <a href="javascript:;">>></a></div';
+		}
+		else{
+			return $value;
+		}
+	}
+	
+	private function markup($str, $num){
+		$sub = mb_substr($str, 0, $num);
+		$len = strlen($sub);
+		if($len<($num-1)*3){
+			$remain = mb_substr($str, $num);
+			$num2 = intval(($num*3-$len)/3);
+			if(mb_strlen($remain)<$num2){
+				$sub.=$remain;
+			}else{
+				$sub .= $this->markup($remain, $num2);
+			}
+		}
+		return $sub;
+	}
 }
 

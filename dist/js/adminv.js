@@ -905,6 +905,16 @@ $(window).ready(function(){
 			}});
 		}
 	});
+	$(document).on('click', '.ffold>a',function(){
+		var _content = $(this).html();
+		if(_content=='>>' || _content=="&gt;&gt;"){
+			$(this).html('<<');
+			$(this).parent().find('span').removeClass('d-none');
+		}else{
+			$(this).html('>>');
+			$(this).parent().find('span').addClass('d-none');
+		}
+	});
 	
 	var menuid = $("#chain_menu").val();
 	if(menuid !=undefined && menuid != ""){
