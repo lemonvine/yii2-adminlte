@@ -289,12 +289,17 @@ class Utility
 			$store = 'local';
 			$dir = $path;
 		}
-		$http_path = Yii::$app->params['FILE_HTTP_PATH'];
-		if(is_array($http_path)){
-			$prefix = $http_path[$store]??'';
+		if($store=='http' || $store=="https"){
+			$prefix = '';
 		}else{
-			$prefix = $http_path;
+			$http_path = Yii::$app->params['FILE_HTTP_PATH'];
+			if(is_array($http_path)){
+				$prefix = $http_path[$store]??'';
+			}else{
+				$prefix = $http_path;
+			}
 		}
+		
 		return $prefix.$dir;
 	}
 }

@@ -150,7 +150,7 @@ class AdminController extends Controller
 	public function modelCallParent($callback, $msg=""){
 		$js = "";
 		if(!empty($msg)){
-			$js = "window.parent.bolevine.alert(\{message: {$msg}\});";
+			$js = 'window.parent.bolevine.alert({message: "'.$msg.'"});';
 		}
 		$js .= "window.parent.".$callback.";";
 		return "<script type='text/javascript'>{$js}</script>";
