@@ -230,6 +230,18 @@ class Buttons extends Widget
 				$content .= self::CancelButton($params);
 			}elseif($params['target']=='back'){
 				$content .= self::BackButton($params);
+			}elseif($params['target']=='button'){
+				$options = ['class'=>'btn btn-'.$params['color']];
+				if(isset($params['id'])){
+					$options['id'] = $params['id'];
+				}
+				if(!empty($params['btnval'])){
+					$options['value'] = $params['btnval'];
+				}
+				if(!empty($params['click'])){
+					$options['onclick'] = $params['click'];
+				}
+				$content .= Html::Button($params['title'], $options);
 			}elseif($params['target']=='func'){
 				$params = array_merge($default_params, $params);
 				$class = ($params['isbtn']?'btn btn-':static::$btn_css).$params['color'];
@@ -314,6 +326,16 @@ class Buttons extends Widget
 		$btns[] = ['target'=>'cancel', 'title'=>'取消'];
 		$btns[] = ['target'=>'ok', 'title'=>'确定'];
 		return self::DialogButtons($btns);
+	}
+	
+	public static function Moves(){
+		$btns = [
+			['target'=>'button', 'title'=>'上一步', 'color'=>'default', 'id'=>'btn_last'],
+			['target'=>'button', 'title'=>'下一步', 'color'=>'success', 'id'=>'btn_next'],
+			['target'=>'button', 'title'=>'确 &nbsp;&nbsp;定', 'color'=>'primary', 'id'=>'btn_ok'],
+		];
+		return self::DialogButtons($btns);
+		
 	}
 	
 	/**
