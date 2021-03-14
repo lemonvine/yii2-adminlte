@@ -391,19 +391,28 @@ var bolevine = {
 		var _for = $(obj).data('for');
 		if(_for){
 			var _images = $(obj).find(".media");
-			var _result = [];
-			$(_images).each(function(){
-				var _file = $(this).data('f');
-				var _type = $(this).data('p');
-				if(_file){
-					if(_type=='image'){
-						_result.push(_file);
-					}else{
-						_result.push([_type, _file]);
+			var multi = $("#"+_for).data('m');
+			if(multi=="2"){
+				var src = '';
+				$(_images).each(function(){
+					src = $(this).data('f');
+				});
+				$("#"+_for).val(src);
+			}else{
+				var _result = [];
+				$(_images).each(function(){
+					var _file = $(this).data('f');
+					var _type = $(this).data('p');
+					if(_file){
+						if(_type=='image'){
+							_result.push(_file);
+						}else{
+							_result.push([_type, _file]);
+						}
 					}
-				}
-			});
-			$("#"+_for).val(bolevine.json2str(_result));
+				});
+				$("#"+_for).val(bolevine.json2str(_result));
+			}
 		}
 	},
 	rctt: function(url, callback){

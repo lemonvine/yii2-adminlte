@@ -402,6 +402,9 @@ class ActiveField extends \yii\bootstrap4\ActiveField
 		
 		if($multi){
 			$fileOptions['multiple'] = 'multiple';
+			$inputOptions['data-m'] = '1';
+		}else{
+			$inputOptions['data-m'] = '2';
 		}
 		$input = '';
 		$content = '';
