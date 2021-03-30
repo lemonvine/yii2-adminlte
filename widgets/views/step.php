@@ -1,6 +1,7 @@
 <?php
 	$steps = $this->context->steps;
 	$current = $this->context->current;
+	$topnum = count($steps);
 	$width = 1 / (count($steps)) * 100;
 	$progress_width = $current? $width * ($current - 0.5) : 0;
 ?>
@@ -32,6 +33,24 @@
 	</ul>
 </div>
 <script>
+var StepNum = eval("<?=$current ?>");
+var TopNum = eval("<?=$topnum ?>");
+var initStep = function(){
+	$("#btn_last").click(function(){
+		stepMove(-1);
+	});
+	$("#btn_next").click(function(){
+		stepMove(1);
+	});
+	$("#btn_ok").click(function(){
+		if(typeof(beforeStepOk) == 'function'){
+			beforeStepOk();
+		}
+		$("#main_form").submit();
+	});
+	
+	stepMove(0);
+};
 var progressMove = function(num){
 	var _list = $("#ui-step>li");
 	$(_list).removeClass('active').removeClass('action');
@@ -49,4 +68,42 @@ var progressMove = function(num){
 		}
 	}
 }
+var stepMove = function(step){
+	StepNum += step;
+	if(StepNum < 1){
+		StepNum = 1;
+	}else if(StepNum > TopNum){
+		StepNum = TopNum;
+	}
+	$("#main_form section").hide();
+	$("#section_"+StepNum).show();
+	if(StepNum==TopNum){
+		$("#btn_next").hide();
+		$("#btn_ok").show();
+	}else{
+		$("#btn_next").show();
+		$("#btn_ok").hide();
+	}
+	if(StepNum==1){
+		$("#btn_last").hide();
+	}else{
+		$("#btn_last").show();
+	}
+	if(StepNum>1){
+		var fucname = 'onStep'+StepNum;
+		if(window[fucname]){
+			eval(fucname+"()");
+		}
+	}
+	progressMove(StepNum);
+};
 </script>
+<?php 
+$js = <<<JS
+	$(document).ready(function(){
+		initStep();
+	});
+JS;
+$this->registerJs($js);
+
+?>
