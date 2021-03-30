@@ -125,7 +125,7 @@ class Buttons extends Widget
 	 * @return string
 	 */
 	public static function DialogButton($config=[]){
-		$params = ['title'=>'保存', 'url'=>'', 'isbtn'=>true, 'color'=>'info', 'size'=>'sm', 'badge'=>'', 'class'=>''];
+		$params = ['title'=>'保存', 'url'=>'', 'isbtn'=>true, 'color'=>'info', 'size'=>'md', 'badge'=>'', 'class'=>''];
 		$params = array_merge($params, $config);
 		$badge = '';
 		if(!empty($params['badge'])){

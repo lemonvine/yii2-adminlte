@@ -207,7 +207,6 @@ class Utility
 					}
 				}else{
 					$media_http = self::dehttpPath($media);
-					
 					$media_html = '<img class="media" src="'.$media_http.'" data-f="'.$media.'" data-p="image">';
 
 					if(empty($media_name)){
